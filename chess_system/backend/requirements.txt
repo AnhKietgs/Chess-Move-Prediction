@@ -1,0 +1,11 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+pydantic-settings==2.5.2
+python-chess==1.999
+python-dotenv==1.0.1
+
+# AI / Training stack (used in later phases: data_processing, training)
+torch==2.6.0
+numpy==1.26.4
+pandas==2.2.2
