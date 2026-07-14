@@ -1,0 +1,21 @@
+# Bỏ qua các file trọng số mô hình PyTorch
+*.pt
+*.pth
+*.weights
+
+# Bỏ qua các định dạng model AI phổ biến khác (nếu có)
+*.h5
+*.onnx
+*.pb
+*.ckpt
+
+# Bỏ qua thư mục chứa model (nếu bạn gom chung vào một thư mục)
+backend/models/weights/
+saved_models/
+
+# (Tiện thể) Bỏ qua luôn môi trường ảo và thư mục cache của Python
+venv/
+__pycache__/
+*.pyc
+# Chặn thư viện của Node.js (Frontend)
+node_modules/

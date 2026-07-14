@@ -1,0 +1,86 @@
+/*
+  Design system: "The Fischer Study"
+  A late-night study lit by one lamp: obsidian walls, warm brass fittings,
+  a walnut-and-ivory board glimpsed through glass. Chess.com's clarity of
+  interaction, none of its flat green-and-white palette.
+*/
+
+:root {
+  /* Color */
+  --color-bg: #0b0d12;
+  --color-bg-glow: radial-gradient(
+    ellipse 80% 60% at 50% -10%,
+    rgba(201, 162, 39, 0.12),
+    transparent 60%
+  );
+  --color-glass: rgba(255, 255, 255, 0.045);
+  --color-glass-strong: rgba(255, 255, 255, 0.07);
+  --color-hairline: rgba(201, 162, 39, 0.22);
+  --color-hairline-strong: rgba(201, 162, 39, 0.45);
+  --color-brass: #c9a227;
+  --color-brass-bright: #e4c257;
+  --color-ivory: #ede6d6;
+  --color-walnut: #3b3024;
+  --color-text-primary: #f2efe6;
+  --color-text-muted: #9a9788;
+  --color-slate: #6e7681;
+  --color-danger: #b3543f;
+  --color-success: #7a9d6e;
+
+  /* Typography */
+  --font-display: "Fraunces", "Iowan Old Style", serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", monospace;
+
+  /* Layout */
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow-panel: 0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  background-image: var(--color-bg-glow);
+  background-attachment: fixed;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-brass-bright);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
