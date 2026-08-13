@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     # Comma-separated origins in .env are split into a list here.
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
-    model_checkpoint_path: Path = Path("./checkpoints/fischer_bc_v1.pt")
+    model_checkpoint_path: Path = Path("./checkpoints/best_fischer_bc.pth")
     stockfish_path: str = "/usr/games/stockfish"
 
     # Behavioral Cloning model architecture. These values are intentionally
