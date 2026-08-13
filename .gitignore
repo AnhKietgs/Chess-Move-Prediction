@@ -19,3 +19,7 @@ __pycache__/
 *.pyc
 # Chặn thư viện của Node.js (Frontend)
 node_modules/
+
+# Stockfish
+chess_system/backend/*.exe
+chess_system/backend/stockfish-windows-x86-64-avx2.exe

@@ -76,6 +76,11 @@ export function useChessGame(playerColor) {
   /**
    * Attempt to play the human's move. Returns true if it was legal and applied.
    *
+   * chess.js 1.x *throws* on an illegal move object instead of returning
+   * null (unlike older versions) — this must stay wrapped in try/catch, or
+   * an illegal click-target (e.g. clicking a second own piece to switch
+   * selection) throws mid-handler and the caller's state update never runs.
+   *
    * @param {string} from
    * @param {string} to
    * @param {string} [promotion="q"]
@@ -86,7 +91,12 @@ export function useChessGame(playerColor) {
       if (game.isGameOver() || isAiThinking) return false;
       if (playerColor && game.turn() !== playerColor) return false;
 
-      const move = game.move({ from, to, promotion });
+      let move;
+      try {
+        move = game.move({ from, to, promotion });
+      } catch {
+        return false; // illegal move — chess.js throws rather than returning null
+      }
       if (!move) return false;
 
       setLastMove({ from: move.from, to: move.to });

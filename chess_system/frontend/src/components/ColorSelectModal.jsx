@@ -1,6 +1,6 @@
 import React from "react";
 import GlassPanel from "./GlassPanel.jsx";
-
+import fischerImg from "./bobby-fischer.jpg";
 /**
  * Full-screen overlay asking the player which side they want to play
  * before the board is shown. This is the "signature" moment of the
@@ -23,7 +23,12 @@ export default function ColorSelectModal({ onChoose }) {
         zIndex: 50,
       }}
     >
-      <div style={{ textAlign: "center", maxWidth: 520 }}>
+      <div style={{ textAlign: "center", maxWidth: 620 }}>
+          <img 
+          src={fischerImg} 
+          alt="Bobby Fischer" 
+          className="my-image"
+      />
         <p
           style={{
             fontFamily: "var(--font-mono)",

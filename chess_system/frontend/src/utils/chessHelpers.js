@@ -29,6 +29,22 @@ export function getLegalMoveSquareStyles(game, square) {
 }
 
 /**
+ * Whether moving the piece on `from` to `to` is a pawn promotion — i.e.
+ * chess.js's legal-move list contains a `to` match with a `promotion` flag.
+ * More reliable than checking ranks manually, since chess.js already
+ * encodes this per legal move.
+ *
+ * @param {import("chess.js").Chess} game
+ * @param {string} from
+ * @param {string} to
+ * @returns {boolean}
+ */
+export function isPromotionMove(game, from, to) {
+  const moves = game.moves({ square: from, verbose: true });
+  return moves.some((move) => move.to === to && Boolean(move.promotion));
+}
+
+/**
  * Style for the origin/destination squares of the most recently played move.
  *
  * @param {{from: string, to: string} | null} lastMove

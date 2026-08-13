@@ -6,6 +6,11 @@ python-chess==1.999
 python-dotenv==1.0.1
 
 # AI / Training stack (used in later phases: data_processing, training)
-torch==2.6.0
-numpy==1.26.4
-pandas==2.2.2
+# torch==2.6.0
+# numpy==1.26.4
+# pandas==2.2.2
+torch
+numpy
+pandas
+
+pytest==8.3.3
