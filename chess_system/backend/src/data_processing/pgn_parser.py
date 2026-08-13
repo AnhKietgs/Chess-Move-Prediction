@@ -162,7 +162,7 @@ def _process_game(
             continue
 
         delta_cp = score_after - score_before
-        if delta_cp >= -blunder_threshold_cp:
+        if delta_cp < -blunder_threshold_cp:
             logger.debug(
                 "Game #%d: dropping blunder %s (Delta cp=%d) at FEN %r.",
                 game_id, move.uci(), delta_cp, fen_before,
