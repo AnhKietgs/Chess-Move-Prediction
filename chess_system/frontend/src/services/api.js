@@ -18,7 +18,7 @@ class ApiError extends Error {
  * Ask the backend for the AI's move given the current position.
  *
  * @param {string} fen - Current board state in FEN notation.
- * @returns {Promise<{moveUci: string, moveSan: string, fenAfter: string, isCheckmate: boolean, isStalemate: boolean, isCheck: boolean, gameOver: boolean}>}
+ * @returns {Promise<{moveUci: string}>}
  */
 export async function requestFischerMove(fen) {
   const response = await fetch(`${API_BASE_URL}/api/play/fischer`, {
@@ -33,14 +33,12 @@ export async function requestFischerMove(fen) {
   }
 
   const data = await response.json();
+  if (typeof data.move !== "string" || data.move.length === 0) {
+    throw new ApiError("The AI returned an invalid move response.", 502);
+  }
+
   return {
-    moveUci: data.move_uci,
-    moveSan: data.move_san,
-    fenAfter: data.fen_after,
-    isCheckmate: data.is_checkmate,
-    isStalemate: data.is_stalemate,
-    isCheck: data.is_check,
-    gameOver: data.game_over,
+    moveUci: data.move,
   };
 }
 

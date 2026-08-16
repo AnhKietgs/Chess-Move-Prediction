@@ -1,31 +1,71 @@
 """
 Routes under /api/play/* — the controller layer.
 
-Routes only handle HTTP concerns (status codes, request/response schemas).
-Actual chess logic lives in `src/services/chess_engine.py`.
+Routes only handle HTTP concerns (lifespan, validation, and HTTP errors).
+Neural inference lives in ``src.services.ai_engine``.
 """
 
-from fastapi import APIRouter, HTTPException
+from __future__ import annotations
 
-from src.models.schemas import MoveRequest, MoveResponse
-from src.services import chess_engine
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+from typing import cast
 
-router = APIRouter(prefix="/api/play", tags=["play"])
+from fastapi import APIRouter, FastAPI, HTTPException, Request
+
+from src.models.schemas import MoveRequest
+from src.services.ai_engine import FischerAI, NoLegalMovesError, get_fischer_ai
 
 
-@router.post("/fischer", response_model=MoveResponse)
-def play_fischer(payload: MoveRequest) -> MoveResponse:
+@asynccontextmanager
+async def router_lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """Load the Fischer policy once before this router begins serving requests.
+
+    Args:
+        app: The FastAPI application owning this router.
+
+    Yields:
+        Control to FastAPI after the cached inference service is attached to
+        application state.
+    """
+    app.state.fischer_ai = get_fischer_ai()
+    yield
+
+
+router = APIRouter(
+    prefix="/api/play",
+    tags=["play"],
+    lifespan=router_lifespan,
+)
+
+
+@router.post("/fischer")
+def play_fischer(payload: MoveRequest, request: Request) -> dict[str, str]:
     """Given the current FEN, return the AI's next move.
 
-    Currently backed by a random-legal-move placeholder
-    (see `chess_engine.select_move`); will be swapped for the trained
-    Behavioral Cloning policy without changing this route's contract.
-    """
-    try:
-        result = chess_engine.select_move(payload.fen)
-    except chess_engine.InvalidFenError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-    except chess_engine.GameOverError as exc:
-        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    The preloaded Behavioral Cloning policy masks illegal actions before
+    selecting one legal UCI move.
 
-    return MoveResponse(**result)
+    Args:
+        payload: Request body containing a full FEN string.
+        request: FastAPI request used to retrieve the startup-loaded policy.
+
+    Returns:
+        JSON-compatible mapping in the form ``{"move": "e2e4"}``.
+
+    Raises:
+        HTTPException: For invalid FEN input, game-over positions, or a policy
+            service that has not completed startup.
+    """
+    fischer_ai = getattr(request.app.state, "fischer_ai", None)
+    if fischer_ai is None:
+        raise HTTPException(status_code=503, detail="Fischer AI is not initialized.")
+
+    try:
+        move = cast(FischerAI, fischer_ai).predict_best_move(payload.fen)
+    except NoLegalMovesError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    return {"move": move}

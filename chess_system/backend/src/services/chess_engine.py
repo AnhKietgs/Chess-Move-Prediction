@@ -1,16 +1,14 @@
 """
 Chess move generation service.
 
-This module is the seam where the future trained model plugs in.
-For now, `select_move` picks a uniformly random legal move — this is the
-explicit placeholder the project brief asked for, to be replaced by
-`model.predict(fen) -> move` once the Behavioral Cloning network exists
-(see /backend/src/training).
+Uses the trained Fischer Behavioral Cloning policy through ``ai_engine``.
+The service preserves the API response contract while replacing the former
+random-move placeholder with legal-move-masked neural inference.
 """
 
-import random
-
 import chess
+
+from src.services.ai_engine import get_fischer_ai
 
 
 class InvalidFenError(ValueError):
@@ -47,9 +45,8 @@ def _load_board(fen: str) -> chess.Board:
 def select_move(fen: str) -> dict:
     """Select a move for the given position and return the resulting state.
 
-    Placeholder strategy: uniformly random choice among all legal moves.
-    This will be swapped for `FischerPolicyNet.predict(board_tensor)` once
-    the imitation-learning model (Weeks 4-6) is trained and loaded.
+    The trained Fischer policy scores all actions, masks every illegal action,
+    and returns the highest-scoring legal move.
 
     Args:
         fen: Current board state in FEN notation.
@@ -67,14 +64,16 @@ def select_move(fen: str) -> dict:
     if not legal_moves:
         raise GameOverError("No legal moves available; the game has already ended.")
 
-    chosen_move = random.choice(legal_moves)
+    move_uci = get_fischer_ai().predict_best_move(fen)
+    chosen_move = chess.Move.from_uci(move_uci)
+    if chosen_move not in legal_moves:
+        raise RuntimeError("Fischer policy returned a non-legal move.")
     move_san = board.san(chosen_move)
-    move_uci = chosen_move.uci()
 
     board.push(chosen_move)
 
     return {
-        "move_uci": move_uci,
+        "move_uci": chosen_move.uci(),
         "move_san": move_san,
         "fen_after": board.fen(),
         "is_checkmate": board.is_checkmate(),
