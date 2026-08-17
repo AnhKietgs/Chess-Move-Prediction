@@ -52,6 +52,14 @@ class Settings(BaseSettings):
     training_use_amp: bool = True
     training_deterministic: bool = True
 
+    # Model-versus-Stockfish arena evaluation.
+    arena_games: int = 100
+    arena_stockfish_elo: int = 1350
+    arena_stockfish_move_time_seconds: float = 0.1
+    arena_max_plies: int = 300
+    arena_seed: int = 42
+    arena_output_dir: Path = Path("./logs/stockfish_arena")
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

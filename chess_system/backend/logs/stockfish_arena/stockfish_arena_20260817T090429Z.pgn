@@ -1,0 +1,1200 @@
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "1"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Be7 5. Nf3 Nd7 6. Nf6+ Ndxf6 7. Bd3 Bd7 8. Qe2 Bc6 9. c3 Bd6 10. Ne5 Nd5 11. f4 a5 12. f5 Qh4+ 13. g3 Qd8 14. Bg5 Qc8 15. Bf6 Ngxf6 16. fxe6 Ke7 17. O-O-O fxe6 18. Rhg1 Rf8 19. Ng6+ Ke8 20. c4 Ne7 21. b3 hxg6 22. Kb2 a4 23. c5 Qd8 24. b4 Qd7 25. Qe4 Bxe4 26. Bxe4 Nxe4 27. Rde1 Rb8 28. Rc1 Ra8 29. g4 a3+ 30. Kb3 Nxc5+ 31. bxc5 Qa4+ 32. Kc3 Nd5+ 33. Kd3 Qb5+ 34. Ke4 Qe2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "2"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. Bf4 Nf6 4. a3 c5 5. Nc3 cxd4 6. Nb5 Be7 7. Nc7+ Qxc7 8. Qa4+ Nc6 9. Bxc7 O-O 10. Nf3 Ne4 11. cxd5 exd5 12. Be5 a5 13. e3 b6 14. h4 Ba6 15. exd4 h5 16. Bxa6 g6 17. Qxc6 Rfe8 18. Qxd5 Rac8 19. O-O a4 20. Bxc8 Bf6 21. Rae1 Be7 22. Qxe4 Rxc8 23. Qe3 Rc4 24. Qh6 f6 25. Qxg6+ Kh8 26. Bxf6+ Bxf6 27. Re8# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "3"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 e4 4. g3 d5 5. Bg2 Nbd7 6. O-O dxc4 7. d4 exf3 8. e4 Be7 9. e5 fxg2 10. Qa4 gxf1=B 11. Bg5 O-O 12. Rc1 c6 13. Bxf6 Bd3 14. h4 Nxf6 15. b3 b5 16. bxc4 Bxc4 17. Qa5 Ne8 18. Qa4 a6 19. Ne4 a5 20. Nc5 Qxd4 21. Ne4 Qd5 22. Nc5 Rb8 23. Ne4 Qd4 24. Nc5 Qxf2+ 25. Kxf2 bxa4 26. Ne4 B8e6 27. Kf3 Bb5 28. h5 Rd8 29. h6 Kh8 30. Kf4 gxh6 31. Nc5 Rg8 32. Nd3 Bg5+ 33. Kf3 Bxd3 34. a3 Bxc1 35. g4 Bg5 36. Kg3 c5 37. Kh3 Kg7 38. Kg3 c4 39. Kh3 c3 40. Kg2 c2 41. Kg3 Be2 42. Kh3 B2c4 43. Kg2 c1=Q 44. Kh3 Bxg4+ 45. Kxg4 Be6+ 46. Kh5 Qd1# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "4"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. Bg2 g6 4. O-O Bg7 5. d4 O-O 6. c4 dxc4 7. Ne5 Nc6 8. Bxc6 bxc6 9. Nc3 Be6 10. Nxc6 Nd7 11. Nxd8 c6 12. Nxc6 Rab8 13. d5 Bxd5 14. Nxe7+ Kh8 15. Bf4 f6 16. Re1 f5 17. b3 Rfe8 18. Nxg6+ hxg6 19. Qxd5 a6 20. Nb5 axb5 21. h4 Bf8 22. a3 Bg7 23. Bxb8 Bf8 24. Bc7 Be7 25. bxc4 bxc4 26. Qxd7 Bc5 27. Rab1 Rf8 28. Be5+ Kg8 29. Qg7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "5"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "1/2-1/2"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 Qa5+ 4. Nd2 Bf5 5. c4 h6 6. Qb3 Qb6 7. g3 cxd5 8. Bg2 Nc6 9. cxd5 Nb4 10. Ndf3 Nc2+ 11. Qxc2 Bxc2 12. b3 Rc8 13. Bb2 e6 14. h4 Be4 15. Ne5 Bxd5 16. Ngf3 f6 17. O-O Bb4 18. a3 Bd6 19. Nf7 Kxf7 20. b4 Bxf3 21. Bxf3 Qd8 22. h5 f5 23. Rac1 Ne7 24. a4 Rg8 25. b5 a6 26. Bc3 b6 27. Rfe1 g5 28. Rcd1 Rg7 29. d5 Rxc3 30. Be2 e5 31. Bd3 Rxd3 32. Rxd3 Qa8 33. Kh2 f4 34. Rc1 a5 35. f3 e4 36. fxe4 g4 37. Rb1 Rg5 38. e5 Rxe5 39. Rd4 fxg3+ 40. Kxg3 Rxd5+ 41. Kxg4 Qc8+ 42. Kf3 Qf5+ 43. Ke2 Qxh5+ 44. Kf1 Qf5+ 45. Ke2 Qh5+ 46. Kf1 Qf5+ 47. Ke2 1/2-1/2
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "6"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. e3 Bg7 4. Nf3 O-O 5. Nc3 d6 6. Bd3 Nbd7 7. e4 e5 8. Be3 c6 9. h3 Qe7 10. O-O Re8 11. Bc2 a6 12. d5 Nh5 13. Re1 f5 14. dxc6 bxc6 15. Bg5 h6 16. Nb5 Nc5 17. exf5 hxg5 18. Nxd6 Nf4 19. Nxe8 Qf6 20. h4 g4 21. Nxf6+ Bxf6 22. Nxe5 gxf5 23. Nxc6 Kh8 24. Kh2 Bd7 25. Nb8 Bc6 26. Nxc6 Rc8 27. Bxf5 Rc7 28. g3 Rd7 29. Bxd7 Nfe6 30. Rxe6 Bg7 31. Re8+ Bf8 32. Qd4+ Kh7 33. Bxg4 Ne6 34. Bf5+ Kh6 35. Qh8# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "7"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Qe7 4. O-O g6 5. d4 exd4 6. Nxd4 a6 7. Bxc6 Bg7 8. Re1 dxc6 9. Be3 Nf6 10. Nd2 Ng4 11. Nc4 c5 12. Nb3 b6 13. f3 Nxe3 14. c3 Nxc4 15. e5 Be6 16. g4 O-O 17. a4 Nxb2 18. Rb1 Nxd1 19. Rb2 Qd7 20. h4 Qd4+ 21. Kg2 Nxb2 22. Nxc5 Qg1+ 23. Kh3 Qxc5 24. h5 Nd3 25. Re3 Qxe3 26. h6 Nf4+ 27. Kh4 Bxe5 28. c4 Ng2+ 29. Kh3 Qxf3# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "8"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. b3 Nc6 4. Be2 g6 5. Bb2 Bg7 6. Bxg7 e6 7. d4 cxd4 8. Bb5 Ne7 9. Nxd4 Rg8 10. Bh6 d5 11. Bg5 Bd7 12. Bxc6 bxc6 13. Ne2 e5 14. Nbc3 Qc8 15. Bf6 Rg7 16. Bxg7 f5 17. Bxe5 dxe4 18. Rb1 Rb8 19. Bxb8 a6 20. Bd6 a5 21. Bf4 a4 22. Rg1 axb3 23. h4 h6 24. Qd2 g5 25. Rxb3 gxf4 26. Nxf4 Ng6 27. Nxg6 c5 28. Rh1 f4 29. Rg1 Qa8 30. Rb8+ Qxb8 31. Qxf4 c4 32. Qf8# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "9"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 h6 4. e5 Ne7 5. f4 a6 6. Nf3 Nf5 7. Bd3 Nc6 8. Ne2 Bd7 9. g3 Na5 10. b3 c5 11. Bd2 Nc6 12. c3 g6 13. O-O cxd4 14. c4 Nb4 15. c5 Bxc5 16. g4 Qb6 17. g5 Ne3 18. Qe1 Nxf1 19. Kg2 Ne3+ 20. Kg3 hxg5 21. Nxg5 Nxd3 22. h4 a5 23. a3 Nxe1 24. Bxe3 Qxb3 25. f5 Qxe3+ 26. Kg4 gxf5# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "10"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1/2-1/2"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. e3 Nf6 4. cxd5 exd5 5. Bd3 c5 6. Nc3 g6 7. dxc5 Nbd7 8. b4 Ne4 9. Bb2 Bg7 10. Nge2 O-O 11. Qc2 f5 12. O-O Re8 13. Bb5 Qh4 14. Rad1 Ne5 15. Nxd5 Nc4 16. Nf6+ Bxf6 17. Bxc4+ Be6 18. Bxe6+ Kf8 19. Nf4 Kg7 20. Qb1 b6 21. Bd5 a5 22. g3 bxc5 23. gxh4 axb4 24. Bxf6+ Kxf6 25. Qb3 Rab8 26. Ba8 h6 27. Qa4 g5 28. Qc6+ Kf7 29. Qd7+ Kf6 30. Qc6+ Kf7 31. Qd7+ Kf6 1/2-1/2
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "11"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 e4 4. g3 exf3 5. Bg2 fxg2 6. d4 gxh1=R+ 7. Kd2 Rxh2 8. b3 Be7 9. Kd3 d5 10. Bb2 Na6 11. c5 O-O 12. e3 Bf5+ 13. Ne4 Nb4+ 14. Kd2 Nxe4+ 15. Kc1 Re8 16. Kb1 Nf6+ 17. Qc2 Rxf2 18. a3 Bxc2+ 19. Kc1 Nd3# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "12"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. Ne5 g6 4. d4 Bg7 5. c3 c6 6. Bd2 O-O 7. Na3 b5 8. Nd3 e5 9. Nxe5 Re8 10. Nd3 Nbd7 11. Bg2 Ne5 12. dxe5 Ng4 13. h3 Nxe5 14. Nxe5 Bb7 15. Ng4 Qb6 16. e3 Rac8 17. Nc2 f5 18. Nh2 b4 19. Nxb4 d4 20. O-O dxe3 21. Qb3+ Kh8 22. Bxe3 Qxe3 23. fxe3 Bf8 24. Rfe1 Bc5 25. c4 Bxb4 26. Red1 g5 27. Qxb4 Red8 28. g4 fxg4 29. hxg4 c5 30. Qc3+ Kg8 31. Qc2 Be4 32. Bxe4 Rd2 33. Bd5+ Kg7 34. Rxd2 Kf6 35. Rf2+ Ke7 36. Qxh7+ Kd6 37. Rd2 Ke5 38. Qe7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "13"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 Nf6 4. c4 g6 5. Nc3 Bg4 6. Qb3 cxd5 7. cxd5 Bc8 8. Be2 Bg7 9. Be3 Nbd7 10. O-O-O Nb6 11. f4 O-O 12. h3 Nfxd5 13. Nxd5 Qxd5 14. Bd2 Qe4 15. g3 Qc6+ 16. Kb1 Bf5+ 17. Bd3 Be6 18. Be4 Bxb3 19. d5 Nxd5 20. f5 Bxa2+ 21. Ka1 Bc4 22. Bxd5 Qa6+ 23. Kb1 Qa2+ 24. Kc1 Qa1+ 25. Kc2 Qxb2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "14"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. g3 Bg7 4. Nf3 O-O 5. Nc3 d6 6. Bg2 Nc6 7. h3 e5 8. d5 Ne7 9. O-O Nd7 10. e4 f5 11. a3 Nc5 12. Ng5 h6 13. Ne6 f4 14. Nxf8 g5 15. gxf4 exf4 16. Bd2 a5 17. Na4 Bd7 18. Nxc5 dxc5 19. Nxd7 Qxd7 20. Rc1 Rf8 21. Rc3 Rf6 22. e5 Rg6 23. Re1 Qd6 24. Rd3 Qxe5 25. Kf1 c6 26. d6 Kf8 27. Rxe5 h5 28. Re4 g4 29. dxe7+ Ke8 30. Rd8+ Kf7 31. e8=Q+ Kf6 32. Qe7+ Kf5 33. Rd5+ Be5 34. Rdxe5# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "15"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. O-O Nf6 5. d3 Bd7 6. Bxc6 bxc6 7. Nbd2 Rc8 8. h3 c5 9. a4 a6 10. c3 Ra8 11. b4 Be6 12. bxc5 Rb8 13. cxd6 Qc8 14. c4 Bxd6 15. a5 Bxh3 16. Nb3 O-O 17. c5 Qg4 18. Nbd4 Qxg2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "16"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. h4 g6 4. Be2 Bg7 5. h5 e5 6. d3 Nf6 7. Bg5 h6 8. Bxf6 Bxf6 9. Nfd2 g5 10. Nc4 Qe7 11. Bg4 Nd7 12. Nc3 Nb6 13. Bxc8 g4 14. Nxb6 O-O 15. Qxg4+ Kh7 16. Bf5+ Kh8 17. Ncd5 Bg7 18. Nd7 Rfe8 19. c3 Qe6 20. N7b6 Qxd5 21. Qxg7+ Kxg7 22. Nxd5 Red8 23. f4 exf4 24. Kd1 f6 25. Nxf4 d5 26. Nxd5 Rd7 27. Bxd7 c4 28. Rf1 b6 29. a4 Rb8 30. Nxf6 Kh8 31. Bb5 a6 32. Bxc4 Kg7 33. Nd5 b5 34. axb5 axb5 35. Ra7+ Kh8 36. Nf6 b4 37. Rh7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "17"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Nc6 4. Nf3 Be7 5. e5 Na5 6. Bb5+ c6 7. a3 cxb5 8. b4 Bd7 9. O-O Qc7 10. bxa5 Qc6 11. Qe2 Rc8 12. Be3 a6 13. Nd2 Qxc3 14. f4 Bd8 15. Rfe1 Ne7 16. Rab1 O-O 17. Bf2 Nf5 18. Nb3 Qc7 19. g4 Nh4 20. Qd3 Qc3 21. g5 Qxd3 22. c3 h6 23. Kh1 Qf3+ 24. Kg1 Qg2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "18"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. e3 Nf6 4. Nf3 Nc6 5. Bd3 Na5 6. Qa4+ Nd7 7. cxd5 c5 8. Bd2 exd5 9. O-O cxd4 10. Qxa5 Be7 11. Qxd5 O-O 12. exd4 b5 13. Qe4 Bb7 14. Qxh7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "19"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 e4 4. g3 exf3 5. Bg2 fxg2 6. d4 gxh1=R+ 7. Kd2 Rxh2 8. b3 Bb4 9. Kd3 Be7 10. Bb2 h5 11. e3 b6 12. a3 c6 13. b4 d5 14. c5 Rh4 15. f4 Bh3 16. Qf3 a5 17. Ne2 b5 18. bxa5 Bf5+ 19. Kc3 Rh2 20. Qg2 Rxg2 21. Rb1 Ne4+ 22. Kd3 Rh2 23. g4 Nd7 24. g5 Ng3+ 25. e4 Nxc5+ 26. dxc5 Bxe4+ 27. Kd4 Bf6+ 28. gxf6 Qxf6+ 29. Ke3 Rxe2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "20"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. Bg2 g6 4. d4 Bg7 5. c3 O-O 6. O-O c6 7. a4 Ne4 8. Qb3 Qb6 9. Qd1 a5 10. Nbd2 Nxc3 11. bxc3 Qc5 12. dxc5 b6 13. cxb6 Nd7 14. Rb1 Ne5 15. Nd4 Rb8 16. N2f3 Bg4 17. Kh1 e6 18. Nxe5 Bxe5 19. Ba3 Bxd4 20. cxd4 Rfe8 21. f3 Bxf3 22. exf3 Red8 23. Qe1 Rd7 24. Bc1 Ra8 25. Bf4 Rb8 26. g4 Rxb6 27. Bb8 Rd6 28. h4 Kf8 29. Rxb6 Ke7 30. g5 e5 31. Bxd6+ Kxd6 32. Rb7 exd4 33. Qe7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "21"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Nf3 Nc6 5. Bd3 Nf6 6. c3 Bg4 7. h3 Bd7 8. O-O Qc7 9. Qe2 O-O-O 10. Re1 Kb8 11. Bf4 Qxf4 12. Ne5 Nxe5 13. dxe5 e6 14. b4 Ne8 15. Qe4 Qxe4 16. Bxe4 dxe4 17. a4 Nc7 18. Nd2 Re8 19. a5 e3 20. Ne4 Rg8 21. Rxe3 a6 22. Nd6 Bb5 23. Kh2 g6 24. Rc1 Rd8 25. Rd1 Bc6 26. f4 Nd5 27. f5 Bxd6 28. fxe6 Nxe3 29. Rc1 Nf1+ 30. Kh1 Ne3 31. Rd1 Bc7 32. Rc1 Bxg2+ 33. Kg1 Bd5 34. Rd1 Nxd1 35. exf7 Rgf8 36. h4 Bxf7 37. Kg2 Be6 38. h5 Ne3+ 39. Kg3 g5 40. c4 Bxe5# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "22"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. e3 Bg7 4. Bd3 O-O 5. Nc3 d5 6. Nf3 Bg4 7. h3 Nc6 8. hxg4 e6 9. cxd5 exd5 10. g5 Ne4 11. Rb1 f5 12. Qb3 a5 13. Qxd5+ Kh8 14. Bd2 b5 15. Qxc6 Re8 16. Bxe4 Rg8 17. Bd5 Bf8 18. a3 Bg7 19. Qxb5 c5 20. Bxa8 cxd4 21. exd4 Bf8 22. Bc6 Bg7 23. Rc1 Bf8 24. b4 axb4 25. Qe5+ Bg7 26. axb4 Qe8 27. Qe2 Bf8 28. Qe5+ Bg7 29. Rxh7+ Kxh7 30. Be3 Bf8 31. Nd5 Bg7 32. Qh2+ Bh6 33. Qxh6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "23"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nge7 4. O-O Ng6 5. d4 exd4 6. Nxd4 a6 7. Nxc6 Qf6 8. Ba4 b5 9. Bb3 Qxc6 10. c3 Bb7 11. Nd2 Bc5 12. Re1 O-O-O 13. g3 f5 14. e5 Qg2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "24"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nd2 a6 6. Be2 e5 7. Nf5 Be7 8. Nxg7+ Kf8 9. Nf5 Nbd7 10. Nxe7 Qxe7 11. f3 b5 12. Nf1 Nc5 13. Bg5 Bd7 14. Qd2 b4 15. Qxb4 h6 16. Bc1 Nd5 17. Qa5 Kg8 18. exd5 f5 19. Qa3 e4 20. Be3 exf3 21. gxf3 Kf7 22. Ng3 Raf8 23. O-O-O Bb5 24. Bxb5 axb5 25. Kb1 f4 26. Bxc5 dxc5 27. Ne4 Qa7 28. Nd6+ Kg6 29. Qxa7 c4 30. Qd4 Kg5 31. Qg7+ Kh5 32. Qg4# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "25"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 a6 4. f4 Nf6 5. Nf3 Bb4 6. Bd3 dxe4 7. Bxe4 Bxc3+ 8. bxc3 Nxe4 9. O-O b5 10. Ng5 Bb7 11. Qg4 g6 12. f5 Nxg5 13. fxe6 Nxe6 14. Bg5 Qxg5 15. Rab1 Qxg4 16. g3 Nd7 17. Rfe1 Bd5 18. h4 Rg8 19. h5 gxh5 20. Re2 Qxg3+ 21. Kf1 Qg1# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "26"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. Nc3 Bb4 5. cxd5 exd5 6. Qb3 O-O 7. Qxb4 c6 8. Bd2 Re8 9. a4 Ne4 10. Qb3 Bf5 11. Bf4 a5 12. h4 h5 13. e3 b6 14. Qd1 Nd7 15. Rc1 Nf8 16. Ne5 Qd7 17. Nxd7 Nxc3 18. Qb3 c5 19. Nxb6 c4 20. Qa3 Rac8 21. Rxc3 Rcd8 22. f3 Rd7 23. Qxf8+ Kh7 24. Qxe8 f6 25. Nxd7 Bd3 26. Rc2 g6 27. Qe7+ Kg8 28. Qf8+ Kh7 29. Nxf6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "27"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 d6 4. g3 g6 5. Bg2 Nbd7 6. O-O Rb8 7. d4 Bg7 8. dxe5 dxe5 9. Bg5 O-O 10. Rc1 Re8 11. b3 e4 12. Nxe4 Qe7 13. Qd2 Nf8 14. Be3 Qxe4 15. Nd4 Qe5 16. Nb5 Bd7 17. Nxc7 Qxc7 18. h3 Qc8 19. a3 Bxh3 20. Rfd1 h5 21. b4 Ra8 22. c5 Ne4 23. Bf3 Rb8 24. Bf4 Ra8 25. Be3 Bf5 26. Kg2 Bg4 27. Bf4 Bh3+ 28. Kg1 Nxd2 29. Rxd2 h4 30. e4 Kh8 31. g4 a5 32. bxa5 Bxg4 33. Kg2 Bxf3+ 34. Kxf3 Ne6 35. Be3 g5 36. Rcd1 Qc6 37. Rd8 Raxd8 38. Bxg5 Rd3+ 39. Rxd3 Nxg5+ 40. Ke2 Qxe4+ 41. Kd2 Qa4 42. f3 Qc4 43. Rc3 Rd8+ 44. Ke3 Qxc3+ 45. Kf2 Qd4+ 46. Ke1 Qd2+ 47. Kf1 Qd1+ 48. Kg2 Rd2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "28"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1/2-1/2"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. c3 g6 4. a4 Bg7 5. Bg2 O-O 6. Qb3 e6 7. d4 Nfd7 8. O-O Nc6 9. Na3 Nc5 10. Qc2 a5 11. dxc5 Ne5 12. Rd1 Nxf3+ 13. Bxf3 b6 14. cxb6 c6 15. Be3 Rb8 16. Qd2 Qe7 17. Nc2 Rd8 18. Bg5 h6 19. Bxe7 g5 20. Bxd8 c5 21. Bh1 c4 22. Be7 f5 23. Ne3 f4 24. Nc2 Kf7 25. Bd6 Bb7 26. Bc7 Bd4 27. Bxf4 g4 28. Ne3 Be5 29. Qc1 Bc6 30. h4 Bxf4 31. gxf4 Bb7 32. Rb1 Bc6 33. Bg2 Bb7 34. Ra1 Bc6 35. f3 g3 36. Bf1 Kf6 37. Ng4+ Kg7 38. f5 exf5 39. Qxh6+ Kg8 40. Qg5+ Kf7 41. Qxf5+ Kg7 42. Qf6+ Kg8 43. Qg6+ Kh8 44. Qf6+ Kg8 45. Qg6+ Kh8 46. Qh6+ Kg8 1/2-1/2
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "29"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Nf3 Nc6 5. Bd3 Bg4 6. h3 Bh5 7. c3 Qc7 8. O-O a6 9. Nbd2 O-O-O 10. Nb3 e6 11. Be3 Bd6 12. Qe2 Nf6 13. Rfe1 Ne4 14. Bxe4 Bh2+ 15. Kf1 g5 16. g4 dxe4 17. Ne5 f6 18. Rad1 Bg6 19. a3 Nxe5 20. Bd2 Nd3 21. c4 Bf4 22. Bc3 Rhe8 23. c5 Rd5 24. Kg2 h5 25. gxh5 Bf5 26. Rd2 Bxd2 27. f4 Nxf4+ 28. Kg3 Bxc3 29. bxc3 Nxe2+ 30. Kf2 Qh2+ 31. Ke3 Nxc3 32. a4 Qf4# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "30"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. Bf4 Bg7 4. Nf3 O-O 5. Nc3 d5 6. Qb3 dxc4 7. Qa3 c6 8. e3 Nbd7 9. h3 c5 10. Bxc4 b6 11. Ne5 Bb7 12. Rd1 Rc8 13. Qb3 Ba6 14. Bxf7+ Rxf7 15. Nxf7 cxd4 16. Nxd8+ Kh8 17. Nf7+ Kg8 18. Nd6+ Nd5 19. Qxd5+ Kf8 20. Qf7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "31"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nd4 4. O-O Nxb5 5. d4 Be7 6. dxe5 d6 7. Nd4 Nxd4 8. Qxd4 c5 9. c4 f6 10. Nc3 fxe5 11. Qxe5 dxe5 12. Rd1 Qb6 13. Be3 Nf6 14. Nd5 Nxd5 15. exd5 Qd6 16. b4 Bh3 17. bxc5 Qa6 18. c6 bxc6 19. d6 Bxd6 20. f4 Rf8 21. f5 Be7 22. c5 Rd8 23. a4 Bxf5 24. a5 Qe2 25. Rd2 Qg4 26. Rad1 Qxd1+ 27. Kf2 Rxd2+ 28. Kg3 Qg4# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "32"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. c3 Nf6 4. Qc2 Nc6 5. Bb5 Bg4 6. Bxc6+ Qd7 7. Bd5 g6 8. d3 Bg7 9. Qd1 O-O 10. a4 Ne8 11. Bb3 e6 12. O-O c4 13. Bxc4 d5 14. h3 dxe4 15. hxg4 exf3 16. Re1 Rb8 17. Qxf3 Bd4 18. cxd4 b6 19. Bh6 f6 20. Bf4 Qd5 21. Nd2 f5 22. Qe3 Qd7 23. Qxe6+ Kh8 24. Bxb8 f4 25. Qe5+ Nf6 26. Qe7 Rf7 27. Qxf6+ Rxf6 28. Be5 h5 29. Nf3 hxg4 30. Bxf6+ Qg7 31. Re8+ Kh7 32. Ng5+ Kh6 33. Nf7+ Kh5 34. Bxg7 g5 35. Be5 b5 36. Rh8+ Kg6 37. Bd5 b4 38. Rh6+ Kf5 39. Be4# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "33"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. a3 Ba5 6. b4 cxb4 7. axb4 Bxb4 8. Qg4 Nf6 9. Bd3 Bxc3+ 10. Bd2 Bxd2+ 11. Kf1 Nxg4 12. c4 dxc4 13. f4 a6 14. Rb1 Nxh2+ 15. Kf2 Be1+ 16. Ke3 Bf2+ 17. Kd2 Bxd4 18. Bxc4 Ba1+ 19. Bd5 Nf1+ 20. Kd3 Ng3 21. Nf3 h6 22. f5 exd5 23. Rhg1 Nc6 24. e6 Bf6 25. exf7+ Kf8 26. Rh1 Ba1 27. Rhg1 Kxf7 28. Ne5+ Nxe5+ 29. Kc2 Ke7 30. Rh1 Nxh1 31. g3 Bxf5+ 32. Kd2 Nf3+ 33. Ke3 Ke6 34. Kf4 Qg5+ 35. Kxf3 Qh5+ 36. g4 Bxg4+ 37. Ke3 Qg5+ 38. Kd3 Nf2+ 39. Kc2 Qf5+ 40. Kd2 Qd3+ 41. Kc1 Rhc8# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "34"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. b3 Nf6 4. e3 c5 5. dxc5 Bxc5 6. cxd5 exd5 7. Bb2 b6 8. a3 Bb7 9. Nf3 O-O 10. Be2 Bc6 11. Ne5 h6 12. Nc3 Re8 13. Nf3 Qd7 14. b4 Bxb4 15. axb4 Ne4 16. Nd4 a5 17. b5 f5 18. Rc1 Kf7 19. Nxe4 dxe4 20. Rxc6 Qd5 21. Rc1 Nd7 22. Bc4 Rac8 23. Bxd5+ Kg6 24. Rxc8 Nf6 25. Rc1 Nxd5 26. Qc2 Kf6 27. Ne2+ Nc3 28. Nxc3 Rd8 29. Ne2+ Kg5 30. Ba3 a4 31. Rg1 Re8 32. f4+ exf3 33. h4+ Kf6 34. Qc6+ Kf7 35. Qd5+ Kf6 36. Rc6+ Re6 37. Qxe6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "35"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 e4 4. g3 exf3 5. Bg2 Nc6 6. O-O Be7 7. e4 fxg2 8. d4 gxf1=Q+ 9. Kxf1 h5 10. e5 Ng4 11. Qc2 Nh6 12. Ke2 Nxd4+ 13. Ke3 Nhf5+ 14. Kf4 d6 15. Qd2 a5 16. a3 Ne6+ 17. Kxf5 Ng5+ 18. e6 fxe6+ 19. Kg6 e5 20. Qd4 Rh6+ 21. Kxg7 Rh7+ 22. Kg6 exd4 23. Bxg5 Bg4 24. Ne4 Be6 25. Bf6 d3 26. f3 Qd7 27. c5 Rh6+ 28. Kg5 Rg6+ 29. Kxg6 Bf7+ 30. Kg5 Be6 31. f4 dxc5 32. Kg6 Bf5+ 33. Kg7 d2 34. Bxe7 Qxe7+ 35. Kh6 Bxe4 36. Re1 Ra6+ 37. Kxh5 dxe1=Q 38. g4 Q1h4# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "36"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. Bg2 g6 4. O-O Bg7 5. d4 O-O 6. Re1 c6 7. c4 dxc4 8. e4 Nbd7 9. e5 Nd5 10. Nbd2 b6 11. e6 Bb7 12. exd7 Nc3 13. Qc2 Qxd7 14. Ne5 Rfd8 15. Nxd7 Rxd7 16. bxc3 Bxd4 17. cxd4 Rc8 18. Be4 e5 19. Nxc4 exd4 20. h4 f5 21. f3 b5 22. Bd3 Kf7 23. Qh2 Re8 24. Bf4 Rxe1+ 25. Rxe1 bxc4 26. Bxc4+ Rd5 27. Bxd5+ cxd5 28. Bd6 Bc6 29. Re7+ Kf6 30. Qb2 h5 31. Qxd4# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "37"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 Qxd5 4. c4 Qd8 5. Nc3 Nf6 6. Nf3 Qc7 7. Bd3 h6 8. O-O g6 9. Qb3 Bg4 10. h3 Be6 11. Be3 Bg7 12. Rfd1 Qb6 13. Rd2 Qxb3 14. a3 Bxc4 15. Bxc4 Qxc4 16. Na4 Qa6 17. Nc5 Qb5 18. Nd3 Qa5 19. Nc5 Nbd7 20. Nh4 Nxc5 21. f3 Ncd7 22. Re2 Nf8 23. Bd2 Qd8 24. Re3 Qd5 25. b4 Rg8 26. f4 h5 27. g4 c5 28. Nf5 Qh1+ 29. Kxh1 Nd5 30. dxc5 Nxe3 31. Bxe3 Bxa1 32. Ng3 h4 33. Kg1 Bh8 34. b5 Nd7 35. a4 hxg3 36. a5 e6 37. c6 bxc6 38. b6 Nxb6 39. Kg2 Nd5 40. Kf3 g2 41. f5 Kd7 42. Bd4 Bxd4 43. a6 gxf5 44. g5 Rab8 45. Ke2 g1=N+ 46. Kf1 Rb1+ 47. Kg2 Rb2+ 48. Kg3 Rxg5+ 49. Kh4 Nf3# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "38"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. h3 O-O 6. g4 e5 7. d5 Nbd7 8. Be3 Nc5 9. Bg2 Nfd7 10. Qc2 f5 11. O-O-O fxe4 12. Nge2 a5 13. Kb1 Nf6 14. Bxc5 dxc5 15. a3 Re8 16. g5 b6 17. Nb5 Bf8 18. gxf6 Be7 19. f7+ Kxf7 20. h4 Bd7 21. h5 Bf5 22. Bxe4 gxh5 23. Bxf5 Bd6 24. Nec3 e4 25. Nxe4 Bf8 26. Nbc3 Qd7 27. Bxd7 Rad8 28. Ng5+ Kf6 29. Nge4+ Kg6 30. Bxe8+ Rxe8 31. Rhg1+ Kh6 32. Qd2# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "39"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nge7 4. O-O Ng6 5. d4 a6 6. Bxc6 a5 7. Re1 dxc6 8. Nbd2 Be6 9. Nc4 Bxc4 10. dxe5 Be6 11. Bg5 Qb8 12. Qd2 Bc5 13. Qf4 Nxf4 14. Be7 Bxf2+ 15. Kh1 Bxe1 16. a3 Qa7 17. Nd4 Kxe7 18. Rd1 Bd2 19. Rxd2 Rhd8 20. h3 g6 21. Nxe6 Kxe6 22. h4 Rxd2 23. h5 a4 24. h6 Qf2 25. c3 Rd1+ 26. Kh2 g5 27. c4 c5 28. b4 b6 29. b5 Rh1+ 30. Kxh1 Qf1+ 31. Kh2 Qxg2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "40"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Bd3 a6 6. Qe2 e6 7. Nf5 Nc6 8. Ng3 Be7 9. O-O O-O 10. a3 b5 11. a4 Bb7 12. f4 Qb6+ 13. Be3 Rac8 14. Bxb6 b4 15. Rf3 d5 16. Nd2 dxe4 17. Be3 Rfd8 18. Ngxe4 Nxe4 19. Bxe4 g6 20. Bd3 Rd5 21. Be4 a5 22. Qf1 Ne5 23. f5 gxf5 24. Rg3+ Kh8 25. Bxd5 Bd8 26. Bxb7 Rb8 27. Rh3 Bc7 28. Bf3 Ra8 29. Bxa8 Nc4 30. Bd4+ Kg8 31. Qxc4 e5 32. Ba7 Kg7 33. Rg3+ Kf6 34. Bd5 h5 35. Qxc7 h4 36. Qd8# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "41"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Bb4 4. e5 c5 5. a3 cxd4 6. axb4 dxc3 7. Nf3 f6 8. Bd3 b6 9. O-O Qc7 10. Re1 Nc6 11. exf6 Nxf6 12. Nd2 cxd2 13. Bxd2 O-O 14. c3 Nd8 15. g3 e5 16. Qf3 e4 17. Qe3 Bd7 18. c4 Ng4 19. Rac1 Nc6 20. cxd5 Qd6 21. Qf4 Nce5 22. Bxe4 Rae8 23. f3 Rf6 24. Rc3 Rxf4 25. b5 Rf7 26. h3 Rxf3 27. h4 Rf7 28. Rd1 Nf3+ 29. Kf1 Qxg3 30. Ke2 Bxb5+ 31. Rc4 Nd4# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "42"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. c5 Nf6 4. Nf3 c6 5. Nc3 Qc7 6. g3 g6 7. Bg2 Bg7 8. b4 O-O 9. Bf4 Nbd7 10. Nxd5 exd5 11. Bxc7 Re8 12. Qb1 Ne4 13. h3 b6 14. g4 Bb7 15. O-O f5 16. Bd6 fxg4 17. Re1 gxf3 18. Bh1 h6 19. exf3 Ng3 20. Rxe8+ Rxe8 21. Qxg6 h5 22. fxg3 Rc8 23. Rd1 bxc5 24. bxc5 Ba6 25. Kh2 Ne5 26. Bxe5 Kf8 27. Bxg7+ Ke7 28. Re1+ Kd8 29. Qd6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "43"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. e3 d5 5. c5 a6 6. Bb5 axb5 7. Nxe5 Nxe5 8. f4 Nf3+ 9. Qxf3 b4 10. Na4 Bg4 11. h3 Bxf3 12. g3 Bh5 13. f5 Bxc5 14. Nxc5 Qe7 15. g4 h6 16. g5 Nh7 17. f6 gxf6 18. gxf6 Qd6 19. O-O Qxc5 20. Kh1 Bf3+ 21. Kg1 Rg8+ 22. Kf2 Bh5 23. d3 Qc6 24. a3 Rb8 25. axb4 Qxf6+ 26. Ke1 Qc6 27. Bd2 Rc8 28. Rg1 Rg2 29. Rxg2 Qc2 30. Rg4 Rd8 31. b5 Ng5 32. Kf2 Qxd2+ 33. Kg3 d4 34. Kf4 Qh2+ 35. Kf5 Qf2+ 36. Rf4 Qxe3 37. Rg4 Qf2+ 38. Rf4 Rd5+ 39. Kf6 Qxf4+ 40. Kg7 Qe5+ 41. Kxh6 Qh8# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "44"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1/2-1/2"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. c3 g6 4. a3 Bg7 5. Ng5 O-O 6. d3 c6 7. Bg2 Ng4 8. a4 Ne5 9. d4 Qb6 10. dxe5 e6 11. Nf3 f5 12. exf6 Nd7 13. O-O Nc5 14. a5 Bxf6 15. axb6 a5 16. Na3 a4 17. Nb1 Bd7 18. h4 e5 19. Kh1 Rac8 20. Bd2 Bf5 21. Ra2 d4 22. Na3 Rfe8 23. Ra1 Bg4 24. Nc4 h5 25. Qb1 Bxf3 26. Qxg6+ Bg7 27. Qxe8+ Kh7 28. Qxc8 e4 29. Qg8+ Kxg8 30. Kh2 Kf7 31. cxd4 Ke7 32. Bf4 Kf6 33. Bg5+ Kf5 34. exf3 exf3 35. Bxf3 Nd7 36. Be4+ Kxe4 37. Kh3 Nf6 38. Rfe1+ Kd3 39. Ne5+ Kc2 40. Rac1+ Kxb2 41. Rb1+ Kc3 42. Bxf6 Bxf6 43. Re3+ Kxd4 44. Ree1 Bg5 45. Nf3+ Kd3 46. hxg5 Kc2 47. Rbd1 Kc3 48. Re3+ Kb2 49. Re2+ Kc3 50. Re3+ Kb2 51. Re2+ Kc3 1/2-1/2
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "45"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 Qxd5 4. c4 Qd6 5. Nc3 Nf6 6. Nf3 Bf5 7. Be2 Qc7 8. O-O Nbd7 9. Bg5 h6 10. Bh4 a6 11. Qd2 Rd8 12. Rad1 Qc8 13. Qf4 e6 14. Bg3 Be7 15. Ne5 b5 16. h3 Bc2 17. b3 O-O 18. c5 g5 19. a4 Nxc5 20. Rd2 Nxb3 21. Qf5 exf5 22. Rfd1 Be4 23. f3 Nxd2 24. a5 Nc4 25. f4 Bc2 26. Bf3 Qb8 27. Nd5 cxd5 28. Rd2 Kg7 29. Kh2 Ng4+ 30. hxg4 Nxe5 31. Kh3 Nxf3 32. Rxc2 gxf4 33. Rc3 fxg3 34. gxf3 Qf4 35. Re3 fxg4+ 36. fxg4 Qf1+ 37. Kxg3 Bd6+ 38. Re5 Bxe5+ 39. dxe5 Kh7 40. e6 fxe6 41. g5 Rc8 42. gxh6 Rf3+ 43. Kg4 Qg2+ 44. Kh5 Rh3# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "46"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. g3 Bg7 4. Bd2 O-O 5. Nc3 c6 6. Nf3 d5 7. b3 e6 8. Rc1 dxc4 9. bxc4 Qe7 10. Bh3 b6 11. O-O Nbd7 12. Qb3 Rb8 13. Bg2 Bb7 14. Bf4 a6 15. c5 b5 16. Bxb8 Rc8 17. Bf4 e5 18. dxe5 Nh5 19. Rfd1 Nxf4 20. gxf4 Nxc5 21. Qb2 Bf8 22. Rc2 f6 23. Re1 fxe5 24. Rd1 e4 25. Nd4 a5 26. Rdc1 a4 27. Rd1 Kf7 28. Ndxb5 cxb5 29. Nxb5 Rc7 30. Qh8 Rd7 31. Rcd2 Rd6 32. Nxd6+ Qxd6 33. Qxh7+ Ke6 34. Bh3+ Kf6 35. Rxd6+ Ne6 36. Rxe6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "47"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nge7 4. O-O Nd4 5. Nxd4 a6 6. Nc6 bxc6 7. Ba4 a5 8. Re1 Ba6 9. Bb3 h5 10. Nc3 c5 11. Nd5 Nc6 12. a4 Nd4 13. f4 c6 14. fxe5 cxd5 15. Bxd5 Rb8 16. c3 Qh4 17. g3 Qe7 18. Qf3 Nxf3+ 19. Kf2 Nxh2 20. Bc4 Bxc4 21. d4 cxd4 22. cxd4 Qb4 23. Be3 Qxb2+ 24. Re2 Ng4+ 25. Kf3 Qxe2+ 26. Kf4 h4 27. Rb1 g5+ 28. Kf5 Be6+ 29. Kxg5 Bh6+ 30. Kxh4 Bg5+ 31. Kxg5 Qxe3# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "48"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1/2-1/2"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. f3 Nc6 6. Be2 g6 7. Nc3 Bg7 8. Nb3 O-O 9. Bg5 Be6 10. Be3 d5 11. exd5 Bxd5 12. O-O Qc7 13. Nxd5 Nxd5 14. Qxd5 Rfd8 15. Qe4 e6 16. c3 e5 17. Bg5 h6 18. Be3 Bf8 19. Kh1 f5 20. Qc2 g5 21. Rab1 f4 22. Bf2 Qb6 23. Qf5 Nb4 24. Bc4+ Kg7 25. Qxe5+ Kg6 26. Bxb6 Rac8 27. Qe4+ Kg7 28. Qe5+ Kg6 29. Qe4+ Kg7 30. Qd4+ Kg6 1/2-1/2
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "49"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Ne7 4. e5 a6 5. f4 h5 6. Bd3 c5 7. dxc5 Nd7 8. Nf3 h4 9. O-O Qc7 10. f5 Nxc5 11. fxe6 fxe6 12. Ne2 Nxd3 13. cxd3 Nf5 14. Nf4 Rh7 15. h3 Rh6 16. Nxh4 Bc5+ 17. Kh2 Nxh4 18. g3 g5 19. g4 Qxe5 20. a3 b5 21. Qf3 Bg1+ 22. Kg3 Nxf3 23. Be3 gxf4+ 24. Bxf4 Rxh3+ 25. Kg2 Qe2+ 26. Kxh3 a5 27. Be5 Ng5+ 28. Kh4 Bf2+ 29. Kh5 Qxe5 30. Rad1 Nf3+ 31. g5 Qxg5# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "50"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. Qb3 Nf6 4. Nc3 Bb4 5. Qa4+ Nfd7 6. Qxb4 dxc4 7. Bf4 c5 8. Qxc4 cxd4 9. Ne4 Nc6 10. Bd2 Nc5 11. Qxc5 b6 12. Nf6+ gxf6 13. Qxc6+ Ke7 14. Qc2 Bb7 15. Nf3 Rc8 16. Qd3 Qc7 17. Qxd4 e5 18. Qc3 Qc6 19. Rc1 Rhd8 20. Qxc6 Bxc6 21. h4 Kd6 22. Rd1 h6 23. Rg1 Kd7 24. Nh2 Rb8 25. Ng4 Re8 26. Nxf6+ Kd6 27. Nxe8+ Kd5 28. Bg5+ Ke6 29. Ng7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "51"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. e3 Bc5 5. Be2 Bb4 6. a3 Bxc3 7. b4 Nd4 8. O-O Nxe2+ 9. Qxe2 Bxa1 10. Nxe5 Bxe5 11. d4 d6 12. Rd1 Bxh2+ 13. Kh1 d5 14. c5 Ng4 15. Qd3 Nxf2+ 16. Kxh2 Qh4+ 17. Kg1 Nxd3 18. Bd2 O-O 19. g3 Qxg3+ 20. Kh1 Nf2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "52"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. b3 g6 4. c3 Bg7 5. Bg2 O-O 6. Bb2 e5 7. Nxe5 c6 8. d4 Bf5 9. c4 Ng4 10. Nf3 f6 11. Nc3 h5 12. O-O Qd7 13. h3 b5 14. cxd5 Ne5 15. dxe5 Kf7 16. e6+ Qxe6 17. dxe6+ Kxe6 18. e4 a6 19. Ng5+ Ke5 20. Ne2# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "53"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "1/2-1/2"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Nf3 Bf5 5. Bb5+ Nd7 6. Nh4 Be4 7. Bxd7+ Kxd7 8. Nc3 e6 9. Bf4 Qxh4 10. Nxe4 f5 11. Nd6 Nh6 12. Be5 Ng4 13. O-O Nxh2 14. Nxf5 Qg5 15. Qg4 Qxg4 16. Rfe1 Qxf5 17. a3 Ng4 18. b4 Qxf2+ 19. Kh1 Qh4+ 20. Kg1 Qf2+ 21. Kh1 Qh4+ 22. Kg1 1/2-1/2
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "54"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. a3 Bg7 4. Nf3 O-O 5. e3 d6 6. Be2 Nbd7 7. b3 e5 8. Nc3 Re8 9. Bb2 e4 10. Nh4 Nf8 11. h3 Bf5 12. g3 h5 13. d5 c6 14. Nxf5 h4 15. Nxg7 Kxg7 16. gxh4 Qe7 17. dxc6 bxc6 18. b4 c5 19. bxc5 d5 20. Nxd5 Qe5 21. Bxe5 Kh6 22. Qb3 N6d7 23. Bd6 Nxc5 24. Bf4+ Kg7 25. Qc3+ Re5 26. Rg1 f5 27. Rb1 a5 28. Bxe5+ Kh6 29. Bd6 g5 30. h5 a4 31. Qh8+ Nh7 32. Bf8+ Rxf8 33. Rb6+ Ne6 34. Rxe6+ Rf6 35. Rxf6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "55"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 d5 4. O-O Bg4 5. h3 h5 6. d3 dxe4 7. Bxc6+ Bd7 8. Nxe5 Bxc6 9. Nd2 Ne7 10. dxe4 Ba4 11. Ndf3 Qd6 12. Qe2 f6 13. Rd1 Qb4 14. c3 Bxd1 15. Ng6 Nxg6 16. e5 Bxe2 17. e6 Qc4 18. Nd4 Qxd4 19. g3 Qd6 20. f4 Qb6+ 21. Kh1 Qc6+ 22. Kg1 Bc5+ 23. Be3 Bxe3+ 24. Kh2 h4 25. Rb1 Bg1+ 26. Kxg1 Qc5+ 27. Kh1 Qd5+ 28. Kg1 Qxe6 29. Kh2 Rf8 30. a3 Qxh3+ 31. Kxh3 Rd8 32. g4 Rf7 33. b4 Nxf4+ 34. Kxh4 Ng2+ 35. Kh5 Rb8 36. c4 Rd8 37. c5 Nf4+ 38. Kh4 Rfd7 39. b5 Bf1 40. g5 a5 41. b6 fxg5+ 42. Kxg5 Ne6+ 43. Kg4 Be2+ 44. Kh4 Bc4 45. Kh5 Be2+ 46. Kh4 Ba6 47. Kh5 Bc4 48. Rb4 axb4 49. axb4 Be2+ 50. Kh4 Bc4 51. Kh5 c6 52. Kg4 Rd5 53. Kf3 Rd3+ 54. Ke2 R3d5+ 55. Ke3 Rf5 56. Ke4 g6 57. b5 Rfd5 58. Kf3 cxb5 59. Kg3 Rxc5 60. Kg4 b4 61. Kf3 Rf5+ 62. Ke3 b3 63. Ke4 Rg5 64. Kf3 b2 65. Ke3 Re5+ 66. Kf3 Nd4+ 67. Kg3 b1=R 68. Kg4 Re6 69. Kg5 Rg1+ 70. Kh4 g5+ 71. Kh5 Be2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "56"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. Bd3 Nc6 4. Be2 g6 5. c3 Bg7 6. d4 e6 7. Be3 Nge7 8. dxc5 dxc5 9. Bxc5 O-O 10. O-O e5 11. Nbd2 f5 12. a4 f4 13. Nc4 b6 14. Bd6 Kh8 15. Ncxe5 Bb7 16. Bc4 Rc8 17. Be6 Rc7 18. Nf7+ Rxf7 19. Bxf7 g5 20. Bh5 g4 21. Ng5 h6 22. Ne6 Qc8 23. Bf7 Na5 24. f3 Rc5 25. b4 Nc4 26. h4 gxf3 27. Rf2 h5 28. bxc5 Ba6 29. Bxe7 b5 30. Rxf3 bxa4 31. Qd5 Qd7 32. Qxh5+ Bh6 33. Qxh6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "57"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Nf6 4. Bg5 Bb4 5. e5 Ne4 6. a3 Qxg5 7. axb4 O-O 8. Nf3 Qh6 9. Bd3 Ng5 10. O-O f5 11. exf6 Rxf6 12. Nxg5 g6 13. Nf3 g5 14. g3 Qh5 15. Ne2 Kh8 16. c3 Rxf3 17. Qd2 Nc6 18. Rfe1 Bd7 19. g4 Qh3 20. b5 Rxd3 21. Nf4 gxf4 22. Re3 Ne5 23. dxe5 Rxd2 24. Rb1 Qxe3 25. b4 Qxf2+ 26. Kh1 Qg2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "58"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. a3 Nf6 4. Qc2 Be7 5. Nf3 O-O 6. cxd5 exd5 7. g3 c6 8. Bg5 h6 9. Bd2 Ne4 10. Qb3 f5 11. Qa2 b5 12. a4 a5 13. axb5 Re8 14. Nc3 g5 15. Ne5 Kg7 16. Nxe4 fxe4 17. bxc6 Bf5 18. b4 axb4 19. Qxa8 Qb6 20. Qa5 Qc5 21. dxc5 Rg8 22. Qa7 Nxc6 23. Nxc6 Kg6 24. Nxe7+ Kg7 25. Nxf5+ Kg6 26. Nd4 g4 27. Ra6+ Kh5 28. Rxh6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "59"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. e3 Bb4 5. a3 Bc5 6. b4 Bb6 7. Be2 O-O 8. O-O d5 9. Nxe5 Bxe3 10. d4 Bxc1 11. cxd5 Ne7 12. Nc6 bxc6 13. Qd3 Bh6 14. Rad1 Nfxd5 15. Ne4 a5 16. bxa5 Bf4 17. g3 Bh6 18. Kg2 Ng6 19. Nc5 Ngf4+ 20. Kf3 Nxe2 21. a4 Rxa5 22. Ke4 f5+ 23. Ke5 Qf6# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "60"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. c3 g6 4. a3 Bg7 5. d3 O-O 6. Bg2 Nc6 7. Qc2 Ng4 8. O-O Nge5 9. Nxe5 f5 10. d4 Bxe5 11. Nd2 Bxd4 12. cxd4 Be6 13. Nb3 a5 14. Qc3 a4 15. Nd2 Nxd4 16. Qxd4 f4 17. Re1 Rf7 18. Qc3 b6 19. Nf3 Qd6 20. Nd4 Rc8 21. Nxe6 d4 22. Nxd4 Kg7 23. Nc2+ Rf6 24. Bd2 e5 25. gxf4 h6 26. Ne3 e4 27. Rad1 Ra8 28. Ng4 Re8 29. Qxf6+ Qxf6 30. Nxf6 Kxf6 31. f3 e3 32. Bxe3 Rf8 33. f5 gxf5 34. Bf2 Re8 35. h3 Kg6 36. Kh2 h5 37. Rd7 h4 38. Bxh4 c6 39. Rd6+ Kh5 40. f4 Kxh4 41. Rh6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "61"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 Nf6 4. c4 g6 5. Nc3 Bg4 6. Qb3 Qc7 7. Nf3 Nbd7 8. Be2 cxd5 9. cxd5 Rc8 10. O-O Qb8 11. Be3 Rd8 12. Rac1 Bg7 13. Bd2 Nb6 14. Bd3 Nfxd5 15. Nxd5 Rxd5 16. Rfe1 Bxf3 17. g3 O-O 18. Be4 Bxe4 19. Rc7 Qxc7 20. Re2 Bf5 21. Bf4 e5 22. Bxe5 Rxe5 23. Kf1 Qc1+ 24. Kg2 Bh3+ 25. Kf3 Rf5+ 26. Ke4 Qc6+ 27. d5 Bg2+ 28. f3 Qe8+ 29. Kd3 Qd8 30. Re3 Bxf3 31. a4 Be4+ 32. Kxe4 Qe8+ 33. Kd3 Qc8 34. Re2 h5 35. Re3 Qc1 36. d6 Rd5+ 37. Ke4 Qh1+ 38. Rf3 Re8+ 39. Kf4 Rf5# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "62"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. g3 Bg7 4. Nf3 O-O 5. Bg5 d6 6. Nc3 h6 7. Be3 c5 8. dxc5 dxc5 9. Bxc5 Nc6 10. Qxd8 Kh7 11. Qc7 Bf5 12. Bg2 Ne4 13. Bxe7 Rfe8 14. Nh4 Red8 15. Bxe4 Rd7 16. Qf4 Bxe4 17. O-O Re8 18. Nxe4 Rexe7 19. Kh1 Nd4 20. Rae1 f5 21. Nc5 Rd6 22. Qxd6 Bf8 23. Qxe7+ Bg7 24. Nd7 f4 25. Nf6+ Kh8 26. Qe8+ Bf8 27. Qxf8# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "63"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Qe7 4. O-O Nf6 5. d3 a6 6. Bxc6 a5 7. Re1 bxc6 8. Nbd2 Bb7 9. a3 d6 10. Nc4 Nd7 11. Bg5 f6 12. Qe2 fxg5 13. Nfd2 Qf7 14. Qe3 Be7 15. f3 Ra6 16. Kh1 h5 17. Re2 h4 18. Rae1 O-O 19. Nf1 Bf6 20. Ng3 d5 21. exd5 cxd5 22. Nxe5 Qe6 23. Ng6 Qd6 24. b4 Rf7 25. b5 hxg3 26. h4 Rb6 27. Qxg5 Nf8 28. Qxf6 Qxf6 29. Re3 Qxg6 30. a4 Re6 31. f4 Qh5 32. Rxg3 Rxf4 33. Kh2 Rxh4+ 34. Kg1 Rh1+ 35. Kf2 Rf6+ 36. Ke3 Qe5+ 37. Kd2 Rf2+ 38. Re2 Rxe2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "64"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. h3 g6 4. a3 Bg7 5. Be2 Nc6 6. a4 e5 7. Bc4 Nge7 8. Ng5 O-O 9. Nxf7 Nd4 10. Nh6+ Kh8 11. Ng4 Bd7 12. c3 Bc6 13. d3 Ne2 14. Kxe2 Qb6 15. Ke1 Nf5 16. Ne3 Nd4 17. Nd2 a6 18. h4 Qc7 19. Ra3 b5 20. Bd5 b4 21. cxd4 Bh6 22. Bxc6 exd4 23. Nec4 Bf4 24. Rb3 Rae8 25. Bxe8 d5 26. Bd7 dxe4 27. Nxe4 Be5 28. Bd2 Qb6 29. Ne3 Qc7 30. Bh3 Qc8 31. Qc1 a5 32. Qd1 Re8 33. h5 gxh5 34. Bxc8 Rd8 35. Rxh5 Re8 36. Bf5 Rd8 37. Nf1 Rc8 38. Bxh7 Kg7 39. Rg5+ Kf8 40. Bf5 Ke7 41. Bxc8 Kd8 42. Bg4 Kc7 43. Rh5 Kb6 44. Rh6+ Kc7 45. Be2 Bf6 46. Rh7+ Kc6 47. Nxf6 Kb6 48. Nd5+ Ka6 49. f3 c4 50. dxc4 d3 51. Ra7+ Kxa7 52. g4 Ka6 53. Ne7 Ka7 54. Be3+ Ka6 55. Bxd3 Kb7 56. Nd5 Kc6 57. Ne7+ Kc7 58. Bf4+ Kb6 59. Nd5+ Ka6 60. Be2 Ka7 61. Be3+ Ka6 62. Nb6 Ka7 63. Nd5+ Ka6 64. Bd3 Kb7 65. f4 Kc6 66. Qf3 Kd7 67. Nb6+ Kc7 68. Nd5+ Kc6 69. Qe4 Kd7 70. Qf5+ Kd6 71. Qe5+ Kc6 72. Qc7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "65"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Nc6 4. Nf3 Qd7 5. Bb5 Qd8 6. O-O Nf6 7. Bg5 a6 8. e5 axb5 9. Qe2 Be7 10. Rfd1 Ng8 11. a3 Bxg5 12. b4 h5 13. Qd3 Bh6 14. Na4 Nge7 15. c3 b6 16. g3 Nxb4 17. axb4 bxa4 18. Nh4 Ra7 19. c4 g5 20. c5 bxc5 21. bxc5 Bg7 22. Rab1 gxh4 23. c6 O-O 24. gxh4 Ng6 25. Rb4 Re8 26. Rb5 Qxh4 27. f3 Qg5+ 28. Kf2 Qh4+ 29. Ke2 Qxh2+ 30. Ke3 a3 31. f4 Qg3+ 32. Kd2 Qxd3+ 33. Kxd3 Ba6 34. f5 a2 35. Rc1 h4 36. fxe6 fxe6 37. Rd1 Bxb5+ 38. Kc3 Rb8 39. Rd2 a1=B+ 40. Kb4 Bf1+ 41. Kc5 Ra5# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "66"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. Qc2 Nf6 4. Nf3 c5 5. e3 Nc6 6. Nc3 cxd4 7. Nxd4 Bc5 8. Be2 Bxd4 9. exd4 O-O 10. Bg5 h6 11. Be3 dxc4 12. Qd2 Re8 13. Bxc4 Ng4 14. O-O a6 15. Ne4 b5 16. Bd3 Bb7 17. Bc2 Rc8 18. h3 Nf6 19. Bxh6 Nd7 20. Bg5 Nb6 21. Bxd8 g6 22. Bg5 Ne5 23. Kh1 Nec4 24. Qe1 f5 25. Nf6+ Kh8 26. Nxe8 e5 27. Bf6+ Kg8 28. dxe5 Bd5 29. Rd1 Rc7 30. Rg1 Kf7 31. Rxd5 Ke6 32. Rd3 f4 33. Ng7+ Kf7 34. e6+ Kxf6 35. e7 Rc5 36. Nh5+ gxh5 37. e8=N+ Kg5 38. Qc3 h4 39. Qf6+ Kh5 40. Bd1+ f3 41. Ng7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "67"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 Qe7 4. g3 Na6 5. Bg2 h6 6. O-O d6 7. d4 g6 8. Bg5 hxg5 9. Qb3 Bh6 10. c5 O-O 11. Rad1 g4 12. d5 Ne8 13. Rde1 Qd8 14. a3 Kh8 15. Qb4 Bg7 16. Qb5 Bh6 17. cxd6 Qxd6 18. Qc6 bxc6 19. dxc6 Kg7 20. Nxe5 Qf6 21. Nd5 Qxe5 22. Ne3 Nf6 23. Rd1 Rb8 24. Rd8 Rxb2 25. Rfd1 Be6 26. h3 Rxd8 27. Rxd8 Bxe3 28. h4 Bxf2+ 29. Kxf2 Qxe2+ 30. Kg1 Qf2+ 31. Kh1 Qxg2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "68"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. c3 g6 4. Bg2 Bg7 5. O-O O-O 6. d4 c6 7. Re1 Nbd7 8. a4 Qb6 9. Qc2 a5 10. h3 Ne4 11. Be3 Qc5 12. dxc5 b6 13. Nbd2 bxc5 14. Nxe4 Nb6 15. Kh2 Nc4 16. Nf6+ exf6 17. Bxc5 Re8 18. b3 Bb7 19. Rad1 Bf8 20. Ba7 Bg7 21. Bc5 Bf8 22. Bxf8 h5 23. Be7 Kg7 24. Bc5 Rac8 25. Bh1 Red8 26. Bf8+ Kxf8 27. Qa2 Ke7 28. bxc4 dxc4 29. Qxc4 Rd5 30. Qd3 Kd6 31. Ng1 Rc7 32. Bxd5 cxd5 33. c4 Rc6 34. cxd5 Rb6 35. Qd4 f5 36. Qxb6+ Ke5 37. f4+ Ke4 38. Qd4# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "69"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Nf3 g6 5. Bd3 Bg4 6. h3 Bf5 7. O-O Nf6 8. c4 Bg7 9. Nc3 O-O 10. Qb3 Bxd3 11. Bg5 Bxf1 12. Rc1 dxc4 13. Bh4 cxb3 14. axb3 Kh8 15. b4 Nbd7 16. b5 Qb6 17. d5 Bxb5 18. Nd2 Ne5 19. Nb3 Qd8 20. Nxb5 Ne8 21. Nc7 Nf3+ 22. gxf3 Nd6 23. Nc5 Nf5 24. Ne4 Rc8 25. Kf1 Rb8 26. Ke2 Rc8 27. Kd3 Bxb2 28. Rb1 Qxc7 29. Kd2 Qc4 30. d6 Bc3+ 31. Kc2 Bg7+ 32. Kd2 Qc2+ 33. Ke1 Nd4 34. Rb4 Qc1# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "70"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1/2-1/2"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. e3 Bg7 4. Qb3 O-O 5. Ne2 d6 6. Bd2 c5 7. h3 Nc6 8. d5 Bd7 9. a3 Na5 10. Qa2 b5 11. Bxa5 Rc8 12. Bc3 b4 13. axb4 cxb4 14. Bxb4 e5 15. Nec3 Ne8 16. Nd2 f5 17. h4 Qe7 18. Ba5 Nf6 19. Bb4 Rfe8 20. c5 e4 21. Bb5 Nxd5 22. Nxd5 Bxb5 23. Nxe7+ Kh8 24. Qb3 dxc5 25. Bc3 a6 26. Nxc8 Rd8 27. Bxg7+ Kxg7 28. Qxb5 axb5 29. Nb6 Kf6 30. Ra6 Ke5 31. Nc8 Re8 32. b3 Rg8 33. f4+ exf3 34. Nxf3+ Ke4 35. Re6+ Kd3 36. Ne7 f4 37. O-O g5 38. Rd6+ Kc3 39. Nxg8 g4 40. e4 gxf3 41. Rfd1 b4 42. gxf3 h6 43. Rc1+ Kb2 44. Rc4 Kxb3 45. Rxc5 Kb2 46. Ne7 Kb3 47. h5 Ka4 48. Rcd5 b3 49. Kf1 b2 50. Ra6+ Kb3 51. Rd1 Kc3 52. Rc6+ Kb4 53. Nd5+ Kb3 54. Rc3+ Ka4 55. Rc6 Ka3 56. Rc3+ Ka4 57. Rc6 Ka3 58. Re6 Ka4 1/2-1/2
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "71"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O d6 5. d3 Bg4 6. c3 Be7 7. Nbd2 a6 8. Bxc6+ bxc6 9. h3 Bc8 10. c4 Nd7 11. a4 a5 12. Re1 h6 13. Nf1 h5 14. Re2 Bf6 15. Bg5 Bxg5 16. Ne3 O-O 17. Qc2 Bf6 18. Rd1 Re8 19. b4 g6 20. Nd4 Bb7 21. Ndf5 Be7 22. bxa5 Ba6 23. g3 Bf8 24. Rdd2 d5 25. cxd5 gxf5 26. dxc6 Nf6 27. h4 Qb8 28. Kh2 fxe4 29. Kh3 Bc8+ 30. Kg2 exd3 31. Rxd3 Rxa5 32. Kf3 Ra6 33. a5 Bg7 34. Nd5 Bh3 35. Ree3 e4+ 36. Kf4 Bh6# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "72"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. g3 g6 4. d4 Bg7 5. c3 Nc6 6. h3 Qa5 7. dxc5 dxc5 8. Nbd2 Nf6 9. e5 O-O 10. exf6 e5 11. Ne4 Bf5 12. Nfd2 Nd4 13. g4 Be6 14. fxg7 Ne2 15. gxf8=Q+ Kxf8 16. Bxe2 c4 17. Rg1 a6 18. Bf3 Ke7 19. h4 h5 20. Bh1 hxg4 21. Ng3 Rb8 22. Bg2 Bd5 23. Bh1 Kd8 24. b4 b5 25. Nde4 Kc7 26. Qxd5 Qa4 27. Qc5+ Kd7 28. Qxe5 Qb3 29. Qe6+ fxe6 30. Nf6+ Kd6 31. Nfe4+ Kd5 32. Nc5+ Kd6 33. axb3 e5 34. Nce4+ Kd5 35. Nc5+ e4 36. Bxe4+ Ke5 37. Bg5 a5 38. bxc4 bxc4 39. Be3 a4 40. Bf4+ Kxf4 41. Ne6+ Ke5 42. Rd1 Kf6 43. Nc5 Ke7 44. Bd5 Kf6 45. Nge4+ Ke7 46. Nxa4 g3 47. Kd2 Kf8 48. Ra1 Kg7 49. Rxg3 Kh6 50. Nac5 Kg7 51. Rg5 Kf8 52. Rg3 Kg7 53. Ne6+ Kh6 54. Rf3 g5 55. Rf6+ Kh5 56. Ng3+ Kg4 57. Ne4 Re8 58. hxg5 Rc8 59. Rh1 Ra8 60. f3# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "73"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 Nc6 4. Nf3 Nf6 5. Bb5 Bb4 6. e5 Bxc3+ 7. bxc3 Nd7 8. O-O Ne7 9. Ba3 b6 10. Re1 a6 11. Qd2 axb5 12. Ng5 c5 13. Bxc5 bxc5 14. a4 Rxa4 15. dxc5 Nb8 16. f4 Nbc6 17. Rab1 Ra7 18. Qd4 h6 19. f5 Nxd4 20. fxe6 Nxe6 21. h4 O-O 22. Nf3 Kh8 23. h5 d4 24. cxd4 Bb7 25. Re4 Qa8 26. Kf2 Ng8 27. Re2 Ra5 28. Re3 Ra2 29. Kg3 Rxc2 30. d5 Ne7 31. c6 Bxc6 32. dxc6 Qxc6 33. Rc1 Rxc1 34. Nd4 Rg1 35. Nxc6 Nd5 36. Ne7 Nxe7 37. Kh4 Nf5+ 38. Kg4 Rc8 39. Kxf5 Ra1 40. g4 b4 41. Ke4 Ra3 42. Kd5 b3 43. Rf3 Rc5+ 44. Kd6 Ra6+ 45. Kd7 Rc7+ 46. Ke8 b2 47. Rg3 Ra8# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "74"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. cxd5 exd5 4. Nc3 Nf6 5. Nf3 c6 6. Bg5 Bf5 7. e3 Nbd7 8. Be2 Be7 9. O-O O-O 10. Qd2 Nh5 11. Nh4 h6 12. Bxe7 Qxe7 13. Nxf5 Rac8 14. e4 Qg5 15. Qc2 Rfe8 16. Bxh5 Qh4 17. Bxf7+ Kh7 18. Nxh4 dxe4 19. Rad1 Nf8 20. f3 b5 21. Nxe4 Rxe4 22. Qxe4+ g6 23. Qe7 g5 24. Be8+ Kh8 25. Nf5 b4 26. Qg7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "75"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 Bd6 4. g3 h6 5. Bg2 O-O 6. O-O e4 7. d4 exf3 8. Bxf3 Bb4 9. a3 Be7 10. Nd5 d6 11. Nxf6+ Bxf6 12. Be3 Re8 13. Rc1 c6 14. d5 Bg5 15. Qd2 Qe7 16. b4 Bh3 17. Rfe1 Bxe3 18. fxe3 Qg5 19. g4 Kh8 20. Rb1 h5 21. Qc1 cxd5 22. cxd5 Qg6 23. g5 Nd7 24. e4 Ne5 25. Kh1 Bc8 26. h3 Kg8 27. Qd1 Qxg5 28. Qc1 Qd8 29. Qb2 g6 30. h4 a5 31. bxa5 Ra6 32. Qc3 Kh7 33. Qb4 Ra8 34. Qb5 Rxa5 35. Qa6 Qxh4+ 36. Kg1 Rxa6 37. Kg2 Qh3+ 38. Kf2 Qh4+ 39. Ke3 g5 40. Bg4 Nxg4+ 41. Kd2 Nf2 42. e5 Ne4+ 43. Kd3 Nf2+ 44. Kc3 Ne4+ 45. Kc4 Qg3 46. exd6 Qc3+ 47. Kb5 Bd7# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "76"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. a3 g6 4. b4 Bg7 5. Bg2 O-O 6. O-O c6 7. Re1 Ne4 8. Ra2 Nc3 9. Nxc3 d4 10. Nb1 Nd7 11. d3 b5 12. Qd2 Nb6 13. Bb2 a5 14. Ra1 e5 15. c3 Re8 16. cxd4 exd4 17. Qc1 a4 18. Nbd2 Be6 19. Rd1 Rc8 20. h3 h5 21. Re1 f5 22. Qd1 Qe7 23. h4 Kf7 24. Rc1 Qc5 25. Ng5+ Kf6 26. Nh7+ Ke5 27. f4+ Kd6 28. bxc5+ Kd7 29. cxb6 Bf6 30. Nf8+ Rxf8 31. Bf3 Bd5 32. b7 Rfe8 33. Qc2 Rg8 34. b8=N+ Kd6 35. Qc5+ Ke6 36. Bxd5+ cxd5 37. Qxb5 Rc6 38. Rxc6+ Ke7 39. Rxf6 Kd8 40. Qd7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "77"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 Qxd5 4. c4 Qd7 5. Nc3 Nf6 6. Nf3 Qd6 7. Be2 Bg4 8. h3 Bh5 9. O-O e6 10. Be3 Qc7 11. Qd2 Be7 12. d5 Bxf3 13. Bxf3 Nbd7 14. dxc6 Ne5 15. Rfd1 Nxf3+ 16. gxf3 Qxc6 17. b4 Qxc4 18. Kh1 O-O 19. Rg1 Rfd8 20. a3 g6 21. Rac1 Qh4 22. Nd5 Qxh3# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "78"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. g3 Bg7 4. Bg2 O-O 5. e4 d6 6. h3 c5 7. Be3 Nc6 8. Ne2 cxd4 9. Nxd4 Nxd4 10. Nc3 Qa5 11. b4 Qxb4 12. Bd2 Re8 13. Na4 Nd7 14. Bxb4 Ne5 15. Bc3 Be6 16. Bxd4 Rac8 17. f4 Nd7 18. Bxg7 Kxg7 19. g4 Nc5 20. Nxc5 dxc5 21. Rf1 a6 22. Bf3 b5 23. Rc1 b4 24. Qc2 f6 25. Qd1 Rg8 26. Rc2 Rc7 27. Rd2 h6 28. Qc2 g5 29. fxg5 hxg5 30. e5 Kf8 31. Ba8 Ke8 32. Qa4+ Rd7 33. exf6 exf6 34. Rxf6 Ke7 35. Rxd7+ Kxf6 36. Rd6 Ke7 37. Rxe6+ Kxe6 38. Bd5+ Ke7 39. Bxg8 Kd6 40. Qb3 Ke5 41. Qg3+ Ke4 42. Bd5+ Kd4 43. Ke2 a5 44. Qe3# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "79"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Bd6 4. O-O Nf6 5. d3 O-O 6. Nbd2 Kh8 7. Re1 Ng4 8. g3 Be7 9. Bxc6 bxc6 10. Nf1 d5 11. h3 Nh6 12. Ne3 Bb4 13. a3 dxe4 14. dxe4 Bd6 15. Nf5 Nxf5 16. b4 Ne7 17. Bb2 f6 18. Nh4 Rb8 19. a4 Qe8 20. Qd2 a5 21. Red1 Rg8 22. Nf5 Bxf5 23. b5 Be6 24. c4 Rf8 25. Qd3 Bxh3 26. Rab1 Qf7 27. c5 Bxc5 28. b6 cxb6 29. Qd4 Qh5 30. Qxe5 Qe8 31. Qxf6 gxf6 32. e5 Ng6 33. Rd8 Kg8 34. Rd7 Rf7 35. exf6 Bxf2+ 36. Kh1 Bxd7 37. Bc3 Qe2 38. Bd4 Bxd4 39. g4 Nf4 40. g5 Qg2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "80"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. Bc4 Bd7 4. Nc3 Nc6 5. O-O g6 6. b3 Bg7 7. Bb2 e6 8. Re1 Nge7 9. Qc1 O-O 10. Nd1 Nd4 11. Ne3 a6 12. Nxd4 Rc8 13. Nf3 b5 14. Be2 f5 15. d3 f4 16. Bxg7 Kxg7 17. Ng4 Bc6 18. b4 cxb4 19. Qb2+ e5 20. h3 Bd7 21. Rec1 Bc6 22. c3 bxc3 23. Rxc3 Bd7 24. Rc2 Rc7 25. Rac1 Be6 26. d4 h6 27. Rxc7 g5 28. d5 Bxd5 29. exd5 Qc8 30. Rxe7+ Kg6 31. Nfxe5+ dxe5 32. Rc6+ Qe6 33. Rcxe6+ Kf5 34. Bd3+ e4 35. Nxh6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "81"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 h6 4. e5 c5 5. Nf3 cxd4 6. Nxd4 a6 7. Bf4 Qc7 8. Qd2 Bb4 9. Be2 Bd7 10. O-O Ne7 11. Bd3 Bc5 12. Be3 O-O 13. f4 Nec6 14. f5 Qxe5 15. fxe6 Nxd4 16. Bxd4 Bxd4+ 17. Kh1 Bxe6 18. h3 Be3 19. Rfd1 Bxd2 20. Kg1 Bxc3 21. bxc3 Nd7 22. c4 g6 23. c5 Qe3+ 24. Kh1 Kh8 25. c6 Rae8 26. c7 d4 27. c3 Bd5 28. cxd4 Qxh3+ 29. Kg1 Qxg2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "82"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. cxd5 exd5 4. Nc3 Nf6 5. Bf4 Bb4 6. Qb3 c5 7. a3 cxd4 8. axb4 O-O 9. Na2 Ne4 10. g3 f5 11. h4 Qb6 12. Nc1 Qc5 13. Nd3 Re8 14. bxc5 a5 15. Rd1 g5 16. Be5 Be6 17. f3 h5 18. Nh3 Nc3 19. Qxc3 Nd7 20. Bxd4 f4 21. Nhxf4 g4 22. fxg4 hxg4 23. Nxe6 Nf6 24. Bxf6 d4 25. Bxd4 Red8 26. Bf6 a4 27. Rg1 Rac8 28. Nxd8 Rxc5 29. Nxc5 Kh7 30. Rd7+ Kg6 31. h5+ Kf5 32. Rd5# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "83"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 e4 4. g3 Bb4 5. Bg2 Bxc3 6. O-O Ba5 7. b3 Nc6 8. Bb2 Qe7 9. d3 exf3 10. e3 fxg2 11. a3 gxf1=Q+ 12. Kxf1 Qe6 13. Ke2 Ne7 14. Qc2 Rg8 15. Rd1 Qc6 16. h3 d6 17. f4 Qg2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "84"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. Nc3 g6 4. d3 Bg7 5. Bg2 O-O 6. O-O Nc6 7. Bd2 d4 8. Ne4 Be6 9. Nc5 Bf5 10. a3 a5 11. Nxb7 Nh5 12. g4 Bxg4 13. Nxd8 Bxf3 14. exf3 Nf4 15. Nb7 Rfd8 16. Re1 Rab8 17. Bxf4 e5 18. Kh1 exf4 19. Nxa5 f5 20. b4 Nxa5 21. h3 Nb3 22. cxb3 Ra8 23. Ra2 Kf7 24. Rc2 Bf8 25. Qc1 Kf6 26. Qd1 h5 27. Bf1 Bg7 28. Rc6+ Kg5 29. a4 h4 30. Bg2 Rd7 31. a5 Re8 32. Rxe8 Rd6 33. Rc2 c5 34. bxc5 Ra6 35. b4 Bf8 36. b5 Be7 37. Kh2 Bxc5 38. b6 Rxb6 39. Rxc5 Rb3 40. Rec8 Rb2 41. Rf8 Rb3 42. Rc2 Rb2 43. Rd8 Rb3 44. Rd6 Rb2 45. Rxb2 Kh6 46. Qb1 Kg7 47. Rd7+ Kf6 48. Qa1 g5 49. Rb6+ Ke5 50. Bf1 g4 51. Qxd4# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "85"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 Qxd5 4. c4 Qd7 5. Nc3 Qc7 6. Nf3 Bf5 7. Bd3 Bg4 8. h3 Bd7 9. O-O h6 10. Bf4 Qb6 11. Qb3 Qxb3 12. Rfd1 Qxb2 13. Rab1 Qb6 14. Be4 Qa5 15. Rd2 g5 16. Bd6 Bf5 17. c5 Qd8 18. Nd5 Bxe4 19. g3 cxd5 20. h4 Bxb1 21. hxg5 Nc6 22. Kg2 a6 23. gxh6 Qxd6 24. Ne5 Nxh6 25. Nd7 Be4+ 26. f3 Bxf3+ 27. Kxf3 Kxd7 28. a3 Nxd4+ 29. Rxd4 Qf6+ 30. Ke3 Nf5+ 31. Kf4 Nh6+ 32. Ke3 Ng4+ 33. Ke2 Qe5+ 34. Kd3 Qe6 35. Rxd5+ Qxd5+ 36. Kc3 Qf3+ 37. Kc4 Qe4+ 38. Kb3 Qe6+ 39. Kb4 a5+ 40. Ka4 Qc4# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "86"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. Be3 Qe7 8. O-O Nc6 9. dxe5 dxe5 10. Re1 Re8 11. Rc1 Nd8 12. h3 c6 13. b3 a6 14. Qd2 Rb8 15. Ba7 Be6 16. Bxb8 Qd6 17. Nd5 Bxd5 18. Bxd6 Bxc4 19. Bxc4 Ng4 20. b4 Nf6 21. a3 Nxe4 22. Qa2 b5 23. Be2 h5 24. Rcd1 Re7 25. Bxe7 g5 26. Bxg5 Kf8 27. Rxd8# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "87"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nge7 4. O-O g6 5. d4 exd4 6. Nxd4 a6 7. Nxc6 Nxc6 8. Ba4 Qh4 9. Re1 Bg7 10. f3 b5 11. Bb3 d6 12. c3 Na5 13. Bd5 Rb8 14. Nd2 Qf6 15. e5 dxe5 16. Nf1 O-O 17. Bg5 Qb6+ 18. Ne3 h6 19. Qd2 Nc4 20. Rad1 Nxb2 21. Bf6 Na4 22. g3 Re8 23. c4 Qxf6 24. Kg2 Nb6 25. c5 Na4 26. Qe2 Kh8 27. f4 Nxc5 28. fxe5 Qxe5 29. Bc4 Qe4+ 30. Kf1 Bh3+ 31. Kf2 bxc4 32. Rd2 Nd3+ 33. Rxd3 Rb2 34. Rd4 Qxe3# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "88"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 a6 6. a4 Qc7 7. Nb3 Be6 8. f3 d5 9. Nd4 Nc6 10. Nxe6 fxe6 11. exd5 exd5 12. Bd3 g6 13. Bd2 Bg7 14. Qb1 O-O 15. Qa2 b5 16. axb5 axb5 17. Qb1 b4 18. Rxa8 Na5 19. Ra6 Qc5 20. Ne2 Qc4 21. Rxa5 Rc8 22. Bxc4 dxc4 23. Nf4 Nd5 24. Qd1 Bf8 25. Nxd5 Kf7 26. Be3 e6 27. Ra7+ Rc7 28. Rxc7+ Ke8 29. Nf6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "89"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 b6 5. Nf3 Nf6 6. Nxf6+ Qxf6 7. Bd3 Ba6 8. c3 Bd6 9. O-O Bxd3 10. c4 Be4 11. Ne5 O-O 12. Qg4 Bg6 13. Be3 Bxe5 14. d5 a5 15. Rad1 Qf5 16. Qf3 Qxf3 17. Bg5 Qg4 18. h3 Qxg5 19. Rfe1 Qf6 20. b4 Bh2+ 21. Kxh2 e5 22. c5 bxc5 23. bxc5 Na6 24. c6 Nc5 25. Rxe5 Qxe5+ 26. g3 Kh8 27. d6 cxd6 28. c7 Ne6 29. a4 Rae8 30. Rd2 Qf6 31. f4 Nxc7 32. Re2 Rxe2+ 33. Kh1 Qa1# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "90"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. Bd2 Nf6 4. e3 c5 5. Nf3 Nc6 6. cxd5 Nxd5 7. Bb5 Be7 8. e4 cxd4 9. Bxc6+ bxc6 10. Nxd4 O-O 11. Nxc6 Bb7 12. Nxd8 Nf6 13. Nxb7 Rac8 14. Qb3 Nd7 15. O-O Nc5 16. Nxc5 Rxc5 17. h3 Rd8 18. Qe3 Rd7 19. Ba5 Rd6 20. Bd2 h6 21. Bc3 Rb5 22. Be5 Rb4 23. a3 Rxb2 24. Bg3 Kh7 25. Qf3 Rd1 26. Qxd1 a5 27. Nd2 Rb3 28. Nxb3 a4 29. Re1 axb3 30. Kh2 Bf6 31. Rc1 b2 32. Rb1 Be5 33. h4 Bd4 34. e5 Bxe5 35. Bxe5 Kg6 36. Qg4+ Kh7 37. Qxg7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "91"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 e4 4. g3 exf3 5. Bg2 d5 6. O-O d4 7. Bxf3 Na6 8. Qb3 Rb8 9. Nd5 c6 10. d3 Bd6 11. Bg5 O-O 12. Nf4 Nc7 13. Rad1 a5 14. a4 Na6 15. Kg2 h6 16. Bxf6 Qxf6 17. c5 Bxc5 18. h3 g5 19. Rd2 Bb4 20. Rfd1 Kh8 21. Qc4 Ra8 22. h4 Rb8 23. hxg5 Qxg5 24. e4 Bc5 25. Ne6 fxe6 26. Be2 Qf6 27. f4 Kg7 28. e5 Qe7 29. b4 b5 30. axb5 Nxb4 31. b6 Rxb6 32. Kf1 Rb7 33. Kf2 a4 34. Bf3 Rf5 35. g4 Rxf4 36. Kg3 Nd5 37. Be2 Rb4 38. Qxd5 exd5 39. Bf3 Rxf3+ 40. Kxf3 Qf8+ 41. Kg3 Qd8 42. Rf2 Qe8 43. Kh4 Qxe5 44. g5 Qxg5# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "92"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. c3 g6 4. Qb3 Bg7 5. d4 O-O 6. Nbd2 Nc6 7. Bg2 e6 8. h4 Ne4 9. Qc2 f5 10. Qd3 h5 11. Qc2 Rf7 12. b4 Kf8 13. Nxe4 fxe4 14. Bg5 Ke8 15. Bxd8 b6 16. Ng5 Bb7 17. Nxe4 Rc8 18. Nc5 Bf6 19. Bxf6 bxc5 20. Rb1 cxb4 21. Kd2 bxc3+ 22. Kd1 Rxf6 23. Qxc3 e5 24. Bh3 e4 25. a4 Nxd4 26. Bxc8 c5 27. Qxc5 Bc6 28. Bd7+ Bxd7 29. Qxd4 Rf5 30. Qxa7 Rf4 31. Qb8+ Ke7 32. gxf4 Kf7 33. Qa7 Ke6 34. Rb6+ Kf5 35. Rb7 Kxf4 36. Qe3+ Ke5 37. f4+ Kd6 38. Qa7 Bc8 39. Qb6# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "93"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "Caro-Kann Defence"]
+[StockfishElo "1320"]
+
+1. e4 c6 2. d4 d5 3. exd5 Qa5+ 4. Nd2 Nf6 5. c4 cxd5 6. Nf3 g6 7. Qb3 Nc6 8. cxd5 Nxd5 9. g3 Rb8 10. Bg2 Bg7 11. O-O Nb6 12. Nc4 Qa6 13. Be3 Be6 14. Rac1 Bxc4 15. Rfd1 Bxb3 16. axb3 Rd8 17. Bd2 O-O 18. d5 Rxd5 19. Ne5 Rxe5 20. h4 Bh8 21. b4 h5 22. Re1 Qb5 23. Red1 Re8 24. f3 Rd8 25. Re1 Rxe1+ 26. Kf2 Qe2# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "94"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "King's Indian Defence"]
+[StockfishElo "1320"]
+
+1. d4 Nf6 2. c4 g6 3. g3 Bg7 4. Nf3 O-O 5. Nc3 d6 6. Bg2 Nc6 7. Qa4 Nd7 8. e3 e5 9. Qd1 exd4 10. exd4 Nc5 11. dxc5 dxc5 12. Bg5 h6 13. Be3 f5 14. Nd5 f4 15. Nxf4 g5 16. Nd5 Re8 17. h4 g4 18. Nh2 h5 19. Nf4 Ne5 20. Qc2 c6 21. Rd1 b5 22. b3 bxc4 23. O-O Rb8 24. Rxd8 Rxd8 25. Be4 Bf8 26. Kg2 Kg7 27. Bh7 Kh8 28. Qb2 a6 29. Qb1 Rd5 30. Bg6 Be6 31. Nxe6 Rb4 32. Qf5 cxb3 33. Qf6+ Bg7 34. Qxg7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "95"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "King's Pawn Game"]
+[StockfishElo "1320"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Bd6 4. O-O Nf6 5. d3 O-O 6. Nbd2 Qe8 7. g3 a6 8. Bxc6 bxc6 9. Re1 a5 10. Nc4 Ba6 11. Ncxe5 Nh5 12. Nxc6 dxc6 13. Ne5 f5 14. Nxc6 fxe4 15. dxe4 Qxc6 16. Be3 Qxe4 17. Qd3 Nf6 18. Bf4 Qg6 19. c4 Rac8 20. Rad1 Qxd3 21. Bxd6 cxd6 22. a3 Qf5 23. b4 Rfe8 24. b5 Bb7 25. Rc1 Qg6 26. Rc2 Rxe1# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "96"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Sicilian Defence"]
+[StockfishElo "1320"]
+
+1. e4 c5 2. Nf3 d6 3. Bc4 Bd7 4. Ng5 Nc6 5. Bxf7# 1-0
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "97"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "French Defence"]
+[StockfishElo "1320"]
+
+1. e4 e6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Be7 5. Nf3 Bd7 6. Bd3 Nc6 7. Qe2 Rc8 8. c3 b6 9. Bf4 Nf6 10. Nxf6+ Bxf6 11. Be3 Qe7 12. O-O Qd6 13. Rfd1 Nb8 14. h3 Ba4 15. c4 c5 16. Nd2 cxd4 17. b4 Qd8 18. a3 O-O 19. Rac1 dxe3 20. Ne4 Bxd1 21. c5 Bxe2 22. f4 Bxd3 23. Nd6 Rc6 24. Rd1 e2 25. Rc1 Rc8 26. Kh2 e1=B 27. Rd1 Bg6 28. Rxe1 Bh5 29. Rd1 Qc7 30. Re1 Bg6 31. Rc1 Qxd6 32. c6 Nxc6 33. b5 Kh8 34. Rd1 Nd8 35. Rc1 Qb8 36. Rd1 Be7 37. Rc1 Bf6 38. Rd1 Qxf4+ 39. g3 Qf2+ 40. Kh1 Be4# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "98"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1/2-1/2"]
+[Opening "Queen's Gambit"]
+[StockfishElo "1320"]
+
+1. d4 d5 2. c4 e6 3. Qc2 Nf6 4. e3 c5 5. a3 cxd4 6. exd4 Be7 7. cxd5 exd5 8. Bb5+ Nfd7 9. h3 O-O 10. Ne2 Nc6 11. Bf4 Nb6 12. O-O Bd7 13. Bh2 g6 14. Qd1 Qc8 15. Nc1 Nxd4 16. Bxd7 Qxd7 17. Qxd4 Qd6 18. Qg4 d4 19. Nd3 Rfe8 20. Bxd6 a5 21. Bf4 f5 22. Qf3 Kf7 23. Qg3 a4 24. Re1 Rac8 25. Kh1 Rg8 26. Qh2 h5 27. Bg5 Rc3 28. bxc3 Bxg5 29. Rf1 f4 30. Ra2 Kf6 31. Nc5 h4 32. Nd7+ Ke7 33. Re1+ Kd6 34. Nf6 dxc3 35. Nxc3 Rg7 36. Nb5+ Kc6 37. Rc2+ Kxb5 38. Ne8 Nd5 39. Rc5+ Kb6 40. Rb5+ Kxb5 41. Nxg7 Ka5 42. Ne6 b6 43. Nxg5 Ne3 44. fxe3 f3 45. Qe5+ b5 46. Qc3+ Ka6 47. Qf6+ Ka5 48. Nxf3 g5 49. Qc3+ b4 50. Qe5+ Kb6 51. Qe6+ Ka5 52. Qd5+ Kb6 53. Qe6+ Ka5 54. Qf5+ Kb6 1/2-1/2
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "99"]
+[White "FischerAI"]
+[Black "Stockfish"]
+[Result "0-1"]
+[Opening "English Opening"]
+[StockfishElo "1320"]
+
+1. c4 e5 2. Nc3 Nf6 3. Nf3 e4 4. g3 Be7 5. Bg2 d5 6. O-O d4 7. Nxd4 Qxd4 8. b3 Nc6 9. Bb2 Bf5 10. Nd5 Qxb2 11. d3 Qe5 12. h3 Nxd5 13. Qd2 Ndb4 14. dxe4 Bc8 15. Qd3 Bxh3 16. a3 Bd7 17. axb4 Nxb4 18. c5 Nc6 19. b4 Nxb4 20. Kh2 Qe6 21. Rfd1 Qh6+ 22. Bh3 Qxh3+ 23. Kg1 Nxd3 24. Rd2 Bc6 25. Rxd3 Bxc5 26. Rb1 Qe6 27. Kg2 Qh6 28. f3 Bd6 29. Rd4 Be7 30. e5 g5 31. g4 Kf8 32. Rd3 Qg6 33. Kg3 Qe6 34. Rd4 a5 35. Rxb7 Qxg4+ 36. Kxg4 a4 37. f4 Bxb7 38. fxg5 Bc6 39. Kf5 Ke8 40. g6 hxg6+ 41. Kg4 a3 42. Re4 Rd8 43. Kf3 Rh4 44. Ke3 Rxe4+ 45. Kf3 a2 46. Kg3 a1=Q 47. e3 Qe1+ 48. Kg2 Rd2+ 49. Kf3 f6 50. exf6 Qe2+ 51. Kg3 Qxe3# 0-1
+
+[Event "FischerAI vs limited Stockfish"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "100"]
+[White "Stockfish"]
+[Black "FischerAI"]
+[Result "1-0"]
+[Opening "Reti Opening"]
+[StockfishElo "1320"]
+
+1. Nf3 d5 2. g3 Nf6 3. Nc3 g6 4. Bg2 Bg7 5. O-O O-O 6. h3 c6 7. Re1 Ne4 8. a4 e5 9. a5 f6 10. Bf1 Nd7 11. Nxe4 dxe4 12. Nh4 f5 13. d3 Re8 14. dxe4 fxe4 15. c3 Nc5 16. Qxd8 Be6 17. Qc7 Bh6 18. Bxh6 Kh8 19. Qg7# 1-0
+

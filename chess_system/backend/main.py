@@ -1,12 +1,4 @@
-"""
-FastAPI application entrypoint.
 
-Run locally with:
-    uvicorn main:app --reload --port 8000
-
-Railway deploy command (in railway.json / Procfile):
-    uvicorn main:app --host 0.0.0.0 --port $PORT
-"""
 
 from fastapi import FastAPI
 
