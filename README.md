@@ -109,6 +109,3 @@ python -m src.training.evaluate_vs_stockfish
 
 Tự thiết kế và triển khai toàn bộ pipeline: xử lý dữ liệu PGN + lọc chất lượng bằng Stockfish, thiết kế encoding bàn cờ/nước đi cho mạng neural, xây dựng kiến trúc Residual CNN policy network bằng PyTorch, viết vòng lặp huấn luyện Behavioral Cloning (kèm chia tập tránh rò rỉ dữ liệu, learning-rate scheduling, mixed precision), script đánh giá đối kháng với Stockfish, API suy luận bằng FastAPI có che nước đi bất hợp lệ, và giao diện chơi cờ bằng React.
 
-## 📄 License
-
-Chưa xác định (chưa có file LICENSE trong repo)
