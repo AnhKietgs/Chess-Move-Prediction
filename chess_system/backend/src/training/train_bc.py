@@ -10,10 +10,10 @@ from __future__ import annotations
 import csv
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Mapping, Optional, Tuple
+from typing import Any, Mapping, Optional
 
 import torch
-from torch import Tensor, nn
+from torch import Tensor
 from torch.optim import AdamW, Optimizer
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader
@@ -21,7 +21,13 @@ from tqdm.auto import tqdm
 
 from src.config.settings import Settings, settings
 from src.data_processing.dataset import get_dataloaders
-from src.models.chess_model import FischerPolicyNet, get_available_device, set_random_seeds
+from src.models.chess_model import (
+    FischerPolicyNet,
+    LegalMoveCrossEntropyLoss,
+    get_available_device,
+    mask_illegal_logits,
+    set_random_seeds,
+)
 
 
 @dataclass(frozen=True)
@@ -31,6 +37,7 @@ class EpochMetrics:
     loss: float
     top1_accuracy: float
     top3_accuracy: float
+    top5_accuracy: float
     examples: int
 
 
@@ -38,7 +45,7 @@ class EpochMetrics:
 class TrainingResult:
     """Summary of a completed Behavioral Cloning training run."""
 
-    best_validation_top1_accuracy: float
+    best_validation_loss: float
     final_epoch: int
     best_checkpoint_path: Path
     last_checkpoint_path: Path
@@ -59,30 +66,64 @@ def build_policy_model(config: Settings) -> FischerPolicyNet:
         channels=config.model_channels,
         residual_blocks=config.model_residual_blocks,
         policy_channels=config.model_policy_channels,
+        policy_dropout=config.model_policy_dropout,
     )
 
 
-def _move_batch(batch: Tuple[Tensor, Tensor], device: torch.device) -> Tuple[Tensor, Tensor]:
-    """Move an input-and-label batch to ``device``."""
-    boards, labels = batch
+def _move_batch(
+    batch: tuple[Tensor, Tensor, Tensor],
+    device: torch.device,
+) -> tuple[Tensor, Tensor, Tensor]:
+    """Move board states, labels, and legal masks to ``device``."""
+    boards, labels, legal_move_masks = batch
     non_blocking = device.type == "cuda"
     return (
         boards.to(device, non_blocking=non_blocking),
         labels.to(device, non_blocking=non_blocking),
+        legal_move_masks.to(device, non_blocking=non_blocking),
     )
 
 
-def _top_k_correct(logits: Tensor, labels: Tensor, k: int) -> int:
-    """Count examples whose label occurs in the model's top-``k`` logits."""
+def top_k_accuracy(
+    logits: Tensor,
+    labels: Tensor,
+    k: int,
+    legal_move_mask: Optional[Tensor] = None,
+) -> float:
+    """Calculate Top-k accuracy, optionally ranking only legal chess moves.
+
+    Args:
+        logits: Unnormalized policy outputs with shape ``[batch_size, actions]``.
+        labels: Target action indices with shape ``[batch_size]``.
+        k: Number of highest-ranked actions to consider.
+        legal_move_mask: Boolean legal-action tensor with the same shape as
+            ``logits``. Illegal actions are excluded before ranking.
+
+    Returns:
+        Proportion of labels present in the Top-k predictions.
+
+    Raises:
+        ValueError: If tensor shapes are incompatible or ``k`` is invalid.
+    """
+    if logits.ndim != 2:
+        raise ValueError("logits must have shape [batch_size, num_actions].")
+    if labels.ndim != 1 or labels.size(0) != logits.size(0):
+        raise ValueError("labels must have shape [batch_size].")
+    if k < 1:
+        raise ValueError("k must be at least 1.")
+    if legal_move_mask is not None:
+        logits = mask_illegal_logits(logits, legal_move_mask)
+
     effective_k = min(k, logits.size(1))
     predicted_indices = logits.topk(effective_k, dim=1).indices
-    return predicted_indices.eq(labels.unsqueeze(1)).any(dim=1).sum().item()
+    correct = predicted_indices.eq(labels.unsqueeze(1)).any(dim=1)
+    return correct.float().mean().item()
 
 
 def _run_epoch(
     model: FischerPolicyNet,
     data_loader: DataLoader,
-    criterion: nn.CrossEntropyLoss,
+    criterion: LegalMoveCrossEntropyLoss,
     device: torch.device,
     optimizer: Optional[Optimizer],
     grad_scaler: torch.amp.GradScaler,
@@ -92,34 +133,35 @@ def _run_epoch(
 
     Args:
         model: Policy network to train or validate.
-        data_loader: Loader yielding board tensors and integer action labels.
-        criterion: Cross-entropy objective for raw model logits.
+        data_loader: Loader yielding board tensors, action labels, and legal masks.
+        criterion: Legal-move cross-entropy objective for raw model logits.
         device: Device on which inference and training are performed.
         optimizer: Optimizer for the train phase; ``None`` for validation.
         grad_scaler: CUDA gradient scaler used by mixed-precision training.
         use_amp: Whether the active device should run autocast operations.
 
     Returns:
-        Mean cross-entropy loss and Top-1/Top-3 action accuracies.
+        Mean cross-entropy loss and Top-1/Top-3/Top-5 action accuracies.
     """
     is_training = optimizer is not None
     model.train(is_training)
     total_loss = 0.0
-    top1_correct = 0
-    top3_correct = 0
+    top1_correct = 0.0
+    top3_correct = 0.0
+    top5_correct = 0.0
     example_count = 0
     phase_name = "train" if is_training else "validation"
     progress = tqdm(data_loader, desc=phase_name, leave=False)
 
     with torch.set_grad_enabled(is_training):
         for batch in progress:
-            boards, labels = _move_batch(batch, device)
+            boards, labels, legal_move_masks = _move_batch(batch, device)
             if optimizer is not None:
                 optimizer.zero_grad(set_to_none=True)
 
             with torch.amp.autocast(device_type=device.type, enabled=use_amp):
-                logits = model(boards)
-                loss = criterion(logits, labels)
+                raw_logits = model(boards)
+                loss = criterion(raw_logits, labels, legal_move_masks)
 
             if optimizer is not None:
                 if grad_scaler.is_enabled():
@@ -132,13 +174,22 @@ def _run_epoch(
 
             batch_size = labels.size(0)
             total_loss += loss.detach().item() * batch_size
-            top1_correct += _top_k_correct(logits.detach(), labels, k=1)
-            top3_correct += _top_k_correct(logits.detach(), labels, k=3)
+            detached_logits = raw_logits.detach()
+            top1_correct += batch_size * top_k_accuracy(
+                detached_logits, labels, k=1, legal_move_mask=legal_move_masks
+            )
+            top3_correct += batch_size * top_k_accuracy(
+                detached_logits, labels, k=3, legal_move_mask=legal_move_masks
+            )
+            top5_correct += batch_size * top_k_accuracy(
+                detached_logits, labels, k=5, legal_move_mask=legal_move_masks
+            )
             example_count += batch_size
             progress.set_postfix(
                 loss=f"{total_loss / example_count:.4f}",
                 top1=f"{top1_correct / example_count:.3f}",
                 top3=f"{top3_correct / example_count:.3f}",
+                top5=f"{top5_correct / example_count:.3f}",
             )
 
     if example_count == 0:
@@ -147,11 +198,12 @@ def _run_epoch(
         loss=total_loss / example_count,
         top1_accuracy=top1_correct / example_count,
         top3_accuracy=top3_correct / example_count,
+        top5_accuracy=top5_correct / example_count,
         examples=example_count,
     )
 
 
-def _checkpoint_paths(config: Settings) -> Tuple[Path, Path]:
+def _checkpoint_paths(config: Settings) -> tuple[Path, Path]:
     """Return checkpoint paths for the best and most-recent policy states."""
     return (
         config.training_checkpoint_dir / "best_fischer_bc.pth",
@@ -165,7 +217,8 @@ def _save_checkpoint(
     optimizer: Optimizer,
     scheduler: ReduceLROnPlateau,
     epoch: int,
-    best_validation_top1_accuracy: float,
+    best_validation_loss: float,
+    epochs_without_improvement: int,
 ) -> None:
     """Save all model and optimization state needed to resume training.
 
@@ -175,7 +228,8 @@ def _save_checkpoint(
         optimizer: Optimizer with current momentum state.
         scheduler: Learning-rate scheduler state.
         epoch: Completed zero-based epoch index.
-        best_validation_top1_accuracy: Best validation Top-1 score so far.
+        best_validation_loss: Lowest validation loss observed so far.
+        epochs_without_improvement: Consecutive epochs without a lower loss.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     torch.save(
@@ -185,7 +239,8 @@ def _save_checkpoint(
             "optimizer_state_dict": optimizer.state_dict(),
             "scheduler_state_dict": scheduler.state_dict(),
             "epoch": epoch,
-            "best_validation_top1_accuracy": best_validation_top1_accuracy,
+            "best_validation_loss": best_validation_loss,
+            "epochs_without_improvement": epochs_without_improvement,
         },
         path,
     )
@@ -197,8 +252,8 @@ def _load_resume_checkpoint(
     optimizer: Optimizer,
     scheduler: ReduceLROnPlateau,
     device: torch.device,
-) -> Tuple[int, float]:
-    """Restore a complete checkpoint and return next epoch and best Top-1.
+) -> tuple[int, float, int]:
+    """Restore a complete checkpoint and return early-stopping state.
 
     Args:
         checkpoint_path: Complete checkpoint generated by this module.
@@ -208,7 +263,7 @@ def _load_resume_checkpoint(
         device: Device used to map checkpoint tensors.
 
     Returns:
-        The next epoch index and the saved best validation Top-1 accuracy.
+        The next epoch index, lowest validation loss, and stale-epoch count.
 
     Raises:
         FileNotFoundError: If ``checkpoint_path`` does not exist.
@@ -233,7 +288,8 @@ def _load_resume_checkpoint(
         "optimizer_state_dict",
         "scheduler_state_dict",
         "epoch",
-        "best_validation_top1_accuracy",
+        "best_validation_loss",
+        "epochs_without_improvement",
     }
     missing_keys = required_keys.difference(checkpoint)
     if missing_keys:
@@ -244,7 +300,8 @@ def _load_resume_checkpoint(
     scheduler.load_state_dict(checkpoint["scheduler_state_dict"])
     return (
         int(checkpoint["epoch"]) + 1,
-        float(checkpoint["best_validation_top1_accuracy"]),
+        float(checkpoint["best_validation_loss"]),
+        int(checkpoint["epochs_without_improvement"]),
     )
 
 
@@ -266,9 +323,11 @@ def _append_metrics(
                 "train_loss",
                 "train_top1_accuracy",
                 "train_top3_accuracy",
+                "train_top5_accuracy",
                 "val_loss",
                 "val_top1_accuracy",
                 "val_top3_accuracy",
+                "val_top5_accuracy",
                 "learning_rate",
             ],
         )
@@ -280,9 +339,11 @@ def _append_metrics(
                 "train_loss": train_metrics.loss,
                 "train_top1_accuracy": train_metrics.top1_accuracy,
                 "train_top3_accuracy": train_metrics.top3_accuracy,
+                "train_top5_accuracy": train_metrics.top5_accuracy,
                 "val_loss": validation_metrics.loss,
                 "val_top1_accuracy": validation_metrics.top1_accuracy,
                 "val_top3_accuracy": validation_metrics.top3_accuracy,
+                "val_top5_accuracy": validation_metrics.top5_accuracy,
                 "learning_rate": learning_rate,
             }
         )
@@ -292,8 +353,9 @@ def train_bc(config: Settings = settings) -> TrainingResult:
     """Train a Fischer policy with Behavioral Cloning.
 
     The best checkpoint is written as ``best_fischer_bc.pth`` whenever the
-    validation Top-1 accuracy improves. Top-3 accuracy is calculated and
-    logged each epoch as a style-learning diagnostic.
+    validation loss improves. Top-1, Top-3, and Top-5 accuracy are logged as
+    style-learning diagnostics. Training stops after the configured number of
+    consecutive epochs without a lower validation loss.
 
     Args:
         config: Centralized settings for architecture and training values.
@@ -313,7 +375,13 @@ def train_bc(config: Settings = settings) -> TrainingResult:
         raise ValueError("Both train and validation DataLoaders must contain examples.")
 
     model = build_policy_model(config).to(device)
-    criterion = nn.CrossEntropyLoss()
+    if not 0.0 <= config.training_label_smoothing <= 1.0:
+        raise ValueError("training_label_smoothing must be in the range [0.0, 1.0].")
+    if config.training_early_stopping_patience < 1:
+        raise ValueError("training_early_stopping_patience must be at least 1.")
+    criterion = LegalMoveCrossEntropyLoss(
+        label_smoothing=config.training_label_smoothing
+    )
     optimizer = AdamW(
         model.parameters(),
         lr=config.training_learning_rate,
@@ -333,9 +401,10 @@ def train_bc(config: Settings = settings) -> TrainingResult:
         enabled=use_amp and device.type == "cuda",
     )
     start_epoch = 0
-    best_validation_top1_accuracy = float("-inf")
+    best_validation_loss = float("inf")
+    epochs_without_improvement = 0
     if config.training_resume_path is not None:
-        start_epoch, best_validation_top1_accuracy = _load_resume_checkpoint(
+        start_epoch, best_validation_loss, epochs_without_improvement = _load_resume_checkpoint(
             config.training_resume_path,
             model,
             optimizer,
@@ -344,6 +413,7 @@ def train_bc(config: Settings = settings) -> TrainingResult:
         )
 
     best_checkpoint_path, last_checkpoint_path = _checkpoint_paths(config)
+    final_epoch = start_epoch
     for epoch in range(start_epoch, config.training_epochs):
         train_metrics = _run_epoch(
             model,
@@ -373,38 +443,52 @@ def train_bc(config: Settings = settings) -> TrainingResult:
             learning_rate,
         )
 
-        if validation_metrics.top1_accuracy > best_validation_top1_accuracy:
-            best_validation_top1_accuracy = validation_metrics.top1_accuracy
+        if validation_metrics.loss < best_validation_loss:
+            best_validation_loss = validation_metrics.loss
+            epochs_without_improvement = 0
             _save_checkpoint(
                 best_checkpoint_path,
                 model,
                 optimizer,
                 scheduler,
                 epoch,
-                best_validation_top1_accuracy,
+                best_validation_loss,
+                epochs_without_improvement,
             )
+        else:
+            epochs_without_improvement += 1
         _save_checkpoint(
             last_checkpoint_path,
             model,
             optimizer,
             scheduler,
             epoch,
-            best_validation_top1_accuracy,
+            best_validation_loss,
+            epochs_without_improvement,
         )
         print(
             f"Epoch {epoch + 1}/{config.training_epochs} | "
             f"Train Loss: {train_metrics.loss:.4f} | "
             f"Train Top-1: {train_metrics.top1_accuracy:.2%} | "
             f"Train Top-3: {train_metrics.top3_accuracy:.2%} | "
+            f"Train Top-5: {train_metrics.top5_accuracy:.2%} | "
             f"Val Loss: {validation_metrics.loss:.4f} | "
             f"Val Top-1: {validation_metrics.top1_accuracy:.2%} | "
             f"Val Top-3: {validation_metrics.top3_accuracy:.2%} | "
+            f"Val Top-5: {validation_metrics.top5_accuracy:.2%} | "
             f"LR: {learning_rate:.2e}"
         )
+        final_epoch = epoch + 1
+        if epochs_without_improvement >= config.training_early_stopping_patience:
+            print(
+                "Early stopping: validation loss did not improve for "
+                f"{epochs_without_improvement} epoch(s)."
+            )
+            break
 
     return TrainingResult(
-        best_validation_top1_accuracy=best_validation_top1_accuracy,
-        final_epoch=config.training_epochs,
+        best_validation_loss=best_validation_loss,
+        final_epoch=final_epoch,
         best_checkpoint_path=best_checkpoint_path,
         last_checkpoint_path=last_checkpoint_path,
     )

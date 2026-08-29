@@ -74,6 +74,8 @@ one game never leak across splits, and returns
 `{"train": DataLoader, "val": DataLoader, "test": DataLoader}`. Tensor
 encoding happens lazily inside `ChessDataset.__getitem__`, so it runs in
 parallel across `num_workers` DataLoader workers instead of up front.
+The training loader also applies horizontal mirroring with 50% probability;
+the validation and test loaders stay unaugmented.
 
 ## Typical usage
 
@@ -89,8 +91,11 @@ python -m src.data_processing.build_cache   # writes data/cache/fischer_training
 from src.data_processing.dataset import get_dataloaders
 
 loaders = get_dataloaders("data/cache/fischer_training_examples.jsonl", batch_size=256, num_workers=4)
-for board_tensor, move_label in loaders["train"]:
-    ...  # board_tensor: [B, 18, 8, 8] float32, move_label: [B] long
+for board_tensor, move_label, legal_move_mask in loaders["train"]:
+    # board_tensor: [B, 18, 8, 8] float32
+    # move_label: [B] long
+    # legal_move_mask: [B, 4672] bool
+    ...
 ```
 
 Tests: `backend/tests/test_data_pipeline.py` (encoder shape/dtype/error

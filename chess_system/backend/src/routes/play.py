@@ -14,7 +14,12 @@ from typing import cast
 from fastapi import APIRouter, FastAPI, HTTPException, Request
 
 from src.models.schemas import MoveRequest
-from src.services.ai_engine import FischerAI, NoLegalMovesError, get_fischer_ai
+from src.services.ai_engine import (
+    FischerAI,
+    NoLegalMovesError,
+    create_stockfish_engine,
+    get_fischer_ai,
+)
 
 
 @asynccontextmanager
@@ -28,8 +33,15 @@ async def router_lifespan(app: FastAPI) -> AsyncIterator[None]:
         Control to FastAPI after the cached inference service is attached to
         application state.
     """
-    app.state.fischer_ai = get_fischer_ai()
-    yield
+    fischer_ai = get_fischer_ai()
+    engine = create_stockfish_engine()
+    fischer_ai.set_engine(engine)
+    app.state.fischer_ai = fischer_ai
+    try:
+        yield
+    finally:
+        fischer_ai.clear_engine()
+        engine.quit()
 
 
 router = APIRouter(
@@ -43,8 +55,8 @@ router = APIRouter(
 def play_fischer(payload: MoveRequest, request: Request) -> dict[str, str]:
     """Given the current FEN, return the AI's next move.
 
-    The preloaded Behavioral Cloning policy masks illegal actions before
-    selecting one legal UCI move.
+    The preloaded Behavioral Cloning policy masks illegal actions, then a
+    startup-created Stockfish safety-net rejects likely blunders.
 
     Args:
         payload: Request body containing a full FEN string.
@@ -62,10 +74,10 @@ def play_fischer(payload: MoveRequest, request: Request) -> dict[str, str]:
         raise HTTPException(status_code=503, detail="Fischer AI is not initialized.")
 
     try:
-        move = cast(FischerAI, fischer_ai).predict_best_move(payload.fen)
+        move = cast(FischerAI, fischer_ai).predict_move(payload.fen)
     except NoLegalMovesError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
-    return {"move": move}
+    return {"move": move.uci()}

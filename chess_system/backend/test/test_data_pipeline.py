@@ -22,6 +22,8 @@ from src.data_processing.encoder import (
     NUM_CHANNELS,
     fen_to_tensor,
     index_to_move,
+    mirror_fen,
+    mirror_move,
     move_to_index,
 )
 from src.data_processing.dataset import _Record, split_indices_by_game
@@ -147,6 +149,35 @@ class TestMoveToIndex:
             index_to_move(ACTION_SPACE_SIZE, board)  # first invalid index
         with pytest.raises(ValueError):
             index_to_move(-1, board)
+
+
+# ---------------------------------------------------------------------------
+# Horizontal-mirror augmentation
+# ---------------------------------------------------------------------------
+
+class TestHorizontalMirroring:
+    def test_mirrored_move_remains_in_action_space(self):
+        mirrored_move = mirror_move(chess.Move.from_uci("e2e4"))
+
+        assert mirrored_move.uci() == "d2d4"
+        mirrored_index = move_to_index(mirrored_move)
+        assert 0 <= mirrored_index < ACTION_SPACE_SIZE
+
+    def test_mirrored_fen_is_valid_and_reflects_en_passant(self):
+        fen_after_e4 = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"
+        mirrored_fen = mirror_fen(fen_after_e4)
+        mirrored_board = chess.Board(mirrored_fen, chess960=True)
+
+        assert mirrored_board.is_valid()
+        assert mirrored_board.ep_square == chess.D3
+        assert mirrored_fen.split()[2] == "KQkq"
+        assert mirrored_board.has_kingside_castling_rights(chess.WHITE)
+        assert mirrored_board.has_queenside_castling_rights(chess.WHITE)
+
+    def test_mirrored_non_castling_fen_is_standard_chess_valid(self):
+        non_castling_fen = "4k3/8/8/8/8/8/8/4K3 w - - 0 1"
+
+        assert chess.Board(mirror_fen(non_castling_fen)).is_valid()
 
 
 # ---------------------------------------------------------------------------

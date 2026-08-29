@@ -12,13 +12,19 @@ from pathlib import Path
 from typing import Optional
 
 import torch
-from torch import Tensor, nn
+from torch import Tensor
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from src.config.settings import Settings, settings
 from src.data_processing.dataset import get_dataloaders
-from src.models.chess_model import FischerPolicyNet, get_available_device, load_model_weights
+from src.models.chess_model import (
+    FischerPolicyNet,
+    LegalMoveCrossEntropyLoss,
+    get_available_device,
+    load_model_weights,
+    mask_illegal_logits,
+)
 
 
 @dataclass(frozen=True)
@@ -31,13 +37,17 @@ class TestMetrics:
     examples: int
 
 
-def _move_batch(batch: tuple[Tensor, Tensor], device: torch.device) -> tuple[Tensor, Tensor]:
-    """Move a batch to the evaluation device."""
-    boards, labels = batch
+def _move_batch(
+    batch: tuple[Tensor, Tensor, Tensor],
+    device: torch.device,
+) -> tuple[Tensor, Tensor, Tensor]:
+    """Move a state, label, and legal-mask batch to the evaluation device."""
+    boards, labels, legal_move_masks = batch
     non_blocking = device.type == "cuda"
     return (
         boards.to(device, non_blocking=non_blocking),
         labels.to(device, non_blocking=non_blocking),
+        legal_move_masks.to(device, non_blocking=non_blocking),
     )
 
 
@@ -51,7 +61,7 @@ def _top_k_correct(logits: Tensor, labels: Tensor, k: int) -> int:
 def evaluate_policy(
     model: FischerPolicyNet,
     data_loader: DataLoader,
-    criterion: nn.CrossEntropyLoss,
+    criterion: LegalMoveCrossEntropyLoss,
     device: torch.device,
     use_amp: bool,
 ) -> TestMetrics:
@@ -59,8 +69,8 @@ def evaluate_policy(
 
     Args:
         model: Loaded policy in evaluation mode.
-        data_loader: Held-out DataLoader yielding states and action labels.
-        criterion: Cross-entropy objective for raw policy logits.
+        data_loader: Held-out DataLoader yielding states, labels, and legal masks.
+        criterion: Legal-move cross-entropy objective for raw policy logits.
         device: Compute device used for inference.
         use_amp: Whether to use supported GPU mixed-precision inference.
 
@@ -78,10 +88,11 @@ def evaluate_policy(
 
     with torch.inference_mode():
         for batch in tqdm(data_loader, desc="test", leave=False):
-            boards, labels = _move_batch(batch, device)
+            boards, labels, legal_move_masks = _move_batch(batch, device)
             with torch.amp.autocast(device_type=device.type, enabled=use_amp):
-                logits = model(boards)
-                loss = criterion(logits, labels)
+                raw_logits = model(boards)
+                logits = mask_illegal_logits(raw_logits, legal_move_masks)
+                loss = criterion(raw_logits, labels, legal_move_masks)
 
             batch_size = labels.size(0)
             total_loss += loss.item() * batch_size
@@ -132,7 +143,7 @@ def evaluate_bc(
     metrics = evaluate_policy(
         model,
         test_loader,
-        nn.CrossEntropyLoss(),
+        LegalMoveCrossEntropyLoss(label_smoothing=config.training_label_smoothing),
         device,
         use_amp,
     )

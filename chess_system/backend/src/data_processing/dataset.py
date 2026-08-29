@@ -24,7 +24,13 @@ import chess
 import torch
 from torch.utils.data import DataLoader, Dataset, Subset
 
-from src.data_processing.encoder import fen_to_tensor, move_to_index
+from src.data_processing.encoder import (
+    ACTION_SPACE_SIZE,
+    board_to_tensor,
+    mirror_fen,
+    mirror_move,
+    move_to_index,
+)
 
 DEFAULT_TRAIN_RATIO = 0.8
 DEFAULT_VAL_RATIO = 0.1
@@ -77,25 +83,72 @@ def _load_records(cache_path: Union[str, Path]) -> List[_Record]:
 
 
 class ChessDataset(Dataset):
-    """Maps an index to a (board_tensor, move_label) pair, encoding lazily.
+    """Lazily encode board, target action, and legal-action mask per sample.
 
     Built from a list of `_Record`s rather than a file path directly, so
     `get_dataloaders` can load the cache once and share the same records
-    across the train/val/test `Subset`s without re-reading the file.
+    across the train/val/test `Subset`s without re-reading the file. The
+    legal-action mask is generated on the CPU in ``__getitem__``; DataLoader
+    workers therefore parallelize python-chess move generation rather than
+    performing it in the GPU training loop.
     """
 
-    def __init__(self, records: Sequence[_Record]):
+    def __init__(self, records: Sequence[_Record], augment: bool = False):
+        """Initialize a lazy dataset with optional horizontal mirroring.
+
+        Args:
+            records: Cache records shared by one or more dataset splits.
+            augment: When true, each access has a 50% probability of
+                horizontally mirroring state, target, and legal actions.
+        """
         self._records = records
+        self._augment = augment
 
     def __len__(self) -> int:
         return len(self._records)
 
-    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
+    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Return encoded board state, target action, and legal action mask.
+
+        Args:
+            idx: Index into the dataset records.
+
+        Returns:
+            A tuple containing a board tensor ``[18, 8, 8]``, a scalar
+            ``torch.long`` action label, and a boolean legal-move mask of
+            shape ``[4672]``.
+
+        Raises:
+            ValueError: If the cached target move is illegal for its FEN.
+        """
         record = self._records[idx]
-        board_tensor = fen_to_tensor(record.fen)
-        move = chess.Move.from_uci(record.move_uci)
+        source_board = chess.Board(record.fen)
+        source_move = chess.Move.from_uci(record.move_uci)
+        source_legal_moves = list(source_board.legal_moves)
+
+        if self._augment and random.random() < 0.5:
+            mirrored_fen = mirror_fen(record.fen)
+            # Horizontal reflection moves the orthodox king from e-file to
+            # d-file. Chess960 mode preserves the original castling-right
+            # flags in this reflected coordinate system.
+            board = chess.Board(mirrored_fen, chess960=True)
+            move = mirror_move(source_move)
+            legal_moves = [mirror_move(legal_move) for legal_move in source_legal_moves]
+        else:
+            board = source_board
+            move = source_move
+            legal_moves = source_legal_moves
+
+        board_tensor = board_to_tensor(board)
         label = torch.tensor(move_to_index(move), dtype=torch.long)
-        return board_tensor, label
+        legal_move_mask = torch.zeros(ACTION_SPACE_SIZE, dtype=torch.bool)
+        legal_indices = [move_to_index(legal_move) for legal_move in legal_moves]
+        legal_move_mask[legal_indices] = True
+        if not legal_move_mask[label.item()]:
+            raise ValueError(
+                f"Cached move {record.move_uci} is illegal for training FEN: {record.fen}"
+            )
+        return board_tensor, label, legal_move_mask
 
 
 def split_indices_by_game(
@@ -168,6 +221,7 @@ def get_dataloaders(
     val_ratio: float = DEFAULT_VAL_RATIO,
     test_ratio: float = DEFAULT_TEST_RATIO,
     seed: int = 42,
+    augment_train: bool = True,
 ) -> Dict[str, DataLoader]:
     """
     Build train/val/test DataLoaders from a JSONL training-examples cache.
@@ -181,16 +235,22 @@ def get_dataloaders(
         train_ratio, val_ratio, test_ratio: Split proportions. Split is
             game-level, not leaked — see `split_indices_by_game`.
         seed: RNG seed for the split.
+        augment_train: Whether to apply random horizontal mirroring to the
+            training split only. Validation and test samples are never
+            augmented.
 
     Returns:
         {"train": DataLoader, "val": DataLoader, "test": DataLoader}
     """
     records = _load_records(file_path)
-    dataset = ChessDataset(records)
     splits = split_indices_by_game(records, train_ratio, val_ratio, test_ratio, seed)
 
     loaders: Dict[str, DataLoader] = {}
     for split_name, indices in splits.items():
+        dataset = ChessDataset(
+            records,
+            augment=augment_train and split_name == "train",
+        )
         subset = Subset(dataset, indices)
         loaders[split_name] = DataLoader(
             subset,

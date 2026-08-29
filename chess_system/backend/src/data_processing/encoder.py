@@ -51,6 +51,115 @@ CH_EN_PASSANT = 16
 CH_SIDE_TO_MOVE = 17
 
 
+def _mirror_square(square: chess.Square) -> chess.Square:
+    """Return the square reflected across the vertical board axis."""
+    return chess.square(7 - chess.square_file(square), chess.square_rank(square))
+
+
+def mirror_fen(fen: str) -> str:
+    """Reflect a FEN position horizontally, exchanging files a through h.
+
+    Ranks, side to move, move counters, and castling-right flags are kept.
+    The en-passant target is reflected to its corresponding file. Reflected
+    positions with castling rights use a Chess960-compatible coordinate
+    layout because a standard chess king moves from the e-file to the d-file
+    under horizontal reflection.
+
+    Args:
+        fen: Full FEN string to reflect.
+
+    Returns:
+        Reflected full FEN string.
+
+    Raises:
+        ValueError: If ``fen`` cannot be parsed by python-chess.
+    """
+    board = chess.Board(fen)
+    fields = fen.split()
+    if len(fields) != 6:
+        raise ValueError("FEN must include all six standard fields.")
+
+    mirrored_ranks: list[str] = []
+    for rank in range(7, -1, -1):
+        empty_squares = 0
+        rank_parts: list[str] = []
+        for file in range(8):
+            piece = board.piece_at(chess.square(7 - file, rank))
+            if piece is None:
+                empty_squares += 1
+                continue
+            if empty_squares:
+                rank_parts.append(str(empty_squares))
+                empty_squares = 0
+            rank_parts.append(piece.symbol())
+        if empty_squares:
+            rank_parts.append(str(empty_squares))
+        mirrored_ranks.append("".join(rank_parts))
+
+    en_passant = fields[3]
+    if en_passant != "-":
+        en_passant = chess.square_name(_mirror_square(chess.parse_square(en_passant)))
+
+    return " ".join(
+        (
+            "/".join(mirrored_ranks),
+            fields[1],
+            fields[2],
+            en_passant,
+            fields[4],
+            fields[5],
+        )
+    )
+
+
+def mirror_move(move: chess.Move) -> chess.Move:
+    """Reflect a move horizontally while preserving promotion information.
+
+    Args:
+        move: Chess move in the original board orientation.
+
+    Returns:
+        Move with its source and target files reflected a through h.
+    """
+    return chess.Move(
+        from_square=_mirror_square(move.from_square),
+        to_square=_mirror_square(move.to_square),
+        promotion=move.promotion,
+        drop=move.drop,
+    )
+
+
+def board_to_tensor(board: chess.Board) -> torch.Tensor:
+    """Encode a chess board as the policy network's multi-channel tensor.
+
+    Args:
+        board: Parsed chess board to encode. The board is not mutated.
+
+    Returns:
+        Tensor of shape ``[18, 8, 8]`` and dtype ``torch.float32``.
+    """
+    tensor = torch.zeros((NUM_CHANNELS, 8, 8), dtype=torch.float32)
+
+    for square, piece in board.piece_map().items():
+        channel = _PIECE_TO_CHANNEL[(piece.piece_type, piece.color)]
+        rank = chess.square_rank(square)
+        file = chess.square_file(square)
+        tensor[channel, rank, file] = 1.0
+
+    tensor[CH_WHITE_KINGSIDE, :, :] = float(board.has_kingside_castling_rights(chess.WHITE))
+    tensor[CH_WHITE_QUEENSIDE, :, :] = float(board.has_queenside_castling_rights(chess.WHITE))
+    tensor[CH_BLACK_KINGSIDE, :, :] = float(board.has_kingside_castling_rights(chess.BLACK))
+    tensor[CH_BLACK_QUEENSIDE, :, :] = float(board.has_queenside_castling_rights(chess.BLACK))
+
+    if board.ep_square is not None:
+        ep_rank = chess.square_rank(board.ep_square)
+        ep_file = chess.square_file(board.ep_square)
+        tensor[CH_EN_PASSANT, ep_rank, ep_file] = 1.0
+
+    tensor[CH_SIDE_TO_MOVE, :, :] = 1.0 if board.turn == chess.WHITE else 0.0
+    return tensor
+
+
 def fen_to_tensor(fen: str) -> torch.Tensor:
     """
     Encode a board position (FEN) as a multi-channel tensor.
@@ -80,28 +189,7 @@ def fen_to_tensor(fen: str) -> torch.Tensor:
         ValueError: If `fen` is not a structurally valid FEN (propagated
             from python-chess's `chess.Board` constructor).
     """
-    board = chess.Board(fen)
-    tensor = torch.zeros((NUM_CHANNELS, 8, 8), dtype=torch.float32)
-
-    for square, piece in board.piece_map().items():
-        channel = _PIECE_TO_CHANNEL[(piece.piece_type, piece.color)]
-        rank = chess.square_rank(square)
-        file = chess.square_file(square)
-        tensor[channel, rank, file] = 1.0
-
-    tensor[CH_WHITE_KINGSIDE, :, :] = float(board.has_kingside_castling_rights(chess.WHITE))
-    tensor[CH_WHITE_QUEENSIDE, :, :] = float(board.has_queenside_castling_rights(chess.WHITE))
-    tensor[CH_BLACK_KINGSIDE, :, :] = float(board.has_kingside_castling_rights(chess.BLACK))
-    tensor[CH_BLACK_QUEENSIDE, :, :] = float(board.has_queenside_castling_rights(chess.BLACK))
-
-    if board.ep_square is not None:
-        ep_rank = chess.square_rank(board.ep_square)
-        ep_file = chess.square_file(board.ep_square)
-        tensor[CH_EN_PASSANT, ep_rank, ep_file] = 1.0
-
-    tensor[CH_SIDE_TO_MOVE, :, :] = 1.0 if board.turn == chess.WHITE else 0.0
-
-    return tensor
+    return board_to_tensor(chess.Board(fen))
 
 
 # ---------------------------------------------------------------------------

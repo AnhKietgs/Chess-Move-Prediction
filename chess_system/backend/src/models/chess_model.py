@@ -9,6 +9,7 @@ from typing import Any, Mapping, Optional, Union
 import numpy as np
 import torch
 from torch import Tensor, nn
+from torch.nn import functional as functional
 
 from src.data_processing.encoder import ACTION_SPACE_SIZE, NUM_CHANNELS
 
@@ -49,6 +50,99 @@ def set_random_seeds(seed: int, deterministic: bool = True) -> None:
     torch.backends.cudnn.benchmark = not deterministic
     torch.backends.cudnn.deterministic = deterministic
     torch.use_deterministic_algorithms(deterministic, warn_only=True)
+
+
+def mask_illegal_logits(logits: Tensor, legal_move_mask: Tensor) -> Tensor:
+    """Set logits for illegal actions to negative infinity.
+
+    Args:
+        logits: Raw policy logits of shape ``[batch_size, num_actions]``.
+        legal_move_mask: Boolean mask with exactly the same shape as
+            ``logits``; ``True`` marks an action legal for that sample.
+
+    Returns:
+        Policy logits with all illegal actions replaced by ``-inf``. The
+        returned logits can be passed directly to argmax or to cross-entropy
+        without label smoothing.
+
+    Raises:
+        ValueError: If shapes differ or any sample has no legal action.
+    """
+    if logits.ndim != 2 or legal_move_mask.shape != logits.shape:
+        raise ValueError(
+            "logits and legal_move_mask must have matching shape "
+            "[batch_size, num_actions]."
+        )
+    if not torch.all(legal_move_mask.any(dim=1)):
+        raise ValueError("Every sample must include at least one legal action.")
+    return logits.masked_fill(~legal_move_mask.to(dtype=torch.bool), float("-inf"))
+
+
+class LegalMoveCrossEntropyLoss(nn.Module):
+    """Cross-entropy that applies label smoothing only across legal actions.
+
+    PyTorch's built-in label smoothing distributes probability over every
+    action class. That is incompatible with ``-inf`` illegal-action logits.
+    This criterion instead distributes its smoothing mass uniformly over the
+    legal moves for each individual chess position.
+
+    Args:
+        label_smoothing: Probability mass distributed uniformly among legal
+            actions. Must be in the range ``[0, 1]``.
+    """
+
+    def __init__(self, label_smoothing: float = 0.0) -> None:
+        super().__init__()
+        if not 0.0 <= label_smoothing <= 1.0:
+            raise ValueError("label_smoothing must be in the range [0.0, 1.0].")
+        self.label_smoothing = label_smoothing
+
+    def forward(
+        self,
+        logits: Tensor,
+        labels: Tensor,
+        legal_move_mask: Tensor,
+    ) -> Tensor:
+        """Return mean legal-action cross-entropy for a policy batch.
+
+        Args:
+            logits: Raw policy logits with shape ``[batch_size, num_actions]``.
+            labels: Legal target action indices with shape ``[batch_size]``.
+            legal_move_mask: Boolean legal-action mask matching ``logits``.
+
+        Returns:
+            A finite scalar loss when every target action is legal.
+
+        Raises:
+            ValueError: If labels are malformed, out of range, or illegal.
+        """
+        masked_logits = mask_illegal_logits(logits, legal_move_mask)
+        if labels.ndim != 1 or labels.size(0) != logits.size(0):
+            raise ValueError("labels must have shape [batch_size].")
+        if labels.dtype != torch.long:
+            raise ValueError("labels must have dtype torch.long.")
+        if torch.any(labels < 0) or torch.any(labels >= logits.size(1)):
+            raise ValueError("labels contain an action index outside the action space.")
+
+        legal_mask = legal_move_mask.to(device=logits.device, dtype=torch.bool)
+        target_is_legal = legal_mask.gather(1, labels.unsqueeze(1)).squeeze(1)
+        if not torch.all(target_is_legal):
+            raise ValueError("Every target action must be legal for its board position.")
+
+        log_probabilities = functional.log_softmax(masked_logits, dim=1)
+        negative_log_likelihood = -log_probabilities.gather(1, labels.unsqueeze(1)).squeeze(1)
+        if self.label_smoothing == 0.0:
+            return negative_log_likelihood.mean()
+
+        legal_counts = legal_mask.sum(dim=1)
+        legal_log_probability_mean = (
+            log_probabilities.masked_fill(~legal_mask, 0.0).sum(dim=1) / legal_counts
+        )
+        smoothed_loss = (
+            (1.0 - self.label_smoothing) * negative_log_likelihood
+            - self.label_smoothing * legal_log_probability_mean
+        )
+        return smoothed_loss.mean()
 
 
 class _ResidualBlock(nn.Module):
@@ -94,25 +188,30 @@ class FischerPolicyNet(nn.Module):
         channels: Width of the residual trunk.
         residual_blocks: Number of residual blocks in the trunk.
         policy_channels: Width of the 1x1 policy head convolution.
+        policy_dropout: Dropout probability before the final policy linear layer.
     """
 
     def __init__(
         self,
         input_channels: int = NUM_CHANNELS,
         num_actions: int = ACTION_SPACE_SIZE,
-        channels: int = 128,
-        residual_blocks: int = 8,
+        channels: int = 64,
+        residual_blocks: int = 4,
         policy_channels: int = 32,
+        policy_dropout: float = 0.4,
     ) -> None:
         super().__init__()
         if min(input_channels, num_actions, channels, residual_blocks, policy_channels) <= 0:
             raise ValueError("All FischerPolicyNet dimensions must be positive.")
+        if not 0.0 <= policy_dropout < 1.0:
+            raise ValueError("policy_dropout must be in the range [0.0, 1.0).")
 
         self.input_channels = input_channels
         self.num_actions = num_actions
         self.channels = channels
         self.residual_blocks = residual_blocks
         self.policy_channels = policy_channels
+        self.policy_dropout = policy_dropout
 
         self.input_conv = nn.Conv2d(
             input_channels,
@@ -129,6 +228,7 @@ class FischerPolicyNet(nn.Module):
 
         self.policy_conv = nn.Conv2d(channels, policy_channels, kernel_size=1, bias=False)
         self.policy_batch_norm = nn.BatchNorm2d(policy_channels)
+        self.policy_dropout_layer = nn.Dropout(p=policy_dropout)
         self.policy_linear = nn.Linear(policy_channels * 8 * 8, num_actions)
 
     def forward(self, board_tensor: Tensor) -> Tensor:
@@ -163,9 +263,10 @@ class FischerPolicyNet(nn.Module):
         policy = self.policy_conv(features)
         policy = self.activation(self.policy_batch_norm(policy))
         policy = torch.flatten(policy, start_dim=1)  # [batch_size, policy_channels * 8 * 8]
+        policy = self.policy_dropout_layer(policy)
         return self.policy_linear(policy)  # [batch_size, num_actions], raw logits
 
-    def model_config(self) -> dict[str, int]:
+    def model_config(self) -> dict[str, int | float]:
         """Return architecture values needed to rebuild this policy.
 
         Returns:
@@ -177,6 +278,7 @@ class FischerPolicyNet(nn.Module):
             "channels": self.channels,
             "residual_blocks": self.residual_blocks,
             "policy_channels": self.policy_channels,
+            "policy_dropout": self.policy_dropout,
         }
 
 
@@ -215,7 +317,7 @@ def load_model_weights(
 
     target_device = device or get_available_device()
     checkpoint = _read_checkpoint(checkpoint_path, target_device)
-    model_config: Mapping[str, int] = {}
+    model_config: Mapping[str, int | float] = {}
     state_dict: Mapping[str, Tensor]
     if isinstance(checkpoint, Mapping) and "model_state_dict" in checkpoint:
         model_config = checkpoint.get("model_config", {})
