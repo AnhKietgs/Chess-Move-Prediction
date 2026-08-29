@@ -120,6 +120,18 @@ def _select_safe_move(
     board = _validated_board(fen)
     mover = board.turn
     limit = chess.engine.Limit(depth=depth)
+
+    # This engine process is reused across an entire game (or arena run) of
+    # calls. Its transposition hash table persists across analyse() calls,
+    # which can bias depth-8 evaluations depending purely on prior search
+    # history — the same issue fixed in the data pipeline's blunder filter
+    # (see pgn_parser.py). Clearing it here keeps each move's judgment
+    # independent of how many prior positions this engine has analysed.
+    try:
+        engine.configure({"Clear Hash": None})
+    except Exception:
+        logger.debug("Engine does not support 'Clear Hash' — continuing without it.")
+
     best_analysis = engine.analyse(board, limit)
     principal_variation = best_analysis.get("pv", [])
     if not principal_variation:

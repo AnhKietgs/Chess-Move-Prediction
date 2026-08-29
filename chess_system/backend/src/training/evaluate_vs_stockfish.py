@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import csv
 import random
+from contextlib import ExitStack
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -61,6 +62,8 @@ class ArenaSummary:
     effective_stockfish_elo: int
     pgn_path: Path
     csv_path: Path
+    used_safety_net: bool
+    safety_net_fallbacks: Optional[int]
 
 
 def _opening_board(uci_moves: Sequence[str]) -> tuple[chess.Board, list[chess.Move]]:
@@ -125,8 +128,16 @@ def _play_game(
     stockfish_time_seconds: float,
     max_plies: int,
     stockfish_elo: int,
+    use_safety_net: bool,
 ) -> tuple[ArenaGameResult, chess.pgn.Game]:
-    """Play and record one full arena game from a fixed opening position."""
+    """Play and record one full arena game from a fixed opening position.
+
+    Args:
+        use_safety_net: When true, FischerAI's moves are guarded by the
+            Stockfish blunder check (``predict_move``). When false, the raw
+            policy argmax is used (``predict_best_move``), matching the
+            original un-guarded benchmark for before/after comparison.
+    """
     board, opening_history = _opening_board(opening_moves)
     game = chess.pgn.Game()
     game.headers["Event"] = "FischerAI vs limited Stockfish"
@@ -135,6 +146,7 @@ def _play_game(
     game.headers["Black"] = "FischerAI" if model_color == chess.BLACK else "Stockfish"
     game.headers["Opening"] = opening_name
     game.headers["StockfishElo"] = str(stockfish_elo)
+    game.headers["SafetyNet"] = "on" if use_safety_net else "off"
 
     node = game
     for move in opening_history:
@@ -143,7 +155,10 @@ def _play_game(
     additional_plies = 0
     while not board.is_game_over(claim_draw=True) and additional_plies < max_plies:
         if board.turn == model_color:
-            move = chess.Move.from_uci(fischer_ai.predict_best_move(board.fen()))
+            if use_safety_net:
+                move = fischer_ai.predict_move(board.fen())
+            else:
+                move = chess.Move.from_uci(fischer_ai.predict_best_move(board.fen()))
         else:
             engine_result = engine.play(
                 board,
@@ -224,6 +239,7 @@ def run_stockfish_arena(
     stockfish_path: Optional[Path] = None,
     checkpoint_path: Optional[Path] = None,
     output_dir: Optional[Path] = None,
+    use_safety_net: bool = True,
 ) -> ArenaSummary:
     """Measure FischerAI's practical playing strength against Stockfish.
 
@@ -237,6 +253,14 @@ def run_stockfish_arena(
         stockfish_path: Optional UCI engine executable override.
         checkpoint_path: Optional Fischer policy checkpoint override.
         output_dir: Optional directory for generated PGN and CSV artifacts.
+        use_safety_net: When true (default), FischerAI's moves are guarded
+            by a *second*, full-strength Stockfish instance running the
+            Δcp blunder check (``FischerAI.predict_move``) — this must be a
+            separate engine from the Elo-limited opponent below, since the
+            blunder judge needs to stay at full strength regardless of what
+            Elo the opponent is configured to play at. When false, the raw
+            policy argmax is used instead (``FischerAI.predict_best_move``),
+            reproducing the original un-guarded benchmark for comparison.
 
     Returns:
         Arena score summary and paths to its generated records.
@@ -256,14 +280,26 @@ def run_stockfish_arena(
             f"Stockfish executable does not exist: {selected_stockfish_path}"
         )
 
-    fischer_ai = FischerAI(selected_checkpoint_path)
     opening_order = list(_OPENINGS)
     random.Random(seed).shuffle(opening_order)
     game_results: list[ArenaGameResult] = []
     pgn_games: list[chess.pgn.Game] = []
 
-    with chess.engine.SimpleEngine.popen_uci(selected_stockfish_path) as engine:
+    with chess.engine.SimpleEngine.popen_uci(selected_stockfish_path) as engine, \
+            ExitStack() as safety_net_stack:
         effective_elo = _configure_limited_stockfish(engine, requested_stockfish_elo)
+
+        safety_net_engine = None
+        if use_safety_net:
+            # A separate, NOT Elo-limited engine process — the blunder
+            # judge must stay at full strength even while the opponent
+            # is deliberately weakened.
+            safety_net_engine = safety_net_stack.enter_context(
+                chess.engine.SimpleEngine.popen_uci(selected_stockfish_path)
+            )
+
+        fischer_ai = FischerAI(selected_checkpoint_path, engine=safety_net_engine)
+
         for game_number in tqdm(range(1, games + 1), desc="Stockfish arena"):
             opening_name, opening_moves = opening_order[(game_number - 1) % len(opening_order)]
             model_color = chess.WHITE if game_number % 2 == 1 else chess.BLACK
@@ -277,6 +313,7 @@ def run_stockfish_arena(
                 stockfish_time_seconds,
                 max_plies,
                 effective_elo,
+                use_safety_net,
             )
             game_results.append(result)
             pgn_games.append(game)
@@ -300,6 +337,8 @@ def run_stockfish_arena(
         effective_stockfish_elo=effective_elo,
         pgn_path=pgn_path,
         csv_path=csv_path,
+        used_safety_net=use_safety_net,
+        safety_net_fallbacks=fischer_ai.safety_net_fallbacks if use_safety_net else None,
     )
 
 
@@ -320,6 +359,14 @@ def _parse_arguments() -> argparse.Namespace:
     parser.add_argument("--stockfish-path", type=Path, default=None)
     parser.add_argument("--checkpoint-path", type=Path, default=None)
     parser.add_argument("--output-dir", type=Path, default=None)
+    parser.add_argument(
+        "--no-safety-net",
+        dest="use_safety_net",
+        action="store_false",
+        help="Disable the Stockfish blunder guard and use raw policy argmax "
+             "(reproduces the original un-guarded benchmark).",
+    )
+    parser.set_defaults(use_safety_net=True)
     return parser.parse_args()
 
 
@@ -336,11 +383,15 @@ def main() -> None:
         stockfish_path=arguments.stockfish_path,
         checkpoint_path=arguments.checkpoint_path,
         output_dir=arguments.output_dir,
+        use_safety_net=arguments.use_safety_net,
     )
     print(f"Stockfish Elo: {summary.effective_stockfish_elo}")
+    print(f"Safety net: {'on' if summary.used_safety_net else 'off'}")
     print(f"Games: {summary.games}")
     print(f"FischerAI W/D/L: {summary.wins}/{summary.draws}/{summary.losses}")
     print(f"FischerAI score: {summary.score:.2%}")
+    if summary.used_safety_net:
+        print(f"Safety-net fallbacks (all top-k were blunders): {summary.safety_net_fallbacks}")
     print(f"PGN: {summary.pgn_path}")
     print(f"CSV: {summary.csv_path}")
 
