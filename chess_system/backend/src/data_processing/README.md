@@ -26,6 +26,11 @@ Filtering applied:
   sound moves worth imitating).
 - **Legality** — `move in board.legal_moves` is re-checked immediately
   before yielding, independent of python-chess's own SAN parsing.
+- **Duplicate games** — before Stockfish starts, `build_cache.py` compares
+  each game's initial position plus its complete UCI main line. Repeated
+  games are skipped while the first occurrence is kept; PGN comments and
+  headers do not make a duplicate appear new. Pass `--keep-duplicate-games`
+  only when this behaviour is explicitly unwanted.
 - **Reproducibility** — Stockfish's transposition hash table persists
   across `analyse()` calls within one engine process; left uncleared, the
   *same* game can yield a different blunder judgment depending purely on
@@ -79,7 +84,7 @@ the validation and test loaders stay unaugmented.
 
 ## Typical usage
 
-The `Fischer.pgn` dataset (827 games) is bundled at `backend/data/raw/Fischer.pgn`
+The Fischer PGN collection is stored at `backend/data/raw/fischer_all.pgn`
 — see `backend/data/README.md` for the full walkthrough. Quick version:
 
 ```bash

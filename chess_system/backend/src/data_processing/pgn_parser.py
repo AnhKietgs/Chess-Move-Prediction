@@ -18,6 +18,7 @@ import json
 import logging
 import re
 import os
+import hashlib
 from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
@@ -47,6 +48,57 @@ class TrainingExample:
     fen: str
     move_uci: str
     game_id: int
+
+
+def _game_fingerprint(game: "chess.pgn.Game") -> str:
+    """Return a stable signature for a game's initial position and main line."""
+    board = game.board()
+    initial_position = " ".join(board.fen().split()[:4])
+    moves = " ".join(move.uci() for move in game.mainline_moves())
+    payload = f"{initial_position}|{moves}".encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def find_duplicate_game_ids(pgn_path: Union[str, Path]) -> set[int]:
+    """Find duplicate PGN games using their initial position and UCI main line.
+
+    The first occurrence of a game is retained and every later occurrence
+    with the exact same move sequence is returned. Metadata such as event,
+    comments, annotations, and whitespace does not affect this decision.
+
+    Args:
+        pgn_path: Path to the raw PGN collection.
+
+    Returns:
+        One-based game IDs that should be skipped during data extraction.
+    """
+    source_path = Path(pgn_path)
+    fingerprints: set[str] = set()
+    duplicate_game_ids: set[int] = set()
+    game_id = 0
+
+    with source_path.open("r", encoding="utf-8", errors="replace") as pgn_file:
+        while True:
+            try:
+                game = chess.pgn.read_game(pgn_file)
+            except Exception:
+                logger.warning(
+                    "Failed to parse a game from %s while checking duplicates; skipping.",
+                    source_path,
+                    exc_info=True,
+                )
+                continue
+            if game is None:
+                break
+
+            game_id += 1
+            fingerprint = _game_fingerprint(game)
+            if fingerprint in fingerprints:
+                duplicate_game_ids.add(game_id)
+            else:
+                fingerprints.add(fingerprint)
+
+    return duplicate_game_ids
 
 
 def _player_color_in_game(headers: "chess.pgn.Headers", player_name: str) -> Optional[chess.Color]:
@@ -181,6 +233,7 @@ def stream_training_examples(
     blunder_threshold_cp: int = BLUNDER_THRESHOLD_CP_DEFAULT,
     min_classical_base_seconds: int = MIN_CLASSICAL_BASE_SECONDS_DEFAULT,
     max_games: Optional[int] = None,
+    excluded_game_ids: Optional[set[int]] = None,
 ) -> Iterator[TrainingExample]:
     """
     Stream (fen, move) training pairs from a PGN file, filtered for quality.
@@ -224,6 +277,8 @@ def stream_training_examples(
             seconds) to count as classical, when that header is present.
         max_games: Optional cap on the number of games read from the file
             (mainly useful for smoke-testing a pipeline run).
+        excluded_game_ids: One-based source game IDs to skip, normally from
+            :func:`find_duplicate_game_ids`.
 
     Yields:
         TrainingExample(fen, move_uci, game_id) for each surviving move.
@@ -251,6 +306,9 @@ def stream_training_examples(
                 break  # end of file
 
             game_id += 1
+            if excluded_game_ids is not None and game_id in excluded_game_ids:
+                logger.info("Game #%d skipped: duplicate main line.", game_id)
+                continue
 
             try:
                 yield from _process_game(
@@ -279,6 +337,7 @@ def _process_pgn_shard(
     blunder_threshold_cp: int,
     min_classical_base_seconds: int,
     max_games: Optional[int],
+    excluded_game_ids: Optional[set[int]],
     log_level: int,
 ) -> List[TrainingExample]:
     """
@@ -325,6 +384,8 @@ def _process_pgn_shard(
 
             game_id += 1
 
+            if excluded_game_ids is not None and game_id in excluded_game_ids:
+                continue
             if not _game_belongs_to_worker(game_id, worker_id, num_workers):
                 continue  # another worker owns this game
 
@@ -359,6 +420,7 @@ def stream_training_examples_parallel(
     blunder_threshold_cp: int = BLUNDER_THRESHOLD_CP_DEFAULT,
     min_classical_base_seconds: int = MIN_CLASSICAL_BASE_SECONDS_DEFAULT,
     max_games: Optional[int] = None,
+    excluded_game_ids: Optional[set[int]] = None,
 ) -> Iterator[TrainingExample]:
     """
     Same filtering behavior as `stream_training_examples`, parallelized
@@ -389,6 +451,8 @@ def stream_training_examples_parallel(
         num_workers: Number of worker processes. Defaults to
             `os.cpu_count()`. Each worker opens its own Stockfish process,
             so this should not exceed available CPU cores.
+        excluded_game_ids: One-based source game IDs to skip, normally from
+            :func:`find_duplicate_game_ids`.
 
     Yields:
         TrainingExample(fen, move_uci, game_id), ordered by game_id (stable
@@ -406,6 +470,7 @@ def stream_training_examples_parallel(
             blunder_threshold_cp=blunder_threshold_cp,
             min_classical_base_seconds=min_classical_base_seconds,
             max_games=max_games,
+            excluded_game_ids=excluded_game_ids,
         )
         return
 
@@ -425,6 +490,7 @@ def stream_training_examples_parallel(
                 blunder_threshold_cp,
                 min_classical_base_seconds,
                 max_games,
+                excluded_game_ids,
                 log_level,
             )
             for worker_id in range(num_workers)

@@ -19,11 +19,12 @@ from pathlib import Path
 
 from src.data_processing.pgn_parser import (
     BLUNDER_THRESHOLD_CP_DEFAULT,
+    find_duplicate_game_ids,
     stream_training_examples_parallel,
     write_training_examples_jsonl,
 )
 
-DEFAULT_PGN_PATH = "data/raw/Fischer.pgn"
+DEFAULT_PGN_PATH = "data/raw/fischer_all.pgn"
 DEFAULT_CACHE_PATH = "data/cache/fischer_training_examples.jsonl"
 DEFAULT_DEPTH = 8
 
@@ -82,12 +83,21 @@ def main(argv: list[str] | None = None) -> None:
                  "Use 1 to force the original single-process path.",
     )
     parser.add_argument("--log-level", default="INFO")
+    parser.add_argument(
+        "--keep-duplicate-games",
+        action="store_true",
+        help="Do not remove repeated games with an identical main line.",
+    )
     args = parser.parse_args(argv)
 
     logging.basicConfig(level=args.log_level, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
     stockfish_path = _resolve_stockfish_path(args.stockfish_path)
     num_workers = args.num_workers or (os.cpu_count() or 1)
+    duplicate_game_ids = set()
+    if not args.keep_duplicate_games:
+        duplicate_game_ids = find_duplicate_game_ids(args.pgn_path)
+        print(f"Duplicate games skipped: {len(duplicate_game_ids)}")
 
     examples =  stream_training_examples_parallel(
         args.pgn_path,
@@ -97,6 +107,7 @@ def main(argv: list[str] | None = None) -> None:
         depth=args.depth,
         blunder_threshold_cp=args.blunder_threshold_cp,
         max_games=args.max_games,
+        excluded_game_ids=duplicate_game_ids,
     )
     count = write_training_examples_jsonl(examples, args.cache_path)
     print(f"Done: {count} training examples written to {args.cache_path}")
