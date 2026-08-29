@@ -45,7 +45,7 @@ class EpochMetrics:
 class TrainingResult:
     """Summary of a completed Behavioral Cloning training run."""
 
-    best_validation_loss: float
+    best_validation_top1_accuracy: float
     final_epoch: int
     best_checkpoint_path: Path
     last_checkpoint_path: Path
@@ -217,7 +217,7 @@ def _save_checkpoint(
     optimizer: Optimizer,
     scheduler: ReduceLROnPlateau,
     epoch: int,
-    best_validation_loss: float,
+    best_validation_top1_accuracy: float,
     epochs_without_improvement: int,
 ) -> None:
     """Save all model and optimization state needed to resume training.
@@ -228,8 +228,8 @@ def _save_checkpoint(
         optimizer: Optimizer with current momentum state.
         scheduler: Learning-rate scheduler state.
         epoch: Completed zero-based epoch index.
-        best_validation_loss: Lowest validation loss observed so far.
-        epochs_without_improvement: Consecutive epochs without a lower loss.
+        best_validation_top1_accuracy: Highest validation Top-1 accuracy so far.
+        epochs_without_improvement: Consecutive epochs without a higher Top-1 score.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     torch.save(
@@ -239,7 +239,7 @@ def _save_checkpoint(
             "optimizer_state_dict": optimizer.state_dict(),
             "scheduler_state_dict": scheduler.state_dict(),
             "epoch": epoch,
-            "best_validation_loss": best_validation_loss,
+            "best_validation_top1_accuracy": best_validation_top1_accuracy,
             "epochs_without_improvement": epochs_without_improvement,
         },
         path,
@@ -263,7 +263,8 @@ def _load_resume_checkpoint(
         device: Device used to map checkpoint tensors.
 
     Returns:
-        The next epoch index, lowest validation loss, and stale-epoch count.
+        The next epoch index, best validation Top-1 accuracy, and stale-epoch
+        count.
 
     Raises:
         FileNotFoundError: If ``checkpoint_path`` does not exist.
@@ -288,7 +289,7 @@ def _load_resume_checkpoint(
         "optimizer_state_dict",
         "scheduler_state_dict",
         "epoch",
-        "best_validation_loss",
+        "best_validation_top1_accuracy",
         "epochs_without_improvement",
     }
     missing_keys = required_keys.difference(checkpoint)
@@ -300,7 +301,7 @@ def _load_resume_checkpoint(
     scheduler.load_state_dict(checkpoint["scheduler_state_dict"])
     return (
         int(checkpoint["epoch"]) + 1,
-        float(checkpoint["best_validation_loss"]),
+        float(checkpoint["best_validation_top1_accuracy"]),
         int(checkpoint["epochs_without_improvement"]),
     )
 
@@ -353,9 +354,9 @@ def train_bc(config: Settings = settings) -> TrainingResult:
     """Train a Fischer policy with Behavioral Cloning.
 
     The best checkpoint is written as ``best_fischer_bc.pth`` whenever the
-    validation loss improves. Top-1, Top-3, and Top-5 accuracy are logged as
-    style-learning diagnostics. Training stops after the configured number of
-    consecutive epochs without a lower validation loss.
+    validation Top-1 accuracy improves. Top-1, Top-3, and Top-5 accuracy are
+    logged as style-learning diagnostics. Training stops after the configured
+    number of consecutive epochs without a higher validation Top-1 score.
 
     Args:
         config: Centralized settings for architecture and training values.
@@ -401,10 +402,14 @@ def train_bc(config: Settings = settings) -> TrainingResult:
         enabled=use_amp and device.type == "cuda",
     )
     start_epoch = 0
-    best_validation_loss = float("inf")
+    best_validation_top1_accuracy = float("-inf")
     epochs_without_improvement = 0
     if config.training_resume_path is not None:
-        start_epoch, best_validation_loss, epochs_without_improvement = _load_resume_checkpoint(
+        (
+            start_epoch,
+            best_validation_top1_accuracy,
+            epochs_without_improvement,
+        ) = _load_resume_checkpoint(
             config.training_resume_path,
             model,
             optimizer,
@@ -443,8 +448,8 @@ def train_bc(config: Settings = settings) -> TrainingResult:
             learning_rate,
         )
 
-        if validation_metrics.loss < best_validation_loss:
-            best_validation_loss = validation_metrics.loss
+        if validation_metrics.top1_accuracy > best_validation_top1_accuracy:
+            best_validation_top1_accuracy = validation_metrics.top1_accuracy
             epochs_without_improvement = 0
             _save_checkpoint(
                 best_checkpoint_path,
@@ -452,7 +457,7 @@ def train_bc(config: Settings = settings) -> TrainingResult:
                 optimizer,
                 scheduler,
                 epoch,
-                best_validation_loss,
+                best_validation_top1_accuracy,
                 epochs_without_improvement,
             )
         else:
@@ -463,7 +468,7 @@ def train_bc(config: Settings = settings) -> TrainingResult:
             optimizer,
             scheduler,
             epoch,
-            best_validation_loss,
+            best_validation_top1_accuracy,
             epochs_without_improvement,
         )
         print(
@@ -481,13 +486,13 @@ def train_bc(config: Settings = settings) -> TrainingResult:
         final_epoch = epoch + 1
         if epochs_without_improvement >= config.training_early_stopping_patience:
             print(
-                "Early stopping: validation loss did not improve for "
+                "Early stopping: validation Top-1 accuracy did not improve for "
                 f"{epochs_without_improvement} epoch(s)."
             )
             break
 
     return TrainingResult(
-        best_validation_loss=best_validation_loss,
+        best_validation_top1_accuracy=best_validation_top1_accuracy,
         final_epoch=final_epoch,
         best_checkpoint_path=best_checkpoint_path,
         last_checkpoint_path=last_checkpoint_path,
