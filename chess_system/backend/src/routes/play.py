@@ -9,8 +9,10 @@ from __future__ import annotations
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+import logging
 from typing import cast
 
+import chess.engine
 from fastapi import APIRouter, FastAPI, HTTPException, Request
 
 from src.models.schemas import MoveRequest
@@ -20,6 +22,22 @@ from src.services.ai_engine import (
     create_stockfish_engine,
     get_fischer_ai,
 )
+
+logger = logging.getLogger(__name__)
+
+
+def _shutdown_stockfish_engine(engine: chess.engine.SimpleEngine) -> None:
+    """Stop Stockfish without failing shutdown when its process already exited.
+
+    Args:
+        engine: Stockfish process created for the current FastAPI lifespan.
+    """
+    try:
+        engine.quit()
+    except chess.engine.EngineTerminatedError:
+        logger.info("Stockfish had already exited before application shutdown.")
+    except chess.engine.EngineError:
+        logger.warning("Stockfish could not shut down cleanly.", exc_info=True)
 
 
 @asynccontextmanager
@@ -41,7 +59,7 @@ async def router_lifespan(app: FastAPI) -> AsyncIterator[None]:
         yield
     finally:
         fischer_ai.clear_engine()
-        engine.quit()
+        _shutdown_stockfish_engine(engine)
 
 
 router = APIRouter(
