@@ -6,6 +6,7 @@ import {
   getLegalMoveSquareStyles,
   getLastMoveSquareStyles,
   getCheckSquareStyles,
+  getAiHeatmapSquareStyles,
   isPromotionMove,
 } from "../utils/chessHelpers.js";
 
@@ -29,10 +30,11 @@ const dndBackendOptions = { enableMouseEvents: true };
  *   playerColor: "w"|"b",
  *   lastMove: {from: string, to: string}|null,
  *   isLocked: boolean,
+ *   aiMoveSquares?: string[],
  *   onMove: (from: string, to: string, promotion?: "q"|"r"|"b"|"n") => boolean,
  * }} props
  */
-export default function ChessBoardContainer({ game, fen, playerColor, lastMove, isLocked, onMove }) {
+export default function ChessBoardContainer({ game, fen, playerColor, lastMove, isLocked, onMove, aiMoveSquares = [] }) {
   const [selectedSquare, setSelectedSquare] = useState(/** @type {string|null} */ (null));
   const [pendingPromotion, setPendingPromotion] = useState(
     /** @type {{from: string, to: string, color: "w"|"b"}|null} */ (null)
@@ -82,6 +84,7 @@ export default function ChessBoardContainer({ game, fen, playerColor, lastMove, 
   };
 
   const squareStyles = {
+    ...getAiHeatmapSquareStyles(aiMoveSquares),
     ...getLastMoveSquareStyles(lastMove),
     ...getCheckSquareStyles(game),
     ...(selectedSquare
@@ -134,7 +137,7 @@ export default function ChessBoardContainer({ game, fen, playerColor, lastMove, 
             onCancel={handlePromotionCancel}
           />
         )}
-        <div style={{ width: "min(72vw, 560px)" }}>
+        <div style={{ width: "min(84vw, 740px)" }}>
           <Chessboard
             id="fischer-board"
             position={fen}
@@ -147,11 +150,11 @@ export default function ChessBoardContainer({ game, fen, playerColor, lastMove, 
             customDndBackendOptions={dndBackendOptions}
             customSquareStyles={squareStyles}
             customBoardStyle={{
-              borderRadius: "10px",
+              borderRadius: "8px",
               boxShadow: "0 12px 30px rgba(0,0,0,0.5)",
             }}
-            customDarkSquareStyle={{ backgroundColor: "var(--color-walnut)" }}
-            customLightSquareStyle={{ backgroundColor: "var(--color-ivory)" }}
+            customDarkSquareStyle={{ backgroundColor: "#779556" }}
+            customLightSquareStyle={{ backgroundColor: "#eeeed2" }}
           />
         </div>
       </div>

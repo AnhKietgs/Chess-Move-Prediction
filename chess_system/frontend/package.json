@@ -13,7 +13,8 @@
     "react": "^18.3.1",
     "react-chessboard": "^4.7.2",
     "react-dnd-touch-backend": "^16.0.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "recharts": "^2.13.3"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",

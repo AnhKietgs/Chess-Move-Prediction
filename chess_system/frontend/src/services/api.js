@@ -42,4 +42,42 @@ export async function requestFischerMove(fen) {
   };
 }
 
+/**
+ * Fetch Fischer-versus-policy opening distributions for one Fischer color.
+ *
+ * @param {"white"|"black"} fischerColor - Fischer's side in the game.
+ * @returns {Promise<{actual: {move: string, value: number, count: number}[], ai: {move: string, value: number, count: number}[], sample_size: number}>}
+ */
+export async function getOpeningStats(fischerColor) {
+  const color = fischerColor === "black" ? "black" : "white";
+  const response = await fetch(
+    `${API_BASE_URL}/api/analytics/opening_stats?color=${color}`
+  );
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new ApiError(body.detail || "Could not load opening analytics.", response.status);
+  }
+  return response.json();
+}
+
+/**
+ * Evaluate policy agreement against an uploaded Fischer PGN.
+ *
+ * @param {File} pgnFile - PGN file selected by the user.
+ * @returns {Promise<{top1_match_rate: number, top3_match_rate: number, positions_evaluated: number, games_evaluated: number}>}
+ */
+export async function evaluateFischerPgn(pgnFile) {
+  const formData = new FormData();
+  formData.append("pgn_file", pgnFile);
+  const response = await fetch(`${API_BASE_URL}/api/analytics/evaluate_pgn`, {
+    method: "POST",
+    body: formData,
+  });
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new ApiError(body.detail || "Could not evaluate the PGN.", response.status);
+  }
+  return response.json();
+}
+
 export { ApiError };

@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 
 from src.middleware.cors import add_cors_middleware
-from src.routes import play
+from src.routes import analytics, play
 
 app = FastAPI(
     title="Fischer-Style Chess AI API",
@@ -14,6 +14,7 @@ app = FastAPI(
 add_cors_middleware(app)
 
 app.include_router(play.router)
+app.include_router(analytics.router)
 
 
 @app.get("/api/health")

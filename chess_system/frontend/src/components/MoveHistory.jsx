@@ -27,9 +27,9 @@ export default function MoveHistory({ history }) {
 
   return (
     <GlassPanel
-      style={{ width: 280, height: "100%", display: "flex", flexDirection: "column", padding: "1.25rem" }}
+      style={{ width: 320, flex: 1, minHeight: 0, display: "flex", flexDirection: "column", padding: "1.35rem" }}
     >
-      <h2 style={{ fontSize: "1rem", color: "var(--color-brass-bright)", marginBottom: "0.25rem" }}>
+      <h2 style={{ fontSize: "1.12rem", color: "var(--color-brass-bright)", marginBottom: "0.25rem" }}>
         Scoresheet
       </h2>
       <p
@@ -62,15 +62,25 @@ export default function MoveHistory({ history }) {
               padding: "0.4rem 0",
               borderBottom: "1px solid rgba(201,162,39,0.08)",
               fontFamily: "var(--font-mono)",
-              fontSize: "0.85rem",
+              fontSize: "0.92rem",
             }}
           >
             <span style={{ color: "var(--color-text-muted)" }}>{row.moveNumber}.</span>
-            <span style={{ color: "var(--color-ivory)" }}>{row.w}</span>
-            <span style={{ color: "var(--color-slate)" }}>{row.b}</span>
+            <span style={{ color: "var(--color-ivory)" }} title={castleTitle(row.w)}>{formatSan(row.w)}</span>
+            <span style={{ color: "var(--color-slate)" }} title={castleTitle(row.b)}>{formatSan(row.b)}</span>
           </div>
         ))}
       </div>
     </GlassPanel>
   );
+}
+
+function formatSan(san) {
+  return san.replace(/^0-0-0/, "O-O-O").replace(/^0-0/, "O-O");
+}
+
+function castleTitle(san) {
+  if (/^(O|0)-(O|0)-(O|0)/.test(san)) return "Queenside castling";
+  if (/^(O|0)-(O|0)/.test(san)) return "Kingside castling";
+  return undefined;
 }

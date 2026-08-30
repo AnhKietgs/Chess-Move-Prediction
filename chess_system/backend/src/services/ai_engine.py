@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import asyncio
 from functools import lru_cache
 import logging
 from pathlib import Path
+import sys
 from threading import RLock
 from typing import Optional, Union
 
@@ -23,6 +25,7 @@ from src.models.chess_model import (
 
 logger = logging.getLogger(__name__)
 _MATE_SCORE_CP = 100_000
+_ENGINE_START_LOCK = RLock()
 
 
 class NoLegalMovesError(ValueError):
@@ -48,7 +51,27 @@ def create_stockfish_engine(
     engine_path = Path(stockfish_path or settings.stockfish_path)
     if not engine_path.is_file():
         raise FileNotFoundError(f"Stockfish executable does not exist: {engine_path}")
-    return chess.engine.SimpleEngine.popen_uci(engine_path)
+
+    # Uvicorn's Windows reload mode switches its main process to a Selector
+    # event-loop policy. python-chess starts Stockfish via asyncio subprocesses,
+    # which require a Proactor loop on Windows. The Uvicorn loop already exists
+    # at this point, so temporarily changing the policy only affects the new
+    # background loop created by python-chess during engine startup.
+    with _ENGINE_START_LOCK:
+        original_policy = asyncio.get_event_loop_policy()
+        proactor_policy_type = getattr(asyncio, "WindowsProactorEventLoopPolicy", None)
+        use_proactor = (
+            sys.platform == "win32"
+            and proactor_policy_type is not None
+            and not isinstance(original_policy, proactor_policy_type)
+        )
+        if use_proactor:
+            asyncio.set_event_loop_policy(proactor_policy_type())
+        try:
+            return chess.engine.SimpleEngine.popen_uci(engine_path)
+        finally:
+            if use_proactor:
+                asyncio.set_event_loop_policy(original_policy)
 
 
 def _validated_board(fen: str) -> chess.Board:

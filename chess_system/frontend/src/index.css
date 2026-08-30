@@ -1,8 +1,8 @@
 /*
   Design system: "The Fischer Study"
   A late-night study lit by one lamp: obsidian walls, warm brass fittings,
-  a walnut-and-ivory board glimpsed through glass. Chess.com's clarity of
-  interaction, none of its flat green-and-white palette.
+  a green-and-ivory board glimpsed through glass, inspired by the familiar
+  visual language of modern online chess boards.
 */
 
 :root {
@@ -78,6 +78,62 @@ button:focus-visible,
   outline: 2px solid var(--color-brass-bright);
   outline-offset: 2px;
 }
+
+/*
+ * Chess.com-inspired board treatment. The piece SVGs come from
+ * react-chessboard and remain bundled locally; these effects give them the
+ * softly shaded ivory/charcoal contrast of a modern chess interface without
+ * loading external image assets at runtime.
+ */
+#fischer-board {
+  overflow: hidden;
+}
+
+#fischer-board [data-piece^="w"] svg {
+  filter: brightness(1.03) contrast(0.94)
+    drop-shadow(0 2px 1px rgba(34, 34, 31, 0.38));
+}
+
+#fischer-board [data-piece^="b"] svg {
+  filter: brightness(0) invert(30%) sepia(8%) saturate(760%)
+    hue-rotate(315deg) brightness(91%) contrast(88%)
+    drop-shadow(0 2px 1px rgba(21, 21, 19, 0.48));
+}
+
+/* Compact captured pieces: coloured and shaded like board pieces, instead
+ * of looking like ordinary text characters. */
+.captured-piece-strip {
+  display: flex;
+  align-items: flex-end;
+  min-height: 1.3rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.captured-piece-icon {
+  display: inline-block;
+  width: 1.16rem;
+  font-family: "DejaVu Serif", "Times New Roman", serif;
+  font-size: 1.42rem;
+  font-weight: 700;
+  line-height: 0.9;
+  text-align: center;
+  transform: scaleX(0.88);
+}
+
+.captured-piece-icon--w {
+  color: #f1f1ea;
+  -webkit-text-stroke: 0.4px #53534f;
+  text-shadow: 0 1px 0 #ffffff, 0 2px 1px rgba(0, 0, 0, 0.44);
+}
+
+.captured-piece-icon--b {
+  color: #72716e;
+  -webkit-text-stroke: 0.45px #292927;
+  text-shadow: 0 1px 0 rgba(212, 212, 206, 0.18),
+    0 2px 1px rgba(0, 0, 0, 0.58);
+}
+
 .my-image {
   width: 600px;
   height: 500px;

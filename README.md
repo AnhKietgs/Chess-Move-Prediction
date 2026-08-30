@@ -78,7 +78,7 @@ FastAPI /api/play/fischer  ──legal-move masking──▶  React chessboard
 cd backend
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
+python main.py
 ```
 
 ### Frontend
@@ -93,14 +93,15 @@ Frontend gọi API tại `VITE_API_BASE_URL` (mặc định `http://localhost:80
 ### Chạy lại pipeline dữ liệu & huấn luyện (tùy chọn)
 
 ```bash
-# 1. Build cache dữ liệu huấn luyện từ PGN (chạy 1 lần, tốn thời gian vì gọi Stockfish cho từng nước)
-python -m src.data_processing.build_cache
+# 1. Build cache dữ liệu huấn luyện từ PGN
+python -m src.data_processing.build_cache --num-workers 4
 
 # 2. Huấn luyện Behavioral Cloning
 python -m src.training.train_bc
 
-# 3. Đánh giá đối đầu Stockfish
-python -m src.training.evaluate_vs_stockfish
+# 3. Đánh giá đối đầu Stockfish(co safety-net)
+python -m src.training.evaluate_vs_stockfish #(co safety-net)
+python -m src.training.evaluate_vs_stockfish --no-safety-net #(khong safety-net)
 ```
 
 ---

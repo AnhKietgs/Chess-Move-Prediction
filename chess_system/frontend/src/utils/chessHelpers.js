@@ -60,6 +60,33 @@ export function getLastMoveSquareStyles(lastMove) {
 }
 
 /**
+ * Create a translucent red heatmap for squares most often reached by the AI.
+ *
+ * @param {string[]} aiMoveSquares - Destination squares from AI move history.
+ * @returns {Record<string, React.CSSProperties>}
+ */
+export function getAiHeatmapSquareStyles(aiMoveSquares) {
+  if (!aiMoveSquares.length) return {};
+
+  const counts = aiMoveSquares.reduce((accumulator, square) => {
+    accumulator[square] = (accumulator[square] ?? 0) + 1;
+    return accumulator;
+  }, {});
+  const maximum = Math.max(...Object.values(counts));
+
+  return Object.fromEntries(
+    Object.entries(counts).map(([square, count]) => {
+      const intensity = count / maximum;
+      const alpha = 0.07 + intensity * 0.18;
+      return [square, {
+        backgroundColor: `rgba(190, 55, 43, ${alpha})`,
+        boxShadow: `inset 0 0 0 1px rgba(235, 110, 85, ${0.18 + intensity * 0.2})`,
+      }];
+    })
+  );
+}
+
+/**
  * Style for the king's square when in check.
  *
  * @param {import("chess.js").Chess} game

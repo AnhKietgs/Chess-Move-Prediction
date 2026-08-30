@@ -7,6 +7,9 @@ import { requestFischerMove, ApiError } from "../services/api.js";
  * @property {number} moveNumber
  * @property {string} san
  * @property {"w"|"b"} color
+ * @property {string} from
+ * @property {string} to
+ * @property {string|undefined} captured
  */
 
 /**
@@ -25,6 +28,8 @@ export function useChessGame(playerColor) {
   const [isAiThinking, setIsAiThinking] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [hasResigned, setHasResigned] = useState(false);
+  const hasResignedRef = useRef(false);
 
   const syncFromGame = useCallback(() => {
     const game = gameRef.current;
@@ -36,9 +41,15 @@ export function useChessGame(playerColor) {
         moveNumber: Math.floor(index / 2) + 1,
         san: move.san,
         color: move.color,
+        from: move.from,
+        to: move.to,
+        captured: move.captured,
       }))
     );
 
+    if (hasResignedRef.current) {
+      return;
+    }
     if (game.isCheckmate()) {
       setStatusMessage(`Checkmate — ${game.turn() === "w" ? "Black" : "White"} wins.`);
     } else if (game.isStalemate()) {
@@ -54,12 +65,13 @@ export function useChessGame(playerColor) {
 
   const requestAiMove = useCallback(async () => {
     const game = gameRef.current;
-    if (game.isGameOver()) return;
+    if (game.isGameOver() || hasResignedRef.current) return;
 
     setIsAiThinking(true);
     setErrorMessage("");
     try {
       const result = await requestFischerMove(game.fen());
+      if (hasResignedRef.current) return;
       const applied = game.move(result.moveUci, { sloppy: true });
       if (applied) {
         setLastMove({ from: applied.from, to: applied.to });
@@ -88,7 +100,7 @@ export function useChessGame(playerColor) {
   const makePlayerMove = useCallback(
     (from, to, promotion = "q") => {
       const game = gameRef.current;
-      if (game.isGameOver() || isAiThinking) return false;
+      if (game.isGameOver() || isAiThinking || hasResignedRef.current) return false;
       if (playerColor && game.turn() !== playerColor) return false;
 
       let move;
@@ -108,10 +120,21 @@ export function useChessGame(playerColor) {
 
   const resetGame = useCallback(() => {
     gameRef.current = new Chess();
+    hasResignedRef.current = false;
+    setHasResigned(false);
     setLastMove(null);
     setErrorMessage("");
     syncFromGame();
   }, [syncFromGame]);
+
+  const resignGame = useCallback(() => {
+    if (!playerColor || gameRef.current.isGameOver() || hasResignedRef.current) return;
+    hasResignedRef.current = true;
+    setHasResigned(true);
+    setIsAiThinking(false);
+    setErrorMessage("");
+    setStatusMessage("You resigned — Fischer wins.");
+  }, [playerColor]);
 
   // If the human chose Black, the AI (White) must play the opening move
   // automatically as soon as the game starts.
@@ -126,7 +149,7 @@ export function useChessGame(playerColor) {
   // After every player move, if it's now the AI's turn, trigger it.
   useEffect(() => {
     const game = gameRef.current;
-    if (!playerColor || game.isGameOver()) return;
+    if (!playerColor || game.isGameOver() || hasResigned) return;
     if (game.turn() !== playerColor && !isAiThinking) {
       requestAiMove();
     }
@@ -143,6 +166,8 @@ export function useChessGame(playerColor) {
     errorMessage,
     makePlayerMove,
     resetGame,
-    isPlayerTurn: playerColor ? gameRef.current.turn() === playerColor && !isAiThinking : false,
+    resignGame,
+    hasResigned,
+    isPlayerTurn: playerColor ? gameRef.current.turn() === playerColor && !isAiThinking && !hasResigned : false,
   };
 }
