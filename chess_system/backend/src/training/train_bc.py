@@ -29,6 +29,8 @@ from src.models.chess_model import (
     set_random_seeds,
 )
 
+_SCHEDULER_MONITOR = "val_top1_accuracy"
+
 
 @dataclass(frozen=True)
 class EpochMetrics:
@@ -241,6 +243,7 @@ def _save_checkpoint(
             "epoch": epoch,
             "best_validation_top1_accuracy": best_validation_top1_accuracy,
             "epochs_without_improvement": epochs_without_improvement,
+            "scheduler_monitor": _SCHEDULER_MONITOR,
         },
         path,
     )
@@ -298,7 +301,11 @@ def _load_resume_checkpoint(
 
     model.load_state_dict(checkpoint["model_state_dict"])
     optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
-    scheduler.load_state_dict(checkpoint["scheduler_state_dict"])
+    # Older checkpoints scheduled on validation loss (``mode='min'``). Their
+    # plateau state must not be restored after switching to Top-1 accuracy,
+    # otherwise the scheduler would compare incompatible values on resume.
+    if checkpoint.get("scheduler_monitor") == _SCHEDULER_MONITOR:
+        scheduler.load_state_dict(checkpoint["scheduler_state_dict"])
     return (
         int(checkpoint["epoch"]) + 1,
         float(checkpoint["best_validation_top1_accuracy"]),
@@ -390,7 +397,7 @@ def train_bc(config: Settings = settings) -> TrainingResult:
     )
     scheduler = ReduceLROnPlateau(
         optimizer,
-        mode="min",
+        mode="max",
         factor=config.training_scheduler_factor,
         patience=config.training_scheduler_patience,
         min_lr=config.training_min_learning_rate,
@@ -438,7 +445,7 @@ def train_bc(config: Settings = settings) -> TrainingResult:
             grad_scaler=grad_scaler,
             use_amp=use_amp,
         )
-        scheduler.step(validation_metrics.loss)
+        scheduler.step(validation_metrics.top1_accuracy)
         learning_rate = optimizer.param_groups[0]["lr"]
         _append_metrics(
             config.training_metrics_path,
