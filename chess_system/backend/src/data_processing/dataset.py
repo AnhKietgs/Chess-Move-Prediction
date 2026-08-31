@@ -14,11 +14,12 @@ the returned DataLoaders, this keeps RAM bounded regardless of dataset size.
 from __future__ import annotations
 
 import json
+import logging
 import math
 import random
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Sequence, Tuple, Union
+from typing import Dict, List, Mapping, Sequence, Tuple, Union
 
 import chess
 import torch
@@ -36,6 +37,8 @@ DEFAULT_TRAIN_RATIO = 0.8
 DEFAULT_VAL_RATIO = 0.1
 DEFAULT_TEST_RATIO = 0.1
 
+logger = logging.getLogger(__name__)
+
 
 @dataclass(frozen=True)
 class _Record:
@@ -44,6 +47,57 @@ class _Record:
     fen: str
     move_uci: str
     game_id: int
+
+
+@dataclass(frozen=True)
+class FenDisjointSplitAudit:
+    """Report how strict FEN filtering changed a game-level split.
+
+    Attributes:
+        train_examples: Number of training examples, never removed by this
+            evaluation-only filtering step.
+        validation_examples: Number of retained validation examples.
+        test_examples: Number of retained test examples.
+        validation_removed: Validation examples removed because their
+            normalized FEN appeared in training.
+        test_removed: Test examples removed because their normalized FEN
+            appeared in training or validation.
+        train_unique_fens: Number of unique normalized FENs in training.
+        validation_unique_fens: Number of unique normalized FENs retained in
+            validation.
+        test_unique_fens: Number of unique normalized FENs retained in test.
+    """
+
+    train_examples: int
+    validation_examples: int
+    test_examples: int
+    validation_removed: int
+    test_removed: int
+    train_unique_fens: int
+    validation_unique_fens: int
+    test_unique_fens: int
+
+
+def normalized_fen_key(fen: str) -> str:
+    """Return the rule-relevant, four-field identity key for a FEN.
+
+    Halfmove and fullmove counters do not alter legal moves or board state, so
+    they are deliberately excluded. The remaining fields encode pieces, side
+    to move, castling rights, and en-passant target.
+
+    Args:
+        fen: Full Forsyth-Edwards Notation string.
+
+    Returns:
+        The first four normalized FEN fields joined by spaces.
+
+    Raises:
+        ValueError: If ``fen`` does not contain at least four fields.
+    """
+    fields = fen.split()
+    if len(fields) < 4:
+        raise ValueError(f"FEN must contain at least four fields: {fen!r}")
+    return " ".join(fields[:4])
 
 
 def _load_records(cache_path: Union[str, Path]) -> List[_Record]:
@@ -126,14 +180,24 @@ class ChessDataset(Dataset):
         source_move = chess.Move.from_uci(record.move_uci)
         source_legal_moves = list(source_board.legal_moves)
 
-        if self._augment and random.random() < 0.5:
+        # Horizontal reflection is an exact chess symmetry only after both
+        # sides have lost castling rights. Reflecting an orthodox castling
+        # move (for example e1g1 -> d1b1) is not a legal orthodox castling
+        # move, so augmenting those positions would create inconsistent
+        # board/label pairs.
+        can_mirror = not source_board.has_castling_rights(
+            chess.WHITE
+        ) and not source_board.has_castling_rights(chess.BLACK)
+        if self._augment and can_mirror and random.random() < 0.5:
             mirrored_fen = mirror_fen(record.fen)
-            # Horizontal reflection moves the orthodox king from e-file to
-            # d-file. Chess960 mode preserves the original castling-right
-            # flags in this reflected coordinate system.
-            board = chess.Board(mirrored_fen, chess960=True)
+            board = chess.Board(mirrored_fen)
             move = mirror_move(source_move)
-            legal_moves = [mirror_move(legal_move) for legal_move in source_legal_moves]
+            legal_moves = list(board.legal_moves)
+            if move not in legal_moves:
+                raise ValueError(
+                    "Mirrored target move is illegal for its mirrored training FEN: "
+                    f"{record.fen}"
+                )
         else:
             board = source_board
             move = source_move
@@ -213,6 +277,81 @@ def split_indices_by_game(
     return splits
 
 
+def enforce_fen_disjoint_splits(
+    records: Sequence[_Record],
+    splits: Mapping[str, Sequence[int]],
+) -> tuple[Dict[str, List[int]], FenDisjointSplitAudit]:
+    """Remove exact-position overlap from validation and test splits.
+
+    The input split must already be grouped by game. Training examples are
+    retained unchanged. Validation loses positions seen in training; test
+    then loses positions seen in either training or retained validation. This
+    keeps every held-out FEN genuinely unseen without moving individual game
+    positions into the training set.
+
+    Args:
+        records: Cache records addressed by the split indices.
+        splits: Existing ``train``, ``val``, and ``test`` index collections.
+
+    Returns:
+        FEN-disjoint split indices and an audit report describing removals.
+
+    Raises:
+        KeyError: If a required split name is missing.
+        IndexError: If an index is outside ``records``.
+    """
+    required_splits = ("train", "val", "test")
+    missing_splits = [name for name in required_splits if name not in splits]
+    if missing_splits:
+        raise KeyError(f"Missing required split(s): {missing_splits}")
+
+    disjoint_splits: Dict[str, List[int]] = {
+        "train": list(splits["train"]),
+        "val": [],
+        "test": [],
+    }
+    seen_fens = {
+        normalized_fen_key(records[index].fen)
+        for index in disjoint_splits["train"]
+    }
+    train_unique_fens = len(seen_fens)
+
+    validation_removed = 0
+    for index in splits["val"]:
+        fen_key = normalized_fen_key(records[index].fen)
+        if fen_key in seen_fens:
+            validation_removed += 1
+            continue
+        disjoint_splits["val"].append(index)
+        seen_fens.add(fen_key)
+    validation_unique_fens = len(
+        {normalized_fen_key(records[index].fen) for index in disjoint_splits["val"]}
+    )
+
+    test_removed = 0
+    for index in splits["test"]:
+        fen_key = normalized_fen_key(records[index].fen)
+        if fen_key in seen_fens:
+            test_removed += 1
+            continue
+        disjoint_splits["test"].append(index)
+        seen_fens.add(fen_key)
+    test_unique_fens = len(
+        {normalized_fen_key(records[index].fen) for index in disjoint_splits["test"]}
+    )
+
+    return disjoint_splits, FenDisjointSplitAudit(
+        train_examples=len(disjoint_splits["train"]),
+        validation_examples=len(disjoint_splits["val"]),
+        test_examples=len(disjoint_splits["test"]),
+        validation_removed=validation_removed,
+        test_removed=test_removed,
+        train_unique_fens=train_unique_fens,
+        validation_unique_fens=validation_unique_fens,
+        test_unique_fens=test_unique_fens,
+    )
+
+
 def get_dataloaders(
     file_path: Union[str, Path],
     batch_size: int = 256,
@@ -222,6 +361,7 @@ def get_dataloaders(
     test_ratio: float = DEFAULT_TEST_RATIO,
     seed: int = 42,
     augment_train: bool = True,
+    strict_fen_disjoint: bool = True,
 ) -> Dict[str, DataLoader]:
     """
     Build train/val/test DataLoaders from a JSONL training-examples cache.
@@ -238,12 +378,30 @@ def get_dataloaders(
         augment_train: Whether to apply random horizontal mirroring to the
             training split only. Validation and test samples are never
             augmented.
+        strict_fen_disjoint: When true, remove validation/test examples whose
+            normalized FEN is already present in an earlier split. This gives
+            an exact-position-disjoint evaluation while preserving game-level
+            separation.
 
     Returns:
         {"train": DataLoader, "val": DataLoader, "test": DataLoader}
     """
     records = _load_records(file_path)
     splits = split_indices_by_game(records, train_ratio, val_ratio, test_ratio, seed)
+    if strict_fen_disjoint:
+        splits, audit = enforce_fen_disjoint_splits(records, splits)
+        logger.info(
+            "Strict FEN-disjoint split: train=%d (%d FENs), val=%d "
+            "(removed=%d; %d FENs), test=%d (removed=%d; %d FENs).",
+            audit.train_examples,
+            audit.train_unique_fens,
+            audit.validation_examples,
+            audit.validation_removed,
+            audit.validation_unique_fens,
+            audit.test_examples,
+            audit.test_removed,
+            audit.test_unique_fens,
+        )
 
     loaders: Dict[str, DataLoader] = {}
     for split_name, indices in splits.items():

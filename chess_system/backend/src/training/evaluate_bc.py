@@ -133,6 +133,7 @@ def evaluate_bc(
         batch_size=config.training_batch_size,
         num_workers=config.training_num_workers,
         seed=config.training_seed,
+        strict_fen_disjoint=config.training_strict_fen_disjoint,
     )
     test_loader = data_loaders["test"]
     if len(test_loader) == 0:

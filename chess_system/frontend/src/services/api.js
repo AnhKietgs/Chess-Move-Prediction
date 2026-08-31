@@ -63,6 +63,20 @@ export async function getOpeningStats(fischerColor) {
 }
 
 /**
+ * Fetch deterministic Fischer/AI comparisons from strict held-out games.
+ *
+ * @returns {Promise<{games: {game_id: number, positions: object[]}[]}>}
+ */
+export async function getHeldoutExamples() {
+  const response = await fetch(`${API_BASE_URL}/api/analytics/heldout_examples`);
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new ApiError(body.detail || "Could not load held-out examples.", response.status);
+  }
+  return response.json();
+}
+
+/**
  * Evaluate policy agreement against an uploaded Fischer PGN.
  *
  * @param {File} pgnFile - PGN file selected by the user.

@@ -1,0 +1,101 @@
+game_number,opening,model_color,result,model_score,plies
+1,French Defence,white,0-1,0.0,64
+2,Queen's Gambit,black,1-0,0.0,55
+3,English Opening,white,0-1,0.0,28
+4,Reti Opening,black,1-0,0.0,61
+5,Caro-Kann Defence,white,0-1,0.0,94
+6,King's Indian Defence,black,1-0,0.0,33
+7,King's Pawn Game,white,0-1,0.0,62
+8,Sicilian Defence,black,1-0,0.0,61
+9,French Defence,white,0-1,0.0,80
+10,Queen's Gambit,black,1-0,0.0,45
+11,English Opening,white,0-1,0.0,66
+12,Reti Opening,black,1/2-1/2,0.5,122
+13,Caro-Kann Defence,white,1/2-1/2,0.5,73
+14,King's Indian Defence,black,1-0,0.0,39
+15,King's Pawn Game,white,0-1,0.0,84
+16,Sicilian Defence,black,1-0,0.0,61
+17,French Defence,white,0-1,0.0,46
+18,Queen's Gambit,black,1-0,0.0,65
+19,English Opening,white,0-1,0.0,52
+20,Reti Opening,black,1-0,0.0,71
+21,Caro-Kann Defence,white,0-1,0.0,156
+22,King's Indian Defence,black,1-0,0.0,61
+23,King's Pawn Game,white,0-1,0.0,82
+24,Sicilian Defence,black,1-0,0.0,69
+25,French Defence,white,0-1,0.0,62
+26,Queen's Gambit,black,1-0,0.0,45
+27,English Opening,white,0-1,0.0,72
+28,Reti Opening,black,1-0,0.0,45
+29,Caro-Kann Defence,white,0-1,0.0,98
+30,King's Indian Defence,black,1-0,0.0,93
+31,King's Pawn Game,white,1/2-1/2,0.5,79
+32,Sicilian Defence,black,1-0,0.0,45
+33,French Defence,white,0-1,0.0,84
+34,Queen's Gambit,black,1-0,0.0,179
+35,English Opening,white,0-1,0.0,72
+36,Reti Opening,black,1/2-1/2,0.5,40
+37,Caro-Kann Defence,white,0-1,0.0,100
+38,King's Indian Defence,black,1-0,0.0,87
+39,King's Pawn Game,white,0-1,0.0,50
+40,Sicilian Defence,black,1-0,0.0,59
+41,French Defence,white,0-1,0.0,36
+42,Queen's Gambit,black,1-0,0.0,17
+43,English Opening,white,0-1,0.0,72
+44,Reti Opening,black,1-0,0.0,71
+45,Caro-Kann Defence,white,0-1,0.0,70
+46,King's Indian Defence,black,1-0,0.0,51
+47,King's Pawn Game,white,0-1,0.0,22
+48,Sicilian Defence,black,1-0,0.0,79
+49,French Defence,white,0-1,0.0,48
+50,Queen's Gambit,black,1-0,0.0,31
+51,English Opening,white,0-1,0.0,82
+52,Reti Opening,black,1-0,0.0,71
+53,Caro-Kann Defence,white,0-1,0.0,52
+54,King's Indian Defence,black,1-0,0.0,77
+55,King's Pawn Game,white,0-1,0.0,68
+56,Sicilian Defence,black,1-0,0.0,47
+57,French Defence,white,0-1,0.0,64
+58,Queen's Gambit,black,1-0,0.0,59
+59,English Opening,white,0-1,0.0,78
+60,Reti Opening,black,1-0,0.0,75
+61,Caro-Kann Defence,white,0-1,0.0,80
+62,King's Indian Defence,black,1-0,0.0,57
+63,King's Pawn Game,white,0-1,0.0,24
+64,Sicilian Defence,black,1-0,0.0,55
+65,French Defence,white,0-1,0.0,60
+66,Queen's Gambit,black,1-0,0.0,85
+67,English Opening,white,0-1,0.0,34
+68,Reti Opening,black,1-0,0.0,57
+69,Caro-Kann Defence,white,0-1,0.0,62
+70,King's Indian Defence,black,1-0,0.0,111
+71,King's Pawn Game,white,0-1,0.0,68
+72,Sicilian Defence,black,1-0,0.0,85
+73,French Defence,white,0-1,0.0,16
+74,Queen's Gambit,black,1-0,0.0,41
+75,English Opening,white,0-1,0.0,108
+76,Reti Opening,black,1-0,0.0,53
+77,Caro-Kann Defence,white,0-1,0.0,58
+78,King's Indian Defence,black,1-0,0.0,73
+79,King's Pawn Game,white,0-1,0.0,34
+80,Sicilian Defence,black,1-0,0.0,65
+81,French Defence,white,0-1,0.0,30
+82,Queen's Gambit,black,1-0,0.0,41
+83,English Opening,white,0-1,0.0,60
+84,Reti Opening,black,1-0,0.0,55
+85,Caro-Kann Defence,white,0-1,0.0,56
+86,King's Indian Defence,black,1-0,0.0,67
+87,King's Pawn Game,white,0-1,0.0,28
+88,Sicilian Defence,black,1-0,0.0,69
+89,French Defence,white,0-1,0.0,68
+90,Queen's Gambit,black,1-0,0.0,55
+91,English Opening,white,0-1,0.0,56
+92,Reti Opening,black,1-0,0.0,115
+93,Caro-Kann Defence,white,0-1,0.0,30
+94,King's Indian Defence,black,1-0,0.0,73
+95,King's Pawn Game,white,0-1,0.0,66
+96,Sicilian Defence,black,1-0,0.0,109
+97,French Defence,white,0-1,0.0,64
+98,Queen's Gambit,black,1-0,0.0,79
+99,English Opening,white,0-1,0.0,88
+100,Reti Opening,black,1-0,0.0,67

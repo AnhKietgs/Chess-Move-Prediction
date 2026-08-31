@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import random
 from pathlib import Path
-from typing import Any, Mapping, Optional, Union
+from typing import Any, Literal, Mapping, Optional, Union
 
 import numpy as np
 import torch
 from torch import Tensor, nn
 from torch.nn import functional as functional
 
-from src.data_processing.encoder import ACTION_SPACE_SIZE, NUM_CHANNELS
+from src.data_processing.encoder import ACTION_SPACE_SIZE, NUM_CHANNELS, NUM_MOVE_PLANES
 
 
 def get_available_device() -> torch.device:
@@ -175,6 +175,32 @@ class _ResidualBlock(nn.Module):
         return self.activation(outputs + residual)
 
 
+def _action_planes_to_logits(action_planes: Tensor) -> Tensor:
+    """Flatten action planes using the project's exact move-label order.
+
+    The action encoder defines ``index = from_square * 73 + move_plane``.
+    A python-chess square index is ``rank * 8 + file``. Moving the plane
+    channel last before flattening therefore preserves that mapping exactly.
+
+    Args:
+        action_planes: Tensor with shape ``[batch_size, 73, 8, 8]``.
+
+    Returns:
+        Raw policy logits with shape ``[batch_size, 4672]``.
+
+    Raises:
+        ValueError: If the supplied tensor does not have 73 action planes.
+    """
+    if action_planes.ndim != 4 or action_planes.shape[1:] != (NUM_MOVE_PLANES, 8, 8):
+        raise ValueError(
+            "action_planes must have shape "
+            f"[batch_size, {NUM_MOVE_PLANES}, 8, 8]."
+        )
+    return action_planes.permute(0, 2, 3, 1).contiguous().view(
+        action_planes.size(0), ACTION_SPACE_SIZE
+    )
+
+
 class FischerPolicyNet(nn.Module):
     """Residual CNN that maps an encoded board state to move-policy logits.
 
@@ -188,7 +214,10 @@ class FischerPolicyNet(nn.Module):
         channels: Width of the residual trunk.
         residual_blocks: Number of residual blocks in the trunk.
         policy_channels: Width of the 1x1 policy head convolution.
-        policy_dropout: Dropout probability before the final policy linear layer.
+        policy_dropout: Dropout probability before policy-logit generation.
+        policy_head_type: ``"action_plane"`` emits 73 move planes for each
+            source square. ``"dense_legacy"`` exists only to load old
+            dense-head checkpoints.
     """
 
     def __init__(
@@ -199,12 +228,21 @@ class FischerPolicyNet(nn.Module):
         residual_blocks: int = 4,
         policy_channels: int = 32,
         policy_dropout: float = 0.4,
+        policy_head_type: Literal["action_plane", "dense_legacy"] = "action_plane",
     ) -> None:
         super().__init__()
         if min(input_channels, num_actions, channels, residual_blocks, policy_channels) <= 0:
             raise ValueError("All FischerPolicyNet dimensions must be positive.")
         if not 0.0 <= policy_dropout < 1.0:
             raise ValueError("policy_dropout must be in the range [0.0, 1.0).")
+        if policy_head_type not in {"action_plane", "dense_legacy"}:
+            raise ValueError(
+                "policy_head_type must be either 'action_plane' or 'dense_legacy'."
+            )
+        if policy_head_type == "action_plane" and num_actions != ACTION_SPACE_SIZE:
+            raise ValueError(
+                "action_plane policy heads require the 4672-action chess encoding."
+            )
 
         self.input_channels = input_channels
         self.num_actions = num_actions
@@ -212,6 +250,7 @@ class FischerPolicyNet(nn.Module):
         self.residual_blocks = residual_blocks
         self.policy_channels = policy_channels
         self.policy_dropout = policy_dropout
+        self.policy_head_type = policy_head_type
 
         self.input_conv = nn.Conv2d(
             input_channels,
@@ -229,7 +268,14 @@ class FischerPolicyNet(nn.Module):
         self.policy_conv = nn.Conv2d(channels, policy_channels, kernel_size=1, bias=False)
         self.policy_batch_norm = nn.BatchNorm2d(policy_channels)
         self.policy_dropout_layer = nn.Dropout(p=policy_dropout)
-        self.policy_linear = nn.Linear(policy_channels * 8 * 8, num_actions)
+        if policy_head_type == "action_plane":
+            self.policy_action_conv = nn.Conv2d(
+                policy_channels,
+                NUM_MOVE_PLANES,
+                kernel_size=1,
+            )
+        else:
+            self.policy_linear = nn.Linear(policy_channels * 8 * 8, num_actions)
 
     def forward(self, board_tensor: Tensor) -> Tensor:
         """Return raw move logits for encoded board states.
@@ -262,11 +308,16 @@ class FischerPolicyNet(nn.Module):
         # Shape after Conv2d: [batch_size, policy_channels, 8, 8].
         policy = self.policy_conv(features)
         policy = self.activation(self.policy_batch_norm(policy))
-        policy = torch.flatten(policy, start_dim=1)  # [batch_size, policy_channels * 8 * 8]
         policy = self.policy_dropout_layer(policy)
+        if self.policy_head_type == "action_plane":
+            # Shape after Conv2d: [batch_size, 73, 8, 8].
+            action_planes = self.policy_action_conv(policy)
+            return _action_planes_to_logits(action_planes)
+
+        policy = torch.flatten(policy, start_dim=1)
         return self.policy_linear(policy)  # [batch_size, num_actions], raw logits
 
-    def model_config(self) -> dict[str, int | float]:
+    def model_config(self) -> dict[str, int | float | str]:
         """Return architecture values needed to rebuild this policy.
 
         Returns:
@@ -279,6 +330,7 @@ class FischerPolicyNet(nn.Module):
             "residual_blocks": self.residual_blocks,
             "policy_channels": self.policy_channels,
             "policy_dropout": self.policy_dropout,
+            "policy_head_type": self.policy_head_type,
         }
 
 
@@ -317,7 +369,7 @@ def load_model_weights(
 
     target_device = device or get_available_device()
     checkpoint = _read_checkpoint(checkpoint_path, target_device)
-    model_config: Mapping[str, int | float] = {}
+    model_config: Mapping[str, int | float | str] = {}
     state_dict: Mapping[str, Tensor]
     if isinstance(checkpoint, Mapping) and "model_state_dict" in checkpoint:
         model_config = checkpoint.get("model_config", {})
@@ -327,8 +379,17 @@ def load_model_weights(
     else:
         raise ValueError(f"Unsupported model checkpoint format: {checkpoint_path}")
 
+    model_kwargs = dict(model_config)
+    # Earlier checkpoints do not contain model_policy_head_type. Detect their
+    # dense output layer so the established baseline remains deployable.
+    if (
+        "policy_head_type" not in model_kwargs
+        and any(key.startswith("policy_linear.") for key in state_dict)
+    ):
+        model_kwargs["policy_head_type"] = "dense_legacy"
+
     try:
-        model = FischerPolicyNet(**dict(model_config))
+        model = FischerPolicyNet(**model_kwargs)
     except TypeError as exc:
         raise ValueError("Checkpoint contains invalid model_config metadata.") from exc
     model.load_state_dict(state_dict)

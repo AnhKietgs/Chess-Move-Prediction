@@ -8,7 +8,7 @@ data/
 └── cache/   # .jsonl output of the Stockfish-filtered pipeline (generated, not hand-edited)
 ```
 
-`Fischer.pgn` (827 games, all with Fischer as either White or Black) is
+`Fischer.pgn` (all with Fischer as either White or Black) is
 already in `raw/`.
 
 ## Running the full pipeline

@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 from collections import Counter
+from functools import lru_cache
 from io import StringIO
-import json
-from pathlib import Path
-from typing import Any
+from typing import Any, Sequence
 
 import chess
 import chess.pgn
@@ -14,11 +13,40 @@ import torch
 from fastapi import APIRouter, File, HTTPException, Query, Request, UploadFile
 
 from src.config.settings import settings
+from src.data_processing.dataset import (
+    _Record,
+    _load_records,
+    enforce_fen_disjoint_splits,
+    split_indices_by_game,
+)
 from src.data_processing.encoder import fen_to_tensor, index_to_move, move_to_index
 from src.models.chess_model import FischerPolicyNet, mask_illegal_logits
 from src.services.ai_engine import FischerAI, get_fischer_ai
 
 router = APIRouter(prefix="/api/analytics", tags=["analytics"])
+
+
+@lru_cache(maxsize=1)
+def _heldout_records(strict_fen_disjoint: bool = True) -> tuple[_Record, ...]:
+    """Return deterministic test records from the Behavioral Cloning split.
+
+    Strict FEN filtering is appropriate for model-generalization metrics and
+    qualitative move examples. Standard first-opening positions are shared
+    by many games, however, so opening-frequency charts intentionally use a
+    game-held-out split without this additional filtering.
+
+    Returns:
+        Immutable held-out cache records in deterministic split order.
+
+    Raises:
+        FileNotFoundError: If the configured training cache is absent.
+    """
+    cache_path = settings.training_data_path
+    records = _load_records(cache_path)
+    splits = split_indices_by_game(records, seed=settings.training_seed)
+    if strict_fen_disjoint:
+        splits, _ = enforce_fen_disjoint_splits(records, splits)
+    return tuple(records[index] for index in splits["test"])
 
 
 def _get_policy(request: Request) -> FischerPolicyNet:
@@ -70,52 +98,50 @@ def _ranked_legal_moves(
 
 
 def _opening_distribution(
-    cache_path: Path,
+    records: Sequence[_Record],
     model: FischerPolicyNet,
     limit: int,
     fischer_color: chess.Color,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], int]:
-    """Build opening distributions for Fischer playing one specified color."""
+    """Build held-out opening distributions for Fischer playing one color."""
     actual_counts: Counter[str] = Counter()
     ai_probability_mass: Counter[str] = Counter()
     samples = 0
 
-    with cache_path.open("r", encoding="utf-8") as cache_file:
-        for line_number, line in enumerate(cache_file, start=1):
-            try:
-                payload = json.loads(line)
-                board = chess.Board(payload["fen"])
-                recorded_move = chess.Move.from_uci(payload["move_uci"])
-            except (KeyError, TypeError, ValueError, json.JSONDecodeError):
-                continue
+    for record in records:
+        try:
+            board = chess.Board(record.fen)
+            recorded_move = chess.Move.from_uci(record.move_uci)
+        except ValueError:
+            continue
 
-            # Compare opening choices at Fischer's first turn only. For
-            # Black, this is the reply after White's opening move, so labels
-            # use the conventional ``1...`` notation.
-            if board.fullmove_number != 1 or board.turn != fischer_color:
-                continue
-            if recorded_move not in board.legal_moves:
-                continue
+        # Compare opening choices at Fischer's first turn only. For Black,
+        # this is the reply after White's opening move, so labels use the
+        # conventional ``1...`` notation.
+        if board.fullmove_number != 1 or board.turn != fischer_color:
+            continue
+        if recorded_move not in board.legal_moves:
+            continue
 
-            move_prefix = "1." if fischer_color == chess.WHITE else "1..."
-            actual_counts[f"{move_prefix} {board.san(recorded_move)}"] += 1
-            legal_moves = list(board.legal_moves)
-            if not legal_moves:
-                continue
+        move_prefix = "1." if fischer_color == chess.WHITE else "1..."
+        actual_counts[f"{move_prefix} {board.san(recorded_move)}"] += 1
+        legal_moves = list(board.legal_moves)
+        if not legal_moves:
+            continue
 
-            device = next(model.parameters()).device
-            legal_mask = torch.zeros((1, model.num_actions), dtype=torch.bool, device=device)
-            legal_indices = [move_to_index(move) for move in legal_moves]
-            legal_mask[0, legal_indices] = True
-            board_tensor = fen_to_tensor(board.fen()).unsqueeze(0).to(device)
-            with torch.no_grad():
-                masked_logits = mask_illegal_logits(model(board_tensor), legal_mask)
-                probabilities = torch.softmax(masked_logits, dim=1)[0]
-            for move, index in zip(legal_moves, legal_indices):
-                ai_probability_mass[
-                    f"{move_prefix} {board.san(move)}"
-                ] += float(probabilities[index].item())
-            samples += 1
+        device = next(model.parameters()).device
+        legal_mask = torch.zeros((1, model.num_actions), dtype=torch.bool, device=device)
+        legal_indices = [move_to_index(move) for move in legal_moves]
+        legal_mask[0, legal_indices] = True
+        board_tensor = fen_to_tensor(board.fen()).unsqueeze(0).to(device)
+        with torch.no_grad():
+            masked_logits = mask_illegal_logits(model(board_tensor), legal_mask)
+            probabilities = torch.softmax(masked_logits, dim=1)[0]
+        for move, index in zip(legal_moves, legal_indices):
+            ai_probability_mass[
+                f"{move_prefix} {board.san(move)}"
+            ] += float(probabilities[index].item())
+        samples += 1
 
     def to_percentages(counts: Counter[str]) -> list[dict[str, Any]]:
         total = sum(counts.values())
@@ -164,17 +190,15 @@ def opening_stats(
     Returns:
         Opening percentages for Fischer's recorded moves and the AI policy.
     """
-    cache_path = settings.training_data_path
-    if not cache_path.is_file():
-        raise HTTPException(status_code=404, detail=f"Training cache not found: {cache_path}")
-
     fischer_color = chess.WHITE if color == "white" else chess.BLACK
-    actual, ai, samples = _opening_distribution(
-        cache_path,
-        _get_policy(request),
-        limit,
-        fischer_color,
-    )
+    try:
+        # Identical opening FENs naturally repeat across distinct games, so
+        # strict FEN filtering would remove all first-move examples. A
+        # game-held-out set still prevents whole games from crossing splits.
+        records = _heldout_records(strict_fen_disjoint=False)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    actual, ai, samples = _opening_distribution(records, _get_policy(request), limit, fischer_color)
     if samples == 0:
         raise HTTPException(
             status_code=422,
@@ -186,7 +210,95 @@ def opening_stats(
         "sample_size": samples,
         "fischer_color": color,
         "analysis_type": "opening" if fischer_color == chess.WHITE else "defense",
-        "source": "cached Fischer opening positions",
+        "source": "game-held-out opening positions; repeated opening FENs are unavoidable",
+    }
+
+
+def _heldout_position_summary(
+    record: _Record,
+    model: FischerPolicyNet,
+) -> dict[str, Any] | None:
+    """Summarize one recorded Fischer move and the model's legal Top-3.
+
+    Args:
+        record: One held-out Fischer state/action record.
+        model: Evaluation-mode policy shared by the FastAPI application.
+
+    Returns:
+        A JSON-compatible comparison, or ``None`` for an invalid record.
+    """
+    try:
+        board = chess.Board(record.fen)
+        actual_move = chess.Move.from_uci(record.move_uci)
+    except ValueError:
+        return None
+    if actual_move not in board.legal_moves:
+        return None
+    predicted_moves = _ranked_legal_moves(board, model, top_k=3)
+    if not predicted_moves:
+        return None
+    return {
+        "fen": record.fen,
+        "fullmove_number": board.fullmove_number,
+        "fischer_color": "white" if board.turn == chess.WHITE else "black",
+        "actual_move": {"uci": actual_move.uci(), "san": board.san(actual_move)},
+        "ai_top_moves": [
+            {"uci": move.uci(), "san": board.san(move)} for move in predicted_moves
+        ],
+        "top1_match": actual_move == predicted_moves[0],
+        "top3_match": actual_move in predicted_moves,
+    }
+
+
+@router.get("/heldout_examples")
+def heldout_examples(
+    request: Request,
+    games: int = Query(default=3, ge=1, le=5),
+    positions_per_game: int = Query(default=3, ge=1, le=5),
+) -> dict[str, Any]:
+    """Return deterministic, uncurated Fischer/AI examples from held-out games.
+
+    The first valid positions from the first held-out game IDs are returned
+    deterministically. They are not selected because the model matched them,
+    which makes the examples suitable as qualitative supporting evidence.
+
+    Args:
+        request: Request used to reuse the startup-loaded Fischer policy.
+        games: Number of held-out games to include.
+        positions_per_game: Fischer decisions included per returned game.
+
+    Returns:
+        Game groups containing Fischer's actual move and AI legal Top-3 moves.
+    """
+    try:
+        records = _heldout_records(strict_fen_disjoint=True)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+    grouped_records: dict[int, list[_Record]] = {}
+    for record in records:
+        grouped_records.setdefault(record.game_id, []).append(record)
+
+    selected_games: list[dict[str, Any]] = []
+    model = _get_policy(request)
+    for game_id in sorted(grouped_records):
+        positions: list[dict[str, Any]] = []
+        for record in grouped_records[game_id]:
+            summary = _heldout_position_summary(record, model)
+            if summary is not None:
+                positions.append(summary)
+            if len(positions) == positions_per_game:
+                break
+        if positions:
+            selected_games.append({"game_id": game_id, "positions": positions})
+        if len(selected_games) == games:
+            break
+
+    if not selected_games:
+        raise HTTPException(status_code=422, detail="No valid held-out examples are available.")
+    return {
+        "games": selected_games,
+        "source": "strict held-out split; examples selected by game order, not match rate",
     }
 
 

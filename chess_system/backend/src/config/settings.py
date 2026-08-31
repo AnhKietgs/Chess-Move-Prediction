@@ -22,7 +22,9 @@ class Settings(BaseSettings):
     # Comma-separated origins in .env are split into a list here.
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 
-    model_checkpoint_path: Path = Path("./checkpoints/best_fischer_bc.pth")
+    model_checkpoint_path: Path = Path(
+        "./checkpoints/action_plane/best_fischer_bc.pth"
+    )
     stockfish_path: str = "/usr/games/stockfish"
     inference_stockfish_depth: int = 8
     inference_top_k: int = 3
@@ -37,6 +39,7 @@ class Settings(BaseSettings):
     model_residual_blocks: int = 4
     model_policy_channels: int = 32
     model_policy_dropout: float = 0.4
+    model_policy_head_type: str = "action_plane"
 
     # Behavioral Cloning training. Every field may be overridden through the
     # corresponding upper-case environment variable, e.g. TRAINING_LEARNING_RATE.
@@ -57,6 +60,7 @@ class Settings(BaseSettings):
     training_early_stopping_patience: int = 5
     training_use_amp: bool = True
     training_deterministic: bool = True
+    training_strict_fen_disjoint: bool = True
 
     # Model-versus-Stockfish arena evaluation.
     arena_games: int = 100

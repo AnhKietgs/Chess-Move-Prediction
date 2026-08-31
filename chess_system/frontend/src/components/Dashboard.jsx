@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import { ApiError, evaluateFischerPgn, getOpeningStats } from "../services/api.js";
+import { ApiError, evaluateFischerPgn, getHeldoutExamples, getOpeningStats } from "../services/api.js";
 import GlassPanel from "./GlassPanel.jsx";
 
 const CHART_COLORS = ["#e4c257", "#b3543f", "#7a9d6e", "#6e7681", "#a57c4b", "#8670aa"];
@@ -12,6 +12,7 @@ const CHART_COLORS = ["#e4c257", "#b3543f", "#7a9d6e", "#6e7681", "#a57c4b", "#8
  */
 export default function Dashboard({ showHeatmap, onHeatmapChange, fischerColor }) {
   const [openingStats, setOpeningStats] = useState(null);
+  const [heldoutExamples, setHeldoutExamples] = useState(null);
   const [metrics, setMetrics] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isEvaluating, setIsEvaluating] = useState(false);
@@ -21,8 +22,15 @@ export default function Dashboard({ showHeatmap, onHeatmapChange, fischerColor }
     let active = true;
     setIsLoading(true);
     setError("");
-    getOpeningStats(fischerColor === "b" ? "black" : "white")
-      .then((data) => active && setOpeningStats(data))
+    Promise.all([
+      getOpeningStats(fischerColor === "b" ? "black" : "white"),
+      getHeldoutExamples(),
+    ])
+      .then(([stats, examples]) => {
+        if (!active) return;
+        setOpeningStats(stats);
+        setHeldoutExamples(examples);
+      })
       .catch((err) => active && setError(err instanceof ApiError ? err.message : "Analytics are unavailable."))
       .finally(() => active && setIsLoading(false));
     return () => {
@@ -76,7 +84,7 @@ export default function Dashboard({ showHeatmap, onHeatmapChange, fischerColor }
         <StatCard label="Top-3 accuracy" value={metrics ? `${metrics.top3_match_rate.toFixed(2)}%` : "—"} />
       </div>
       <label style={uploadLabelStyle}>
-        <span>{isEvaluating ? "Evaluating PGN…" : "Evaluate held-out PGN"}</span>
+        <span>{isEvaluating ? "Evaluating PGN…" : "Evaluate external held-out PGN"}</span>
         <input type="file" accept=".pgn,application/x-chess-pgn" onChange={handlePgnUpload} disabled={isEvaluating} hidden />
       </label>
       {metrics && <span style={captionStyle}>{metrics.positions_evaluated} Fischer moves across {metrics.games_evaluated} games</span>}
@@ -95,8 +103,12 @@ export default function Dashboard({ showHeatmap, onHeatmapChange, fischerColor }
             {charts.map((chart) => <OpeningPie key={chart.title} title={chart.title} data={chart.data} />)}
           </div>
         )}
-        {openingStats && <p style={{ ...captionStyle, marginTop: "0.5rem" }}>{openingStats.sample_size} Fischer {fischerColor === "b" ? "Black defensive" : "White opening"} positions</p>}
+        {openingStats && <>
+          <p style={{ ...captionStyle, marginTop: "0.5rem" }}>{openingStats.sample_size} Fischer {fischerColor === "b" ? "Black defensive" : "White opening"} positions</p>
+          <p style={{ ...captionStyle, marginTop: "0.2rem" }}>{openingStats.source}</p>
+        </>}
       </div>
+      <HeldoutExamples examples={heldoutExamples?.games ?? []} />
       {error && <p style={{ ...captionStyle, color: "var(--color-danger)", margin: 0 }}>{error}</p>}
     </GlassPanel>
   );
@@ -130,6 +142,24 @@ function OpeningPie({ title, data }) {
     {data.slice(0, 3).map((entry, index) => <div key={entry.move} style={{ display: "flex", justifyContent: "space-between", gap: "0.25rem", fontFamily: "var(--font-mono)", fontSize: "0.72rem", color: "var(--color-text-muted)", marginTop: "0.18rem" }}>
       <span style={{ color: CHART_COLORS[index % CHART_COLORS.length] }}>{entry.move}</span><span>{entry.value.toFixed(1)}%</span>
     </div>)}
+  </div>;
+}
+
+function HeldoutExamples({ examples }) {
+  return <div style={{ borderTop: "1px solid var(--color-hairline)", paddingTop: "0.9rem" }}>
+    <p style={eyebrowStyle}>Strict hold-out examples</p>
+    {examples.length === 0 ? <p style={captionStyle}>Loading Fischer/AI comparisons…</p> : examples.map((game) => (
+      <div key={game.game_id} style={{ marginTop: "0.65rem" }}>
+        <p style={{ ...captionStyle, color: "var(--color-brass-bright)", marginBottom: "0.3rem" }}>Game {game.game_id}</p>
+        {game.positions.map((position) => (
+          <div key={position.fen} style={{ borderLeft: "2px solid var(--color-hairline-strong)", marginBottom: "0.35rem", paddingLeft: "0.5rem" }}>
+            <p style={captionStyle}>Move {position.fullmove_number} · Fischer {position.fischer_color}</p>
+            <p style={{ ...captionStyle, color: "var(--color-text-primary)" }}>Fischer: {position.actual_move.san} · AI: {position.ai_top_moves[0].san}</p>
+            <p style={captionStyle}>Top-3: {position.ai_top_moves.map((move) => move.san).join(", ")} · {position.top1_match ? "Top-1 match" : position.top3_match ? "Top-3 match" : "No match"}</p>
+          </div>
+        ))}
+      </div>
+    ))}
   </div>;
 }
 

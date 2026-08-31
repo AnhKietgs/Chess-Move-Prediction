@@ -69,6 +69,7 @@ def build_policy_model(config: Settings) -> FischerPolicyNet:
         residual_blocks=config.model_residual_blocks,
         policy_channels=config.model_policy_channels,
         policy_dropout=config.model_policy_dropout,
+        policy_head_type=config.model_policy_head_type,
     )
 
 
@@ -378,6 +379,7 @@ def train_bc(config: Settings = settings) -> TrainingResult:
         batch_size=config.training_batch_size,
         num_workers=config.training_num_workers,
         seed=config.training_seed,
+        strict_fen_disjoint=config.training_strict_fen_disjoint,
     )
     if len(data_loaders["train"]) == 0 or len(data_loaders["val"]) == 0:
         raise ValueError("Both train and validation DataLoaders must contain examples.")
