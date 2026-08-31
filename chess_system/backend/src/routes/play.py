@@ -73,8 +73,9 @@ router = APIRouter(
 def play_fischer(payload: MoveRequest, request: Request) -> dict[str, str]:
     """Given the current FEN, return the AI's next move.
 
-    The preloaded Behavioral Cloning policy masks illegal actions, then a
-    startup-created Stockfish safety-net rejects likely blunders.
+    The preloaded Behavioral Cloning policy masks illegal actions. Clients
+    can optionally disable the startup-created Stockfish safety-net to play
+    the raw policy's legal Top-1 move.
 
     Args:
         payload: Request body containing a full FEN string.
@@ -92,7 +93,10 @@ def play_fischer(payload: MoveRequest, request: Request) -> dict[str, str]:
         raise HTTPException(status_code=503, detail="Fischer AI is not initialized.")
 
     try:
-        move = cast(FischerAI, fischer_ai).predict_move(payload.fen)
+        move = cast(FischerAI, fischer_ai).select_move(
+            payload.fen,
+            use_safety_net=payload.use_safety_net,
+        )
     except NoLegalMovesError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
     except ValueError as exc:

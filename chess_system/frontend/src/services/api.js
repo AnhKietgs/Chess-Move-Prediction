@@ -18,13 +18,15 @@ class ApiError extends Error {
  * Ask the backend for the AI's move given the current position.
  *
  * @param {string} fen - Current board state in FEN notation.
+ * @param {boolean} [useSafetyNet=true] - Whether Stockfish may reject a
+ * likely policy blunder before returning the move.
  * @returns {Promise<{moveUci: string}>}
  */
-export async function requestFischerMove(fen) {
+export async function requestFischerMove(fen, useSafetyNet = true) {
   const response = await fetch(`${API_BASE_URL}/api/play/fischer`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ fen }),
+    body: JSON.stringify({ fen, use_safety_net: useSafetyNet }),
   });
 
   if (!response.ok) {

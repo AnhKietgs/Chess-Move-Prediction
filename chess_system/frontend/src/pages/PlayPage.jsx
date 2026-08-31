@@ -18,6 +18,8 @@ export default function PlayPage() {
     resetGame,
     resignGame,
     hasResigned,
+    useSafetyNet,
+    setUseSafetyNet,
     isPlayerTurn,
   } = useChessGame(playerColor);
 
@@ -69,6 +71,8 @@ export default function PlayPage() {
           onNewGame={handleNewGame}
           onResign={resignGame}
           hasResigned={hasResigned}
+          useSafetyNet={useSafetyNet}
+          onSafetyNetChange={setUseSafetyNet}
         />
       )}
     </div>

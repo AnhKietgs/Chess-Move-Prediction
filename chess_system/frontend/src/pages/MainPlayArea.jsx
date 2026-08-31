@@ -25,6 +25,8 @@ export default function MainPlayArea({
   onNewGame,
   onResign,
   hasResigned,
+  useSafetyNet,
+  onSafetyNetChange,
 }) {
   const [showHeatmap, setShowHeatmap] = useState(false);
   const aiMoveSquares = history
@@ -61,6 +63,8 @@ export default function MainPlayArea({
           onNewGame={onNewGame}
           onResign={onResign}
           hasResigned={hasResigned}
+          useSafetyNet={useSafetyNet}
+          onSafetyNetChange={onSafetyNetChange}
         />
         <MoveHistory history={history} />
       </div>
@@ -68,7 +72,7 @@ export default function MainPlayArea({
   );
 }
 
-function StatusBar({ isAiThinking, statusMessage, errorMessage, onNewGame, onResign, hasResigned }) {
+function StatusBar({ isAiThinking, statusMessage, errorMessage, onNewGame, onResign, hasResigned, useSafetyNet, onSafetyNetChange }) {
   return (
     <GlassPanel style={{ padding: "1rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
       <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: errorMessage ? "var(--color-danger)" : "var(--color-text-primary)" }}>
@@ -78,9 +82,18 @@ function StatusBar({ isAiThinking, statusMessage, errorMessage, onNewGame, onRes
         <button onClick={onNewGame} style={newGameButtonStyle}>New Game</button>
         <button onClick={onResign} disabled={hasResigned} style={{ ...resignButtonStyle, opacity: hasResigned ? 0.45 : 1 }}>Resign</button>
       </div>
+      <label style={safetyNetToggleStyle}>
+        <input
+          type="checkbox"
+          checked={useSafetyNet}
+          onChange={(event) => onSafetyNetChange(event.target.checked)}
+        />
+        <span>Stockfish safety-net</span>
+      </label>
     </GlassPanel>
   );
 }
 
 const newGameButtonStyle = { alignSelf: "flex-start", background: "transparent", border: "1px solid var(--color-hairline-strong)", color: "var(--color-brass-bright)", borderRadius: "var(--radius-sm)", padding: "0.4rem 0.9rem", fontFamily: "var(--font-mono)", fontSize: "0.72rem", letterSpacing: "0.05em", textTransform: "uppercase" };
 const resignButtonStyle = { ...newGameButtonStyle, borderColor: "rgba(179,84,63,0.7)", color: "#d98270" };
+const safetyNetToggleStyle = { display: "flex", alignItems: "center", gap: "0.45rem", color: "var(--color-text-muted)", cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: "0.68rem" };

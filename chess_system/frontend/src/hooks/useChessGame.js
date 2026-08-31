@@ -29,6 +29,7 @@ export function useChessGame(playerColor) {
   const [statusMessage, setStatusMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [hasResigned, setHasResigned] = useState(false);
+  const [useSafetyNet, setUseSafetyNet] = useState(true);
   const hasResignedRef = useRef(false);
 
   const syncFromGame = useCallback(() => {
@@ -70,7 +71,7 @@ export function useChessGame(playerColor) {
     setIsAiThinking(true);
     setErrorMessage("");
     try {
-      const result = await requestFischerMove(game.fen());
+      const result = await requestFischerMove(game.fen(), useSafetyNet);
       if (hasResignedRef.current) return;
       const applied = game.move(result.moveUci, { sloppy: true });
       if (applied) {
@@ -83,7 +84,7 @@ export function useChessGame(playerColor) {
     } finally {
       setIsAiThinking(false);
     }
-  }, [syncFromGame]);
+  }, [syncFromGame, useSafetyNet]);
 
   /**
    * Attempt to play the human's move. Returns true if it was legal and applied.
@@ -168,6 +169,8 @@ export function useChessGame(playerColor) {
     resetGame,
     resignGame,
     hasResigned,
+    useSafetyNet,
+    setUseSafetyNet,
     isPlayerTurn: playerColor ? gameRef.current.turn() === playerColor && !isAiThinking && !hasResigned : false,
   };
 }

@@ -24,6 +24,13 @@ class MoveRequest(BaseModel):
         description="Current board state in Forsyth-Edwards Notation.",
         examples=["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"],
     )
+    use_safety_net: bool = Field(
+        default=True,
+        description=(
+            "When true, reject policy blunders with the Stockfish safety-net. "
+            "When false, return the raw legal Top-1 policy move."
+        ),
+    )
 
 
 class MoveResponse(BaseModel):

@@ -297,6 +297,23 @@ class FischerAI:
                 )
             return selected_move
 
+    def select_move(self, fen: str, use_safety_net: bool = True) -> chess.Move:
+        """Select either a safety-checked or raw policy move.
+
+        Args:
+            fen: Full FEN string describing the current board position.
+            use_safety_net: When true, evaluate the policy's candidates with
+                Stockfish. When false, return the model's legal Top-1 move
+                without starting a Stockfish analysis.
+
+        Returns:
+            The chosen legal chess move.
+        """
+        if use_safety_net:
+            return self.predict_move(fen)
+        board = _validated_board(fen)
+        return _model_top_moves(board, self.model, top_k=1)[0]
+
     def predict_best_move(self, fen: str) -> str:
         """Return the highest-scoring legal UCI move for a chess position.
 
@@ -316,8 +333,7 @@ class FischerAI:
             NoLegalMovesError: If the position is checkmate or stalemate.
             RuntimeError: If the policy produces an unexpected logits shape.
         """
-        board = _validated_board(fen)
-        return _model_top_moves(board, self.model, top_k=1)[0].uci()
+        return self.select_move(fen, use_safety_net=False).uci()
 
 
 @lru_cache(maxsize=1)
