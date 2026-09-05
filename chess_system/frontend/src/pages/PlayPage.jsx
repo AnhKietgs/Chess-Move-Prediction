@@ -11,6 +11,12 @@ export default function PlayPage() {
     fen,
     history,
     lastMove,
+    displayGame,
+    displayFen,
+    displayLastMove,
+    visibleHistory,
+    displayedPly,
+    isReviewingHistory,
     isAiThinking,
     statusMessage,
     errorMessage,
@@ -53,16 +59,19 @@ export default function PlayPage() {
         >
           Fischer Study
         </p>
-        <h1 style={{ fontSize: "2rem" }}>Style-Constrained Chess AI</h1>
+        <h1 style={{ fontSize: "2rem" }}>Chess AI</h1>
       </header>
 
       {phase === "playing" && (
         <MainPlayArea
-          game={game}
-          fen={fen}
+          game={displayGame}
+          fen={displayFen}
           playerColor={playerColor}
           history={history}
-          lastMove={lastMove}
+          visibleHistory={visibleHistory}
+          lastMove={displayLastMove}
+          displayedPly={displayedPly}
+          isReviewingHistory={isReviewingHistory}
           isAiThinking={isAiThinking}
           statusMessage={statusMessage}
           errorMessage={errorMessage}

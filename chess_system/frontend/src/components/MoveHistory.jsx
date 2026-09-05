@@ -6,9 +6,9 @@ import GlassPanel from "./GlassPanel.jsx";
  * brass-ruled ledger — the signature element of the design: it reads
  * like a tournament scoresheet rather than a chat log.
  *
- * @param {{history: {moveNumber: number, san: string, color: "w"|"b"}[]}} props
+ * @param {{history: {moveNumber: number, san: string, color: "w"|"b"}[], displayedPly: number}} props
  */
-export default function MoveHistory({ history }) {
+export default function MoveHistory({ history, displayedPly }) {
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -66,8 +66,8 @@ export default function MoveHistory({ history }) {
             }}
           >
             <span style={{ color: "var(--color-text-muted)" }}>{row.moveNumber}.</span>
-            <span style={{ color: "var(--color-ivory)" }} title={castleTitle(row.w)}>{formatSan(row.w)}</span>
-            <span style={{ color: "var(--color-slate)" }} title={castleTitle(row.b)}>{formatSan(row.b)}</span>
+            <span style={moveCellStyle(displayedPly === row.moveNumber * 2 - 1, "var(--color-ivory)")} title={castleTitle(row.w)}>{formatSan(row.w)}</span>
+            <span style={moveCellStyle(displayedPly === row.moveNumber * 2, "var(--color-slate)")} title={castleTitle(row.b)}>{formatSan(row.b)}</span>
           </div>
         ))}
       </div>
@@ -83,4 +83,13 @@ function castleTitle(san) {
   if (/^(O|0)-(O|0)-(O|0)/.test(san)) return "Queenside castling";
   if (/^(O|0)-(O|0)/.test(san)) return "Kingside castling";
   return undefined;
+}
+
+function moveCellStyle(isActive, color) {
+  return {
+    background: isActive ? "rgba(201,162,39,0.25)" : "transparent",
+    borderRadius: "3px",
+    color,
+    padding: "0.08rem 0.15rem",
+  };
 }

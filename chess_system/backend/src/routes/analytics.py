@@ -210,7 +210,6 @@ def opening_stats(
         "sample_size": samples,
         "fischer_color": color,
         "analysis_type": "opening" if fischer_color == chess.WHITE else "defense",
-        "source": "game-held-out opening positions; repeated opening FENs are unavoidable",
     }
 
 

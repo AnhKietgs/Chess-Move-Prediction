@@ -125,9 +125,9 @@ def evaluate_bc(
         Test-set loss, Top-1 accuracy, Top-3 accuracy, and sample count.
     """
     device = get_available_device()
-    selected_checkpoint = checkpoint_path or (
-        config.training_checkpoint_dir / "best_fischer_bc.pth"
-    )
+    # Keep command-line evaluation aligned with the checkpoint configured for
+    # the API. This is essential when the production policy uses action planes.
+    selected_checkpoint = checkpoint_path or config.model_checkpoint_path
     data_loaders = get_dataloaders(
         file_path=config.training_data_path,
         batch_size=config.training_batch_size,

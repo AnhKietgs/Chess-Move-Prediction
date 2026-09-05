@@ -1,0 +1,7 @@
+# Local runtimes and generated build/test files.
+.venv/
+backend/venv/
+**/__pycache__/
+**/.pytest_cache/
+frontend/node_modules/
+frontend/dist/
