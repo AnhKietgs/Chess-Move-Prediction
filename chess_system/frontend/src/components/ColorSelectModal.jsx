@@ -18,6 +18,7 @@ export default function ColorSelectModal({ onChoose }) {
           className="my-image"
       />
         <p
+          className="color-select-modal__eyebrow"
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: "0.75rem",
@@ -29,10 +30,10 @@ export default function ColorSelectModal({ onChoose }) {
         >
           Behavioral Cloning · Bobby Fischer
         </p>
-        <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 2.6rem)", color: "var(--color-text-primary)" }}>
+        <h1 className="color-select-modal__title" style={{ fontSize: "clamp(1.8rem, 4vw, 2.6rem)", color: "var(--color-text-primary)" }}>
           Take a seat across the board.
         </h1>
-        <p style={{ color: "var(--color-text-muted)", marginTop: "0.75rem", lineHeight: 1.6 }}>
+        <p className="color-select-modal__description" style={{ color: "var(--color-text-muted)", marginTop: "0.75rem", lineHeight: 1.6 }}>
           Choose your color. The AI plays in Fischer's style — sharp,
           principled, and unwilling to give you anything for free.
         </p>

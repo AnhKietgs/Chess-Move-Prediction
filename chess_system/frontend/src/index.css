@@ -362,17 +362,66 @@ button:focus-visible,
 
   .color-select-modal {
     justify-content: flex-start;
-    padding-top: 1.2rem;
+    gap: 1rem;
+    padding: 1rem 0.75rem 1.25rem;
+  }
+
+  .color-select-modal__intro {
+    max-width: 28rem;
+  }
+
+  .color-select-modal__intro .my-image {
+    aspect-ratio: 16 / 7;
+    max-height: 10.5rem;
+  }
+
+  .color-select-modal__eyebrow {
+    margin: 0.45rem 0 0.35rem !important;
+    font-size: 0.61rem !important;
+    letter-spacing: 0.13em !important;
+  }
+
+  .color-select-modal__title {
+    font-size: clamp(1.55rem, 7.5vw, 2rem) !important;
+    line-height: 1.1;
+  }
+
+  .color-select-modal__description {
+    margin-top: 0.45rem !important;
+    font-size: 0.88rem;
+    line-height: 1.45 !important;
   }
 
   .color-select-modal__choices {
     width: 100%;
-    gap: 0.75rem;
+    flex-wrap: nowrap;
+    gap: 0.6rem;
   }
 
   .color-tile {
-    width: min(100%, 280px);
-    padding: 1.15rem !important;
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    max-width: 12rem;
+    padding: 0.9rem 0.45rem !important;
+  }
+
+  .color-tile__button {
+    gap: 0.5rem !important;
+  }
+
+  .color-tile__button > span[aria-hidden] {
+    width: 2.7rem !important;
+    height: 2.7rem !important;
+  }
+
+  .color-tile__button > span:nth-child(2) {
+    font-size: 1rem !important;
+  }
+
+  .color-tile__button > span:nth-child(3) {
+    font-size: 0.56rem !important;
+    letter-spacing: 0.055em !important;
   }
 }
 
