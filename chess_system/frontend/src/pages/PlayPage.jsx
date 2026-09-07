@@ -35,18 +35,10 @@ export default function PlayPage() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "2.5rem 1.5rem",
-      }}
-    >
+    <div className="play-page">
       {phase === "color-select" && <ColorSelectModal onChoose={chooseColor} />}
 
-      <header style={{ textAlign: "center", marginBottom: "2rem" }}>
+      <header className="play-page__header">
         <p
           style={{
             fontFamily: "var(--font-mono)",
@@ -59,7 +51,7 @@ export default function PlayPage() {
         >
           Fischer Study
         </p>
-        <h1 style={{ fontSize: "2rem" }}>Chess AI</h1>
+        <h1 className="play-page__title">Chess AI</h1>
       </header>
 
       {phase === "playing" && (

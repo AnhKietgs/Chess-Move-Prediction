@@ -22,7 +22,7 @@ export default function MaterialBalance({ history, playerColor, position }) {
   const advantage = isTop ? Math.max(-material.balance, 0) : Math.max(material.balance, 0);
 
   return (
-    <GlassPanel style={{ width: "calc(min(82vw, 740px) + 48px)", padding: "0.68rem 1.2rem", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem" }}>
+    <GlassPanel className="material-balance" style={{ padding: "0.68rem 1.2rem", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem" }}>
       <CapturedRow label={label} pieces={pieces} color={capturedColor} />
       {advantage > 0 && <strong style={{ color: "var(--color-success)", fontFamily: "var(--font-mono)", fontSize: "0.82rem" }}>+{advantage}</strong>}
     </GlassPanel>

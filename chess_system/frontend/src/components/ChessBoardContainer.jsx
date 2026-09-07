@@ -103,30 +103,15 @@ export default function ChessBoardContainer({ game, fen, playerColor, lastMove, 
     // Fix: the blurred glass surface is a sibling `::behind` layer, not a
     // parent of the board, so nothing above the board in the DOM has a
     // filter and the drag layer's fixed positioning stays viewport-relative.
-    <div style={{ position: "relative", borderRadius: "var(--radius-lg)" }}>
+    <div className="chess-board-shell">
       <div
         aria-hidden
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: "var(--color-glass)",
-          backdropFilter: "blur(18px)",
-          WebkitBackdropFilter: "blur(18px)",
-          border: "1px solid var(--color-hairline)",
-          borderRadius: "var(--radius-lg)",
-          boxShadow: "var(--shadow-panel)",
-          zIndex: 0,
-        }}
+        className="chess-board-shell__glass"
       />
-      <div style={{ position: "relative", zIndex: 1, padding: "1.5rem" }}>
+      <div className="chess-board-shell__content">
         {isLocked && !pendingPromotion && (
           <div
-            style={{
-              position: "absolute",
-              inset: "1.5rem",
-              zIndex: 5,
-              cursor: "not-allowed",
-            }}
+            className="chess-board-shell__lock"
             aria-hidden
           />
         )}
@@ -137,7 +122,7 @@ export default function ChessBoardContainer({ game, fen, playerColor, lastMove, 
             onCancel={handlePromotionCancel}
           />
         )}
-        <div style={{ width: "min(84vw, 740px)" }}>
+        <div className="chess-board">
           <Chessboard
             id="fischer-board"
             position={fen}

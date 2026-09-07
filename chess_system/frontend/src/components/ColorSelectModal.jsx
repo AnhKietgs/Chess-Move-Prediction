@@ -10,20 +10,8 @@ import fischerImg from "./bobby-fischer.jpg";
  */
 export default function ColorSelectModal({ onChoose }) {
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        gap: "2.5rem",
-        padding: "2rem",
-        zIndex: 50,
-      }}
-    >
-      <div style={{ textAlign: "center", maxWidth: 620 }}>
+    <div className="color-select-modal">
+      <div className="color-select-modal__intro">
           <img 
           src={fischerImg} 
           alt="Bobby Fischer" 
@@ -50,7 +38,7 @@ export default function ColorSelectModal({ onChoose }) {
         </p>
       </div>
 
-      <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", justifyContent: "center" }}>
+      <div className="color-select-modal__choices">
         <ColorTile
           color="w"
           label="Play White"
@@ -72,10 +60,8 @@ function ColorTile({ color, label, sublabel, onChoose }) {
   const isWhite = color === "w";
   return (
     <GlassPanel
-      as="button"
       className="color-tile"
       style={{
-        width: 220,
         padding: "2rem 1.5rem",
         display: "flex",
         flexDirection: "column",
@@ -87,6 +73,7 @@ function ColorTile({ color, label, sublabel, onChoose }) {
       }}
     >
       <button
+        className="color-tile__button"
         onClick={() => onChoose(color)}
         style={{
           all: "unset",

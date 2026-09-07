@@ -26,9 +26,7 @@ export default function MoveHistory({ history, displayedPly }) {
   });
 
   return (
-    <GlassPanel
-      style={{ width: 320, flex: 1, minHeight: 0, display: "flex", flexDirection: "column", padding: "1.35rem" }}
-    >
+    <GlassPanel className="move-history" style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", padding: "1.35rem" }}>
       <h2 style={{ fontSize: "1.12rem", color: "var(--color-brass-bright)", marginBottom: "0.25rem" }}>
         Scoresheet
       </h2>

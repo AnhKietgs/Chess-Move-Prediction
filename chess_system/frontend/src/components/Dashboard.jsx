@@ -87,7 +87,7 @@ export default function Dashboard({ showHeatmap, onHeatmapChange, fischerColor }
   };
 
   return (
-    <GlassPanel style={{ width: 450, padding: "1.55rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+    <GlassPanel className="dashboard" style={{ padding: "1.55rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
       <div>
         <p style={eyebrowStyle}>Fischer analytics</p>
         <div style={tabListStyle} role="tablist" aria-label="Fischer analytics">

@@ -38,15 +38,15 @@ export default function MainPlayArea({
     .map((move) => move.to);
 
   return (
-    <div style={{ display: "flex", gap: "1.5rem", alignItems: "stretch", flexWrap: "wrap", justifyContent: "center" }}>
-      <div style={{ alignSelf: "flex-start" }}>
+    <div className="game-layout">
+      <div className="game-layout__dashboard">
         <Dashboard
           showHeatmap={showHeatmap}
           onHeatmapChange={setShowHeatmap}
           fischerColor={playerColor === "w" ? "b" : "w"}
         />
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.7rem", alignSelf: "flex-start" }}>
+      <div className="game-layout__board-column">
         <MaterialBalance history={visibleHistory} playerColor={playerColor} position="top" />
         <ChessBoardContainer
           game={game}
@@ -59,7 +59,7 @@ export default function MainPlayArea({
         />
         <MaterialBalance history={visibleHistory} playerColor={playerColor} position="bottom" />
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem", width: 320, height: "calc(min(84vw, 740px) + 176px)", minHeight: 0 }}>
+      <div className="game-layout__sidebar">
         <StatusBar
           isAiThinking={isAiThinking}
           isReviewingHistory={isReviewingHistory}
@@ -84,7 +84,7 @@ function StatusBar({ isAiThinking, isReviewingHistory, displayedPly, totalPly, s
   const message = errorMessage || (isAiThinking ? "Fischer is thinking…" : isReviewingHistory ? reviewMessage : statusMessage || "Your move.");
 
   return (
-    <GlassPanel style={{ padding: "1rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+    <GlassPanel className="game-status" style={{ padding: "1rem 1.25rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "0.55rem", minHeight: "2rem" }}>
         {isAiThinking && <img
           src={fischerPortrait}
