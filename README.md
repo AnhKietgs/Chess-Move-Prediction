@@ -1,112 +1,248 @@
-# ♟️ Fischer-Style Chess AI — Behavioral Cloning Move Predictor
+# Fischer-Style Chess AI
 
-> **Trạng thái: đang phát triển (work in progress)** — pipeline dữ liệu, mô hình, huấn luyện và đánh giá đã hoạt động end-to-end; đang trong giai đoạn cải thiện chất lượng dự đoán.
+Hệ thống cờ vua mô phỏng một phần lựa chọn nước đi của Bobby Fischer bằng
+Behavioral Cloning. Dự án gồm pipeline PGN, mô hình PyTorch, API FastAPI và
+giao diện React để chơi, phân tích và trình bày bằng chứng về phong cách.
 
-Hệ thống AI dự đoán nước đi cờ vua theo **phong cách chơi của Bobby Fischer**, huấn luyện bằng **Behavioral Cloning** trên chính các ván đấu lịch sử của ông (827 ván), lọc chất lượng dữ liệu bằng Stockfish, và đánh giá sức mạnh bằng cách cho model đấu trực tiếp với Stockfish.
+> Trạng thái: sẵn sàng chạy và demo local. Mô hình là policy bắt chước phong
+> cách, không phải chess engine có tìm kiếm sâu; sức mạnh thi đấu raw policy
+> không tương đương một engine như Stockfish.
 
-**Stack:** Python, PyTorch (CNN Residual Policy Network), FastAPI · React 18 + `react-chessboard`
+## Điểm chính
 
----
+- PGN nguồn hiện có 2.015 ván. Cache hiện tại chứa 48.479 mẫu từ 1.238
+  game ID sau khi khử main line trùng, lọc điều kiện game và loại nước đi
+  blunder bằng Stockfish.
+- FEN được mã hóa thành tensor 18 kênh; nước đi dùng action space 4.672 lớp.
+- FischerPolicyNet là Residual CNN 64 channels, 4 residual blocks, 32 policy
+  channels và action-plane policy head 73 planes.
+- Action-plane head giữ đúng ánh xạ from-square x 73 move planes, sau đó trả
+  raw logits có shape batch x 4672.
+- Legal-move masking được dùng nhất quán khi train, đánh giá và inference:
+  model chỉ xếp hạng giữa các nước đi hợp lệ của vị trí hiện tại.
+- Loss là legal-move cross-entropy với label smoothing; train dùng AdamW,
+  ReduceLROnPlateau theo Validation Top-1, mixed precision, resume checkpoint
+  và early stopping.
+- Train augmentation lật ngang được thực hiện lazy trong DataLoader. Các thế
+  còn quyền nhập thành không bị lật để tránh cặp board/label không hợp lệ.
+- Tách dữ liệu theo game; chế độ strict loại mọi FEN val/test đã xuất hiện ở
+  split trước, dùng FEN chuẩn hóa 4 trường đầu.
+- API có raw policy mode và Stockfish safety-net tùy chọn. Safety-net kiểm tra
+  Top-3 legal moves, từ chối blunder theo ngưỡng centipawn và fallback về
+  Stockfish nếu cần.
 
-## ✨ Đã triển khai
+## Kết quả đánh giá hiện tại
 
-| Hạng mục | Trạng thái |
-|---|---|
-| **Data pipeline** | Parse 827 ván PGN của Fischer → lọc nước đi bằng Stockfish (loại "blunder" theo ngưỡng centipawn) → cache ra `.jsonl` (~33.000 mẫu huấn luyện) để không phải chạy lại engine mỗi epoch |
-| **Board/Move encoding** | FEN → tensor 18 kênh (12 kênh quân cờ, 4 kênh quyền nhập thành, 1 kênh en-passant, 1 kênh lượt đi); action space rời rạc 4.672 nước đi hợp lệ có thể có |
-| **Mô hình (FischerPolicyNet)** | Residual CNN (8 residual block, 128 channels) → policy head dự đoán logits trên 4.672 hành động |
-| **Huấn luyện (Behavioral Cloning)** | Train/val split theo cấp độ ván đấu (tránh rò rỉ dữ liệu — data leakage), learning-rate scheduler, mixed-precision, checkpoint theo best-val — đã chạy 30 epoch, log đầy đủ loss/accuracy mỗi epoch |
-| **Suy luận có che nước đi bất hợp lệ** | API luôn chọn nước có xác suất cao nhất **trong số các nước đi hợp lệ** (legal-move masking bằng `python-chess`), không bao giờ trả về nước sai luật |
-| **Đánh giá đối kháng với Stockfish** | Script tự động cho model đấu nhiều ván với Stockfish (mức Elo, thời gian suy nghĩ cấu hình được), xuất kết quả PGN + CSV để phân tích |
-| **REST API (FastAPI)** | `POST /api/play/fischer` nhận FEN, trả về nước đi UCI từ policy đã huấn luyện; `GET /api/health` cho health check |
-| **Giao diện chơi cờ (React)** | Bàn cờ đầy đủ: chọn màu quân, xoay bàn theo màu người chơi, kéo-thả/click để đi, highlight nước hợp lệ/nước vừa đi/chiếu tướng, sổ ghi nước đi (scoresheet), giao diện kính mờ (glassmorphism) tự thiết kế |
-| **Unit test** | Kiểm thử encoding (shape, dtype tensor), action-space mapping, và tính đúng đắn của việc chia tập train/val theo ván (không leak dữ liệu giữa 2 tập) |
+Checkpoint mặc định:
 
-## 🚧 Đang trong quá trình cải thiện
+    backend/checkpoints/action_plane/best_fischer_bc.pth
 
-- Model hiện **overfit rõ rệt trên tập train** (~97% top-1 accuracy) trong khi **độ chính xác trên tập validation dừng ở khoảng ~26%** sau 30 epoch — đúng như dự kiến với lượng dữ liệu còn hạn chế (827 ván) so với độ phức tạp của cờ vua.
-- Kết quả đối đầu Stockfish hiện dùng để **làm cơ sở đo lường tiến bộ qua các lần huấn luyện lại**, chưa phải mục tiêu cuối; các hướng cải thiện đang cân nhắc: tăng dữ liệu huấn luyện, regularization mạnh hơn, data augmentation (xoay/lật bàn cờ), hoặc bổ sung self-play/RL sau giai đoạn Behavioral Cloning.
+Đánh giá strict FEN-disjoint trên 2.716 mẫu test:
 
----
+| Chỉ số | Kết quả |
+| --- | ---: |
+| Test loss | 3.0148 |
+| Test Top-1 | 20.77% |
+| Test Top-3 | 38.81% |
 
-## 🏗️ Kiến trúc hệ thống
+Kết quả này tốt hơn checkpoint dense cũ trên cùng strict test
+(Top-1 19.18%, Top-3 37.15%), nhưng chưa chứng minh mô hình tái tạo hoàn
+chỉnh phong cách hay năng lực chiến thuật của Fischer.
 
-```
-chess_system/
-├── backend/
-│   ├── src/
-│   │   ├── data_processing/   # PGN parsing, lọc bằng Stockfish, FEN↔tensor encoding
-│   │   ├── models/             # FischerPolicyNet (Residual CNN)
-│   │   ├── training/           # Vòng lặp huấn luyện BC, script đánh giá vs. Stockfish
-│   │   ├── services/           # ai_engine.py — load checkpoint, suy luận có che nước bất hợp lệ
-│   │   ├── routes/             # FastAPI endpoints
-│   │   └── config/             # Cấu hình tập trung (pydantic-settings)
-│   ├── data/                   # raw/ (PGN gốc) + cache/ (dữ liệu đã xử lý)
-│   ├── logs/                   # Metrics huấn luyện + kết quả đấu Stockfish
-│   └── test/                   # Unit test cho data pipeline
-└── frontend/
-    └── src/                    # React app: bàn cờ, context quản lý ván đấu, gọi API
-```
+Raw policy không dùng safety-net đạt 2.00% score khi đấu 100 ván Stockfish
+Elo 1320 (0 thắng, 4 hòa, 96 thua). Đây là baseline sức mạnh policy thuần.
+Kết quả có safety-net phải được báo cáo riêng vì Stockfish tham gia chọn nước
+đi để bảo vệ demo khỏi blunder.
 
-```
-PGN (827 ván Fischer)
-   │  lọc bằng Stockfish (loại blunder)
-   ▼
-Training examples (.jsonl, ~33k mẫu)
-   │  FEN → tensor 18 kênh
-   ▼
-FischerPolicyNet (Residual CNN, PyTorch)
-   │  Behavioral Cloning — CrossEntropyLoss trên 4.672 action
-   ▼
-Checkpoint (.pth)
-   │
-   ▼
-FastAPI /api/play/fischer  ──legal-move masking──▶  React chessboard
-```
+## Kiến trúc
 
----
+    chess_system/
+    ├── backend/
+    │   ├── src/
+    │   │   ├── config/          # Pydantic settings và biến môi trường
+    │   │   ├── data_processing/ # PGN, Stockfish filter, encoder, dataset
+    │   │   ├── models/          # FischerPolicyNet và legal-mask loss
+    │   │   ├── training/        # train/evaluate BC và Stockfish arena
+    │   │   ├── services/        # inference và safety-net
+    │   │   ├── routes/          # play + analytics FastAPI APIs
+    │   │   └── middleware/      # CORS
+    │   ├── data/
+    │   │   ├── raw/             # PGN Fischer gốc
+    │   │   └── cache/           # JSONL state/action đã xử lý
+    │   ├── checkpoints/         # model checkpoints, không commit Git
+    │   ├── logs/                # metrics CSV, PGN/CSV arena
+    │   ├── tests/               # 40 automated tests
+    │   └── Dockerfile
+    └── frontend/
+        ├── src/
+        │   ├── components/      # board, dashboard, scoresheet, material
+        │   ├── hooks/           # game loop và playback bàn phím
+        │   ├── pages/
+        │   └── services/        # FastAPI client
+        └── public/
 
-## 🚀 Cài đặt & chạy dự án
+Luồng dữ liệu:
 
-### Yêu cầu
-- Python ≥ 3.10, Node.js ≥ 18
-- [Stockfish](https://stockfishchess.org/download/) (binary riêng, dùng để lọc dữ liệu và đánh giá đối kháng)
+    PGN Fischer
+      -> parse + game deduplication + Stockfish blunder filter
+      -> JSONL records: fen, move_uci, game_id
+      -> game-level / strict FEN-disjoint split
+      -> lazy tensor + legal mask + optional mirror augmentation
+      -> FischerPolicyNet action-plane policy
+      -> checkpoint
+      -> FastAPI legal-mask inference
+      -> React chessboard và analytics dashboard
 
-### Backend
+## Yêu cầu
 
-```bash
-cd backend
-python -m venv venv && source venv/bin/activate
-pip install -r requirements.txt
-python main.py
-```
+- Python 3.11 trở lên
+- Node.js 18 trở lên
+- Stockfish cho local backend, với đường dẫn cấu hình qua STOCKFISH_PATH
+- Môi trường ảo Python và npm dependencies
 
-### Frontend
+## Chạy local
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
-Frontend gọi API tại `VITE_API_BASE_URL` (mặc định `http://localhost:8000`).
+Từ thư mục repository:
 
-### Chạy lại pipeline dữ liệu & huấn luyện (tùy chọn)
+    cd chess_system/backend
+    python -m venv .venv
+    .\.venv\Scripts\Activate.ps1
+    pip install -r requirements.txt
 
-```bash
-# 1. Build cache dữ liệu huấn luyện từ PGN
-python -m src.data_processing.build_cache --num-workers 4
+Tạo hoặc cập nhật backend/.env cho máy local:
 
-# 2. Huấn luyện Behavioral Cloning
-python -m src.training.train_bc
+    ENVIRONMENT=local
+    CORS_ORIGINS=http://localhost:1010,http://127.0.0.1:1010
+    MODEL_CHECKPOINT_PATH=./checkpoints/action_plane/best_fischer_bc.pth
+    STOCKFISH_PATH=D:\duong-dan\den\stockfish.exe
+    TRAINING_STRICT_FEN_DISJOINT=true
 
-# 3. Đánh giá đối đầu Stockfish(co safety-net)
-python -m src.training.evaluate_vs_stockfish #(co safety-net)
-python -m src.training.evaluate_vs_stockfish --no-safety-net #(khong safety-net)
-```
+Chạy backend:
 
----
+    python -m uvicorn main:app --reload --port 8000
 
-## 👤 Vai trò cá nhân trong dự án
+Ở terminal khác:
 
-Tự thiết kế và triển khai toàn bộ pipeline: xử lý dữ liệu PGN + lọc chất lượng bằng Stockfish, thiết kế encoding bàn cờ/nước đi cho mạng neural, xây dựng kiến trúc Residual CNN policy network bằng PyTorch, viết vòng lặp huấn luyện Behavioral Cloning (kèm chia tập tránh rò rỉ dữ liệu, learning-rate scheduling, mixed precision), script đánh giá đối kháng với Stockfish, API suy luận bằng FastAPI có che nước đi bất hợp lệ, và giao diện chơi cờ bằng React.
+    cd chess_system/frontend
+    npm install
+    npm run dev
 
+Vite chạy tại http://localhost:1010. Frontend mặc định gọi
+http://localhost:8000. Khi backend ở host khác, tạo frontend/.env:
+
+    VITE_API_BASE_URL=https://your-backend.example.com
+
+## API
+
+| Endpoint | Mô tả |
+| --- | --- |
+| GET /api/health | Health check |
+| POST /api/play/fischer | Nhận FEN, trả UCI move hợp lệ |
+| GET /api/analytics/opening_stats | So sánh khai cuộc hoặc phòng thủ Fischer và AI |
+| GET /api/analytics/heldout_examples | Ví dụ strict hold-out không chọn theo match rate |
+| POST /api/analytics/evaluate_pgn | Upload PGN để tính Top-1 và Top-3 match rate |
+
+Ví dụ request:
+
+    POST /api/play/fischer
+    {
+      "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+      "use_safety_net": true
+    }
+
+use_safety_net bằng false yêu cầu raw model chọn Top-1 hợp lệ. Giá trị true
+là chế độ mặc định cho demo an toàn, không dùng để tuyên bố sức mạnh raw model.
+
+## Giao diện
+
+- Chọn chơi Trắng hoặc Đen, kéo-thả/click quân cờ, phong cấp, highlight nước
+  hợp lệ, nước gần nhất và chiếu tướng.
+- Fischer is thinking có avatar và thời gian hiển thị tối thiểu 3.5 giây.
+- Hiển thị quân bị bắt và material advantage theo giá trị Tốt 1,
+  Mã/Tượng 3, Xe 5, Hậu 9.
+- Scoresheet hỗ trợ phím mũi tên trái/phải để tua từng half-move. Bàn cờ,
+  material balance, heatmap và nước đang chọn cùng quay về vị trí lịch sử.
+- Có nút resign, new game và switch bật/tắt Stockfish safety-net.
+- Dashboard gồm ba tab: Style verification, Strict hold-out examples và
+  Opening/Defensive distribution. Biểu đồ tự đổi sang phân tích phòng thủ khi
+  AI cầm quân Đen.
+- Có thể upload PGN hold-out bên ngoài để lấy Top-1/Top-3 match rate.
+
+## Pipeline dữ liệu và train
+
+Build cache từ PGN. Mỗi worker tạo và tái sử dụng một Stockfish process:
+
+    cd chess_system/backend
+    python -m src.data_processing.build_cache --num-workers 4
+
+Train action-plane policy với cấu hình hiện tại:
+
+    python -m src.training.train_bc
+
+Các hyperparameter nằm trong src/config/settings.py và có thể override bằng
+biến môi trường. Ví dụ PowerShell cho một run action-plane riêng:
+
+    $env:TRAINING_CHECKPOINT_DIR="./checkpoints/action_plane"
+    $env:TRAINING_METRICS_PATH="./logs/behavioral_cloning_metrics_action_plane.csv"
+    $env:TRAINING_LEARNING_RATE="3e-4"
+    $env:TRAINING_WEIGHT_DECAY="5e-4"
+    $env:TRAINING_STRICT_FEN_DISJOINT="true"
+    python -m src.training.train_bc
+
+Checkpoint gồm model, optimizer, scheduler, epoch, best validation Top-1 và
+early-stopping state. Đặt TRAINING_RESUME_PATH để tiếp tục một run bị dừng.
+
+Đánh giá checkpoint cấu hình hiện tại:
+
+    python -m src.training.evaluate_bc
+
+Đấu với Stockfish, 100 ván, chia đều màu:
+
+    python -m src.training.evaluate_vs_stockfish --games 100 --elo 1320 --no-safety-net
+
+Bỏ --no-safety-net để đo chất lượng trải nghiệm demo có blunder guard. Elo
+thấp nhất phụ thuộc phiên bản Stockfish cài trên máy; build hiện tại hỗ trợ từ
+khoảng Elo 1320.
+
+## Kiểm thử
+
+Backend có test cho encoder/action planes, legal mask/loss, mirror
+augmentation, strict FEN split, game deduplication, analytics, safety-net và
+play lifecycle.
+
+    cd chess_system/backend
+    ..\.venv\Scripts\python.exe -m pytest -q
+
+Kết quả kiểm tra cuối: 40 passed.
+
+Build frontend:
+
+    cd chess_system/frontend
+    npm run build
+
+## Deploy
+
+backend/Dockerfile dùng Python 3.11 slim và cài Stockfish Linux, phù hợp để
+deploy backend bằng Docker trên Railway hoặc nền tảng tương tự.
+
+Lưu ý bắt buộc trước khi deploy:
+
+1. File checkpoint .pth bị Git ignore, nên phải upload/mount checkpoint vào
+   service hoặc dùng storage riêng. MODEL_CHECKPOINT_PATH phải trỏ tới file đó.
+2. Cấu hình CORS_ORIGINS thành URL frontend production.
+3. Build frontend với VITE_API_BASE_URL là URL backend production.
+4. Không commit .env chứa đường dẫn local hay secret.
+
+## Giới hạn và hướng phát triển
+
+Mô hình hiện chứng minh được một phần mức độ khớp lựa chọn nước đi Fischer
+trên strict held-out test, không phải một tái tạo hoàn hảo của phong cách.
+Các hướng cải thiện thực tế gồm mở rộng dữ liệu Fischer/nguồn phong cách
+tương tự, tăng đa dạng vị trí, tune hyperparameter trên validation, thêm
+value head + search, hoặc PPO/self-play sau khi giữ một baseline BC rõ ràng.
+
+## Tác giả
+
+Tự thiết kế và triển khai pipeline dữ liệu, Stockfish filtering, board/move
+encoding, action-plane policy, Behavioral Cloning loop, đánh giá, inference
+API, safety-net, analytics dashboard và giao diện React.

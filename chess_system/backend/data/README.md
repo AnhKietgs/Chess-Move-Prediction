@@ -4,19 +4,23 @@ Not part of `src/` on purpose — this holds actual data files, not code.
 
 ```
 data/
-├── raw/     # source PGN files go here (e.g. Fischer.pgn)
+├── raw/     # source PGN files go here (fischer_all.pgn)
 └── cache/   # .jsonl output of the Stockfish-filtered pipeline (generated, not hand-edited)
 ```
 
-`Fischer.pgn` (all with Fischer as either White or Black) is
-already in `raw/`.
+`fischer_all.pgn` is the current source collection and contains 2.015
+PGN games. The checked-in cache currently has 48.479 state/action examples
+from 1.238 source game IDs. This is lower than the raw count because the
+pipeline skips duplicate main lines, ineligible games, corrupt entries, and
+Fischer moves rejected by the Stockfish blunder filter.
 
 ## Running the full pipeline
 
-This runs Stockfish on every one of Fischer's own moves across all 827
+This runs Stockfish on every Fischer move in the eligible, de-duplicated
 games — expect it to take a while (each position is a real engine call).
 Run it once; the result is cached to `data/cache/` and re-used for every
-future training run.
+future training run. Counts can change if source PGNs or filtering options
+change.
 
 ```bash
 cd backend
@@ -29,7 +33,7 @@ Or from a Python shell / notebook, with more control over the knobs:
 from src.data_processing.pgn_parser import stream_training_examples, write_training_examples_jsonl
 
 examples = stream_training_examples(
-    "data/raw/Fischer.pgn",
+    "data/raw/fischer_all.pgn",
     "/usr/games/stockfish",   # wherever Stockfish is installed — see below
     player_name="Fischer",
     depth=8,                  # lower (e.g. 6) for a faster, slightly noisier pass
